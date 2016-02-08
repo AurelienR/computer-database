@@ -10,11 +10,11 @@ public class Computer {
 	private Timestamp introduced;
 	
 	public Computer(int id, String name,Company company, Timestamp discontinued, Timestamp introduced){
-		this.id = id;
-		this.name = name;
-		this.company = company;
-		this.discontinued = discontinued;
-		this.introduced = introduced;
+		setId(id);
+		setName(name);
+		setCompany(company);
+		setDiscontinued(discontinued);
+		setIntroduced(introduced);
 	}
 	
 	public Computer(){};
@@ -47,7 +47,10 @@ public class Computer {
 		return discontinued;
 	}
 
-	public void setDiscontinued(Timestamp discontinued) {
+	public void setDiscontinued(Timestamp discontinued) throws IllegalArgumentException {
+		if(introduced != null && introduced.after(discontinued)){
+			throw new IllegalArgumentException("Setting discontinued attribute before introduced timestamp");
+		}
 		this.discontinued = discontinued;
 	}
 
@@ -55,7 +58,10 @@ public class Computer {
 		return introduced;
 	}
 
-	public void setIntroduced(Timestamp introduced) {
+	public void setIntroduced(Timestamp introduced) throws IllegalArgumentException {
+		if(discontinued != null && discontinued.before(introduced)){
+			throw new IllegalArgumentException("Setting introduced attribute after discontinued timestamp");
+		}
 		this.introduced = introduced;
 	}
 	

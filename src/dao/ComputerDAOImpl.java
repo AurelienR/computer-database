@@ -100,7 +100,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public List<Computer> findByName(String name) throws DAOException {
+	public List<Computer> findByName(String name) throws DAOException, IllegalArgumentException {
+		if(name == null || name.isEmpty()) throw new IllegalArgumentException("Name parameter must be not null or empty");
+		
 		Connection con = null;
 		ResultSet results = null;
 		PreparedStatement ps = null;
@@ -135,7 +137,11 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public void insertComputer(Computer computer) {
+	public void insertComputer(Computer computer) throws DAOException, IllegalArgumentException {
+		if(computer.getName() == null || computer.getName().isEmpty()) throw new IllegalArgumentException("Name parameter must be not null or empty");
+		if(computer.getIntroduced() == null) throw new IllegalArgumentException("Introduced timestamp of computer parameter must be not null");
+		if(computer.getDiscontinued() != null && computer.getDiscontinued().before(computer.getIntroduced())) throw new IllegalArgumentException("Discontinued computer timestamp is set before Introduced computer timestamp");
+		
 		Connection con = null;
 		PreparedStatement ps = null;
 		
@@ -167,7 +173,20 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public void updateComputer(Computer computer) {
+	public void updateComputer(Computer computer) throws DAOException, IllegalArgumentException {
+		if(computer.getName() == null || computer.getName().isEmpty()) throw new IllegalArgumentException("Name parameter must be not null or empty");
+		if(computer.getDiscontinued() != null && computer.getIntroduced()!= null && computer.getIntroduced().after(computer.getDiscontinued()))throw new IllegalArgumentException("Discontinued computer timestamp is set before Introduced computer timestamp");
+		else if(computer.getDiscontinued() != null && computer.getIntroduced() == null){
+			for(Computer c: findById(computer.getId())){
+				if(c.getIntroduced().after(computer.getDiscontinued())) throw new IllegalArgumentException("Inconsistency with DB, Discontinued timestamp is before introduced DB timestamp");	
+			}
+		}
+		else if(computer.getIntroduced() != null && computer.getDiscontinued() == null){
+			for(Computer c: findById(computer.getId())){
+				if(c.getDiscontinued().before(computer.getIntroduced())) throw new IllegalArgumentException("Inconsistency with DB, Introduced timestamp is after discontinued DB timestamp");	
+			}
+		}
+
 		Connection con = null;
 		PreparedStatement ps = null;
 		
@@ -245,7 +264,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			
 			computerList.add(computer);
 		}
-		
+
 		return computerList;
 	}
 }

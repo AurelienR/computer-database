@@ -10,12 +10,11 @@ import java.sql.Connection;
 
 public class DAOFactory {
 
-
-    private static final String FICHIER_PROPERTIES       = "dao/dao.properties";
-    private static final String PROPERTY_URL             = "url";
-    private static final String PROPERTY_DRIVER          = "driver";
-    private static final String PROPERTY_NOM_UTILISATEUR = "nomutilisateur";
-    private static final String PROPERTY_MOT_DE_PASSE    = "motdepasse";
+    private static final String PROPERTY_FILE       = "dao/dao.properties";
+    private static final String URL_PROPERTY             = "url";
+    private static final String DRIVER_PROPERTY          = "driver";
+    private static final String USERNAME_PROPERTY = "nomutilisateur";
+    private static final String PASSWORD_PROPERTY    = "motdepasse";
 
     private String url;
     private String username;
@@ -38,30 +37,30 @@ public class DAOFactory {
         String motDePasse = null;
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream fichierProperties = classLoader.getResourceAsStream( FICHIER_PROPERTIES );
+        InputStream fichierProperties = classLoader.getResourceAsStream( PROPERTY_FILE );
 
 
         if ( fichierProperties == null ) {
-            throw new DAOConfigurationException( "Le fichier properties " + FICHIER_PROPERTIES + " est introuvable." );
+            throw new DAOConfigurationException( "Property file " + PROPERTY_FILE + " not found." );
         }
 
 
         try {
             properties.load( fichierProperties );
-            url = properties.getProperty( PROPERTY_URL );
-            driver = properties.getProperty( PROPERTY_DRIVER );
-            nomUtilisateur = properties.getProperty( PROPERTY_NOM_UTILISATEUR );
-            motDePasse = properties.getProperty( PROPERTY_MOT_DE_PASSE );
+            url = properties.getProperty( URL_PROPERTY );
+            driver = properties.getProperty( DRIVER_PROPERTY );
+            nomUtilisateur = properties.getProperty( USERNAME_PROPERTY );
+            motDePasse = properties.getProperty( PASSWORD_PROPERTY );
 
         } catch ( IOException e ) {
-            throw new DAOConfigurationException( "Impossible de charger le fichier properties " + FICHIER_PROPERTIES, e );
+            throw new DAOConfigurationException( "Cannot load propertied " + PROPERTY_FILE, e );
         }
 
 
         try {
             Class.forName( driver );
         } catch ( ClassNotFoundException e ) {
-            throw new DAOConfigurationException( "Le driver est introuvable dans le classpath.", e );
+            throw new DAOConfigurationException( "Driver is missiing from classpath.", e );
         }
         
         DAOFactory instance = new DAOFactory( url, nomUtilisateur, motDePasse );

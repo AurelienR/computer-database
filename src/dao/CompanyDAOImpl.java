@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import models.Company;
 
 public class CompanyDAOImpl implements CompanyDAO {
@@ -47,8 +48,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 			
 			con.commit();
 			
-		} catch (SQLException e) {
-			
+		} catch (SQLException e) {			
 			try {
 				con.rollback();
 			} catch (SQLException e1) {
@@ -65,7 +65,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	}
 
 	@Override
-	public List<Company> findById(int id) throws DAOException {
+	public List<Company> findById(int id) throws DAOException {		
 		Connection con = null;
 		ResultSet results = null;
 		PreparedStatement ps = null;
@@ -100,7 +100,9 @@ public class CompanyDAOImpl implements CompanyDAO {
 	}
 
 	@Override
-	public List<Company> findByName(String name) throws DAOException {
+	public List<Company> findByName(String name) throws DAOException, IllegalArgumentException {
+		if(name == null || name.isEmpty()) throw new IllegalArgumentException("Name parameter must be not null or empty");
+		
 		Connection con = null;
 		ResultSet results = null;
 		PreparedStatement ps = null;
@@ -135,7 +137,9 @@ public class CompanyDAOImpl implements CompanyDAO {
 	}
 
 	@Override
-	public void insertCompany(Company company) throws DAOException {
+	public void insertCompany(Company company) throws DAOException, IllegalArgumentException {
+		if(company.getName() == null || company.getName().isEmpty()) throw new IllegalArgumentException("Name parameter must be not null or empty");
+		
 		Connection con = null;
 		PreparedStatement ps = null;
 		
@@ -166,7 +170,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	private List<Company> getCompaniesFromResults(ResultSet results) throws SQLException{
 		
 		ArrayList<Company> companyList = new ArrayList<Company>();
-		
+
 		while(results.next()){
 			companyList.add(new Company(results.getInt(ID_COLUMN),results.getString(NAME_COLUMN)));
 		}

@@ -32,10 +32,8 @@ public class Company {
 		StringBuilder sb = new StringBuilder();
 		sb.append(Company.class.getSimpleName())
 		.append(" :")
-		.append("id: ")
-		.append(Integer.toString(getId()))
-		.append(" name:")
-		.append(getName());
+		.append("id: ").append(Integer.toString(getId()))
+		.append(" name:").append(getName());
 		
 		return sb.toString();
 	}
