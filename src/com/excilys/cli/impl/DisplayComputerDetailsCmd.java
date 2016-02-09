@@ -1,10 +1,11 @@
-package cli;
+package com.excilys.cli.impl;
 
 import java.util.Scanner;
 
-import dao.DAOException;
-import dao.DAOFactory;
-import models.Computer;
+import com.excilys.cli.Command;
+import com.excilys.dao.DAOException;
+import com.excilys.dao.ConnectionFactory;
+import com.excilys.models.Computer;
 
 public class DisplayComputerDetailsCmd implements Command {
 	
@@ -21,13 +22,14 @@ public class DisplayComputerDetailsCmd implements Command {
 			System.out.println("Name (of existing computer):");
 			String computerName;
 			
-			while(!(computerName =sc.nextLine()).isEmpty() && DAOFactory.getInstance().getComputerDAO().findByName(computerName).isEmpty()){
+			sc.nextLine();
+			while((computerName =sc.nextLine()).isEmpty() || ConnectionFactory.getInstance().getComputerDAO().findByName(computerName).isEmpty()){
 				System.out.println("Computer Name is not matching with an existring one");
 			}
 			
 			if(computerName.isEmpty())return;
 			
-			for(Computer c : DAOFactory.getInstance().getComputerDAO().findByName(computerName)){
+			for(Computer c : ConnectionFactory.getInstance().getComputerDAO().findByName(computerName)){
 				System.out.println(c);
 			}
 			

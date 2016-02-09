@@ -1,12 +1,23 @@
-package dao;
+package com.excilys.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
+/**
+ * Utility class to close properly connection and related objects
+ * @author excilys
+ *
+ */
 public class ConnectionCloser{
 
+	/**
+	 * Close resultSet related to a DB Connection
+	 * @param resultSet resultSet to close
+	 * @throws DAOException
+	 */
 	public static void silentClose( ResultSet resultSet ) throws DAOException {
 	    if ( resultSet != null ) {
 	        try {
@@ -19,6 +30,11 @@ public class ConnectionCloser{
 	}
 
 
+	/**
+	 * Close statement related to a DB Connection
+	 * @param statement statement to close
+	 * @throws DAOException
+	 */
 	public static void silentClose( Statement statement ) throws DAOException {
 	    if ( statement != null ) {
 	        try {
@@ -29,10 +45,15 @@ public class ConnectionCloser{
 	    }
 	}
 
-	public static void silentClose( Connection connexion ) throws DAOException {
-	    if ( connexion != null ) {
+	/**
+	 * Close connection related to a DB Connection
+	 * @param connection connection to close
+	 * @throws DAOException
+	 */
+	public static void silentClose( Connection connection ) throws DAOException {
+	    if ( connection != null ) {
 	        try {
-	            connexion.close();
+	            connection.close();
 	        } catch ( SQLException e ) {
 	        	throw new DAOException("Failure closing connextion",e);
 	        }
@@ -40,12 +61,25 @@ public class ConnectionCloser{
 	}
 
 
+	/**
+	 * Close multiple DB connection element
+	 * @param statement statement to close
+	 * @param connexion connection to close
+	 * @throws DAOException
+	 */
 	public static void silentCloses( Statement statement, Connection connexion ) throws DAOException {
 	    silentClose(statement );
 	    silentClose( connexion );
 	}
 
 
+	/**
+	 * Close multiple DB connection element
+	 * @param resultSet resultSet to close
+	 * @param statement statement to close
+	 * @param connexion connection to close
+	 * @throws DAOException
+	 */
 	public static void silentCloses( ResultSet resultSet, Statement statement, Connection connexion ) throws DAOException {
 	    silentClose( resultSet );
 	    silentClose( statement );

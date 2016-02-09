@@ -1,6 +1,11 @@
-package dao;
+package com.excilys.dao;
 
 
+/**
+ * Custom exception for DAO database access
+ * @author Aurelien.R
+ *
+ */
 public class DAOException extends RuntimeException {
 
     public DAOException( String message ) {

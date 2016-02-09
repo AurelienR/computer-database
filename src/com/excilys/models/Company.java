@@ -1,5 +1,10 @@
-package models;
+package com.excilys.models;
 
+/**
+ * Model of a company
+ * @author Aurelien.R
+ *
+ */
 public class Company {
 	private int id;
 	private String name;

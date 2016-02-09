@@ -1,34 +1,40 @@
-package dao;
+package com.excilys.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-
-import models.Company;
+import com.excilys.dao.CompanyDAO;
+import com.excilys.dao.ConnectionCloser;
+import com.excilys.dao.DAOException;
+import com.excilys.mappers.CompanyMapper;
+import com.excilys.dao.ConnectionFactory;
+import com.excilys.models.Company;
 
 public class CompanyDAOImpl implements CompanyDAO {
 	
-	private final String NAME_COLUMN = "name";
-	private final String ID_COLUMN = "id";
+	// DB column name
+	public static final String NAME_COLUMN = "name";
+	public static final String ID_COLUMN = "id";
 	
+	// SQL Queries
 	private final String FIND_ALL_QUERY = "SELECT * FROM company";
 	private final String FIND_BYID_QUERY = "SELECT * FROM company WHERE id=?";
 	private final String FIND_BYNAME_QUERY = "SELECT * FROM company WHERE name=?";
 	private final String INSERT_QUERY = "INSERT INTO company (name) VALUES (?)";;
 	
-	private DAOFactory daoFactory;
+	// DAOFactory
+	private ConnectionFactory daoFactory;
 
-	
+	// Constructors
 	public CompanyDAOImpl(){};
-	
-	public CompanyDAOImpl(DAOFactory daoFactory){
+	public CompanyDAOImpl(ConnectionFactory daoFactory){
 		this.daoFactory = daoFactory;
 	}
-
+	
+	// Methods
 	@Override
 	public List<Company> findAll() throws DAOException {
 		
@@ -44,7 +50,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 			ps = con.prepareStatement(FIND_ALL_QUERY);
 			results = ps.executeQuery();
 			
-			companyList = getCompaniesFromResults(results);
+			companyList = CompanyMapper.getCompaniesFromResults(results);
 			
 			con.commit();
 			
@@ -63,27 +69,33 @@ public class CompanyDAOImpl implements CompanyDAO {
 		
 		return companyList;
 	}
-
 	@Override
-	public List<Company> findById(int id) throws DAOException {		
+	public List<Company> findById(int id) throws DAOException {
+		
+		// Init local variables
 		Connection con = null;
 		ResultSet results = null;
 		PreparedStatement ps = null;
 		List<Company> companyList = null;
 		
 		try {
+			// Get opened connection
 			con = daoFactory.getConnection();
 			con.setAutoCommit(false);
 			
+			// Prepare query
 			ps = con.prepareStatement(FIND_BYID_QUERY);
+			// Replace query fields
 			ps.setString(1,Integer.toString(id));
 			results = ps.executeQuery();
 			
-			companyList = getCompaniesFromResults(results);
+			// Deserialize resultSet to a list of company
+			companyList = CompanyMapper.getCompaniesFromResults(results);
 			
 			con.commit();
 			
 		} catch (SQLException e) {
+			// Try to recover previous DB state
 			try {
 				con.rollback();
 			} catch (SQLException e1) {
@@ -93,34 +105,43 @@ public class CompanyDAOImpl implements CompanyDAO {
 			throw new DAOException("Failed on findById method, SQLException",e);	
 		}
 		finally{
+			// Close any connection related object
 			ConnectionCloser.silentCloses(results, ps, con);
 		}
 		
 		return companyList;
 	}
-
 	@Override
 	public List<Company> findByName(String name) throws DAOException, IllegalArgumentException {
+		
+		// Parameter validation
+		// Check name field
 		if(name == null || name.isEmpty()) throw new IllegalArgumentException("Name parameter must be not null or empty");
 		
+		// Init local variables
 		Connection con = null;
 		ResultSet results = null;
 		PreparedStatement ps = null;
 		List<Company> companyList = null;
 		
 		try {
+			// Get opened connection
 			con = daoFactory.getConnection();
 			con.setAutoCommit(false);
 			
+			// Prepare query
 			ps = con.prepareStatement(FIND_BYNAME_QUERY);
+			// Replace query fields
 			ps.setString(1,name);
 			results = ps.executeQuery();
 			
-			companyList = getCompaniesFromResults(results);
+			// Close any connection related object
+			companyList = CompanyMapper.getCompaniesFromResults(results);
 			
 			con.commit();
 			
 		} catch (SQLException e) {
+			// Try to recover previous DB state
 			try {
 				con.rollback();
 			} catch (SQLException e1) {
@@ -130,30 +151,38 @@ public class CompanyDAOImpl implements CompanyDAO {
 			throw new DAOException("Failed on findByName method, SQLException",e);	
 		}
 		finally{
+			// Close any connection related object
 			ConnectionCloser.silentCloses(results, ps, con);
 		}
 		
 		return companyList;
 	}
-
 	@Override
 	public void insertCompany(Company company) throws DAOException, IllegalArgumentException {
+		
+		// Parameter validation
+		// Check name field
 		if(company.getName() == null || company.getName().isEmpty()) throw new IllegalArgumentException("Name parameter must be not null or empty");
 		
+		// Get opened connection
 		Connection con = null;
 		PreparedStatement ps = null;
 		
 		try {
+			// Get opened connection
 			con = daoFactory.getConnection();
 			con.setAutoCommit(false);
 			
+			// Prepare query
 			ps = con.prepareStatement(INSERT_QUERY);
+			// Replace query fields
 			ps.setString(1,company.getName());
 			
 			ps.executeUpdate();
 			con.commit();		
 			
 		}catch (SQLException e) {
+			// Try to recover previous DB state
 			try {
 				con.rollback();
 			} catch (SQLException e1) {
@@ -163,18 +192,9 @@ public class CompanyDAOImpl implements CompanyDAO {
 			throw new DAOException("Failed on insertCompany method, SQLException",e);	
 		}
 		finally{
+			// Close any connection related object
 			ConnectionCloser.silentCloses(ps, con);
 		}
 	}
 	
-	private List<Company> getCompaniesFromResults(ResultSet results) throws SQLException{
-		
-		ArrayList<Company> companyList = new ArrayList<Company>();
-
-		while(results.next()){
-			companyList.add(new Company(results.getInt(ID_COLUMN),results.getString(NAME_COLUMN)));
-		}
-		
-		return companyList;
-	}
 }

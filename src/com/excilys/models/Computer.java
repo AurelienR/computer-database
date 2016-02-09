@@ -1,24 +1,31 @@
-package models;
+package com.excilys.models;
 
 import java.sql.Timestamp;
 
+/**
+ * Model of a Computer
+ * @author Aurelien.R
+ *
+ */
 public class Computer {
+	// Attributes
 	private int id = 0;
 	private Company company;
 	private String name;
 	private Timestamp discontinued;
 	private Timestamp introduced;
 	
+	// Constructors
 	public Computer(int id, String name,Company company, Timestamp discontinued, Timestamp introduced){
-		setId(id);
-		setName(name);
-		setCompany(company);
-		setDiscontinued(discontinued);
-		setIntroduced(introduced);
-	}
-	
+		this.id = id;
+		this.name = name;
+		this.company = company;
+		this.discontinued = discontinued;
+		this.introduced = introduced;
+	}	
 	public Computer(){};
 
+	// Getter and Setter
 	public int getId() {
 		return id;
 	}
@@ -48,9 +55,6 @@ public class Computer {
 	}
 
 	public void setDiscontinued(Timestamp discontinued) throws IllegalArgumentException {
-		if(introduced != null && introduced.after(discontinued)){
-			throw new IllegalArgumentException("Setting discontinued attribute before introduced timestamp");
-		}
 		this.discontinued = discontinued;
 	}
 
@@ -59,9 +63,6 @@ public class Computer {
 	}
 
 	public void setIntroduced(Timestamp introduced) throws IllegalArgumentException {
-		if(discontinued != null && discontinued.before(introduced)){
-			throw new IllegalArgumentException("Setting introduced attribute after discontinued timestamp");
-		}
 		this.introduced = introduced;
 	}
 	

@@ -1,18 +1,19 @@
-package cli;
+package com.excilys.cli.impl;
 
-import dao.DAOException;
-import dao.DAOFactory;
-import models.Computer;
+import com.excilys.cli.Command;
+import com.excilys.dao.DAOException;
+import com.excilys.dao.ConnectionFactory;
+import com.excilys.models.Computer;
 
 public class DisplayAllComputerCmd implements Command {
 	
-	DisplayAllComputerCmd(){};
+	public DisplayAllComputerCmd(){};
 
 	@Override
 	public void execute() {
 		System.out.println("Display all computers...");
 		try{
-			for(Computer c:DAOFactory.getInstance().getComputerDAO().findAll()){
+			for(Computer c:ConnectionFactory.getInstance().getComputerDAO().findAll()){
 				System.out.println(c);
 			}
 		}catch(DAOException e){
