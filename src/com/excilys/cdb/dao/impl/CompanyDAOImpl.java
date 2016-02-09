@@ -1,4 +1,4 @@
-package com.excilys.dao.impl;
+package com.excilys.cdb.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,12 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.excilys.dao.CompanyDAO;
-import com.excilys.dao.ConnectionCloser;
-import com.excilys.dao.DAOException;
-import com.excilys.mappers.CompanyMapper;
-import com.excilys.dao.ConnectionFactory;
-import com.excilys.models.Company;
+import com.excilys.cdb.dao.CompanyDAO;
+import com.excilys.cdb.dao.ConnectionCloser;
+import com.excilys.cdb.dao.ConnectionFactory;
+import com.excilys.cdb.dao.DAOException;
+import com.excilys.cdb.mappers.CompanyMapper;
+import com.excilys.cdb.models.Company;
 
 public class CompanyDAOImpl implements CompanyDAO {
 	
@@ -25,16 +25,24 @@ public class CompanyDAOImpl implements CompanyDAO {
 	private final String FIND_BYNAME_QUERY = "SELECT * FROM company WHERE name=?";
 	private final String INSERT_QUERY = "INSERT INTO company (name) VALUES (?)";;
 	
-	// DAOFactory
-	private ConnectionFactory daoFactory;
+	// Singleton
+	private static CompanyDAO instance;
 
 	// Constructors
-	public CompanyDAOImpl(){};
-	public CompanyDAOImpl(ConnectionFactory daoFactory){
-		this.daoFactory = daoFactory;
-	}
+	private CompanyDAOImpl(){};
 	
 	// Methods
+	/**
+	 * CompanyDAO singleton
+	 * @return unique instance access
+	 */
+	public static CompanyDAO getInstance() {
+		if(instance == null){
+			instance = new CompanyDAOImpl();
+		}
+		return instance;
+	}	
+	
 	@Override
 	public List<Company> findAll() throws DAOException {
 		
@@ -44,7 +52,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 		List<Company> companyList = null;
 		
 		try {
-			con = daoFactory.getConnection();
+			con = ConnectionFactory.getInstance().getConnection();
 			con.setAutoCommit(false);
 			
 			ps = con.prepareStatement(FIND_ALL_QUERY);
@@ -80,7 +88,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 		
 		try {
 			// Get opened connection
-			con = daoFactory.getConnection();
+			con = ConnectionFactory.getInstance().getConnection();
 			con.setAutoCommit(false);
 			
 			// Prepare query
@@ -126,7 +134,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 		
 		try {
 			// Get opened connection
-			con = daoFactory.getConnection();
+			con = ConnectionFactory.getInstance().getConnection();
 			con.setAutoCommit(false);
 			
 			// Prepare query
@@ -170,7 +178,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 		
 		try {
 			// Get opened connection
-			con = daoFactory.getConnection();
+			con = ConnectionFactory.getInstance().getConnection();
 			con.setAutoCommit(false);
 			
 			// Prepare query

@@ -1,4 +1,4 @@
-package com.excilys.dao;
+package com.excilys.cdb.dao;
 
 
 /**

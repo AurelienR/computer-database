@@ -1,8 +1,8 @@
-package com.excilys.dao;
+package com.excilys.cdb.dao;
 
 import java.util.List;
 
-import com.excilys.models.Computer;
+import com.excilys.cdb.models.Computer;
 /**
  * Interface for managing Computer data with the database
  * @author Aurelien.R

@@ -1,4 +1,5 @@
-import com.excilys.cli.CommandParser;
+package com.excilys.cdb;
+import com.excilys.cdb.cli.CommandParser;
 
 public class Main {
 

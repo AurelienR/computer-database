@@ -1,7 +1,7 @@
-package com.excilys.dao;
+package com.excilys.cdb.dao;
 import java.util.List;
 
-import com.excilys.models.Company;
+import com.excilys.cdb.models.Company;
 
 public interface CompanyDAO {
 	

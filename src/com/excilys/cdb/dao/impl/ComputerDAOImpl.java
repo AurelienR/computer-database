@@ -1,17 +1,18 @@
-package com.excilys.dao.impl;
+package com.excilys.cdb.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
-import com.excilys.dao.ComputerDAO;
-import com.excilys.dao.ConnectionCloser;
-import com.excilys.dao.DAOException;
-import com.excilys.mappers.ComputerMapper;
-import com.excilys.dao.ConnectionFactory;
-import com.excilys.models.Computer;
+import com.excilys.cdb.dao.ComputerDAO;
+import com.excilys.cdb.dao.ConnectionCloser;
+import com.excilys.cdb.dao.ConnectionFactory;
+import com.excilys.cdb.dao.DAOException;
+import com.excilys.cdb.mappers.ComputerMapper;
+import com.excilys.cdb.models.Computer;
 
 /**
  * Manage computer data operation with the Database
@@ -32,16 +33,24 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private final String UPDATE_QUERY = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 	private final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
 	
-	// DAOFactory
-	private ConnectionFactory daoFactory;
+	//Singleton
+	private static ComputerDAO instance;
 	
 	// Constructors
-	public ComputerDAOImpl(){};	
-	public ComputerDAOImpl(ConnectionFactory daoFactory){
-		this.daoFactory = daoFactory;
-	}
+	private ComputerDAOImpl(){};	
 
 	// Methods
+	/**
+	 * ComputerDAO singleton
+	 * @return unique instance access
+	 */
+	public static ComputerDAO getInstance() {
+		if(instance == null){
+			instance = new ComputerDAOImpl();
+		}
+		return instance;
+	}
+	
 	@Override
 	public List<Computer> findAll() throws DAOException {
 		
@@ -53,7 +62,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		
 		try {
 			// Get opened connection
-			con = daoFactory.getConnection();
+			con = ConnectionFactory.getInstance().getConnection();
 			con.setAutoCommit(false);
 			
 			// Prepare query
@@ -92,7 +101,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		
 		try {
 			// Get opened connection
-			con = daoFactory.getConnection();
+			con = ConnectionFactory.getInstance().getConnection();
 			con.setAutoCommit(false);
 			
 			// Prepare query
@@ -139,7 +148,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		
 		try {
 			// Get opened connection
-			con = daoFactory.getConnection();
+			con = ConnectionFactory.getInstance().getConnection();
 			con.setAutoCommit(false);
 			
 			// Prepare query
@@ -178,8 +187,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 		if(computer.getName() == null || computer.getName().isEmpty()) throw new IllegalArgumentException("Name parameter must be not null or empty");
 		// Check introduced field
 		if(computer.getIntroduced() == null) throw new IllegalArgumentException("Introduced timestamp of computer parameter must be not null");
-		// Check introduced field and Check introduced,discontinued time consistency
-		if(computer.getDiscontinued() != null && computer.getDiscontinued().before(computer.getIntroduced())) throw new IllegalArgumentException("Discontinued computer timestamp is set before Introduced computer timestamp");
 		
 		// Init local variables
 		Connection con = null;
@@ -187,15 +194,15 @@ public class ComputerDAOImpl implements ComputerDAO {
 		
 		try {
 			// Get opened connection
-			con = daoFactory.getConnection();
+			con = ConnectionFactory.getInstance().getConnection();
 			con.setAutoCommit(false);
 			
 			// Prepare query
 			ps = con.prepareStatement(INSERT_QUERY);
 			// Replace query fields
 			ps.setString(1,computer.getName());
-			ps.setTimestamp(2,computer.getIntroduced());
-			ps.setTimestamp(3, computer.getDiscontinued());
+			ps.setTimestamp(2,Timestamp.valueOf(computer.getIntroduced()));
+			ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
 			ps.setInt(4, computer.getCompany().getId());
 			ps.setInt(5, computer.getId());
 			
@@ -220,23 +227,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public void updateComputer(Computer computer) throws DAOException, IllegalArgumentException {
-		// Parameter validation and DB consistency
-		// Check name Field
-		if(computer.getName() == null || computer.getName().isEmpty()) throw new IllegalArgumentException("Name parameter must be not null or empty");
-		// Check discontinued and introduced local attribute are consistent
-		if(computer.getDiscontinued() != null && computer.getIntroduced()!= null && computer.getIntroduced().after(computer.getDiscontinued()))throw new IllegalArgumentException("Discontinued computer timestamp is set before Introduced computer timestamp");
-		// Check discontinued local field is consistent with introduced DB value
-		else if(computer.getDiscontinued() != null && computer.getIntroduced() == null){
-			for(Computer c: findById(computer.getId())){
-				if(c.getIntroduced().after(computer.getDiscontinued())) throw new IllegalArgumentException("Inconsistency with DB, Discontinued timestamp is before introduced DB timestamp");	
-			}
-		}
-		// Check introduced local field is consistent with discontinued DB value
-		else if(computer.getIntroduced() != null && computer.getDiscontinued() == null){
-			for(Computer c: findById(computer.getId())){
-				if(c.getDiscontinued().before(computer.getIntroduced())) throw new IllegalArgumentException("Inconsistency with DB, Introduced timestamp is after discontinued DB timestamp");	
-			}
-		}
 
 		// Init local variables
 		Connection con = null;
@@ -244,15 +234,15 @@ public class ComputerDAOImpl implements ComputerDAO {
 		
 		try {
 			// Get opened connection
-			con = daoFactory.getConnection();
+			con = ConnectionFactory.getInstance().getConnection();
 			con.setAutoCommit(false);
 			
 			// Prepare query
 			ps = con.prepareStatement(UPDATE_QUERY);
 			// Replace query fields
 			ps.setString(1,computer.getName());
-			ps.setTimestamp(2,computer.getIntroduced());
-			ps.setTimestamp(3, computer.getDiscontinued());
+			ps.setTimestamp(2,Timestamp.valueOf(computer.getIntroduced()));
+			ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
 			ps.setInt(4, computer.getCompany().getId());
 			ps.setInt(5, computer.getId());	
 			
@@ -284,7 +274,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		
 		try {
 			// Get opened connection
-			con = daoFactory.getConnection();
+			con = ConnectionFactory.getInstance().getConnection();
 			con.setAutoCommit(false);
 			
 			// Prepare query
@@ -310,5 +300,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 			ConnectionCloser.silentCloses(ps, con);
 		}
 		
-	}	
+	}
+
+
+
+
 }

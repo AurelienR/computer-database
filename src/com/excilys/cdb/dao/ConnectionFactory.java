@@ -1,14 +1,10 @@
-package com.excilys.dao;
+package com.excilys.cdb.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-
-import com.excilys.dao.impl.CompanyDAOImpl;
-import com.excilys.dao.impl.ComputerDAOImpl;
-
 import java.sql.Connection;
 
 /**
@@ -28,20 +24,36 @@ public class ConnectionFactory {
 	private String url;
 	private String username;
 	private String password;
+	
+	// Singleton
+	private static ConnectionFactory instance;
 
-	ConnectionFactory(String url, String username, String password) {
+	private ConnectionFactory(String url, String username, String password) {
 		this.url = url;
 		this.username = username;
 		this.password = password;
 	}
 
 	/**
-	 * Initialize drivers and db connections
-	 * @return DAOFactory object that give access to connections
+	 * Get instance of ConnectionFactory object correctly initialize 
+	 * @return ConnectionFactory object that give access to connections
 	 * @throws DAOConfigurationException
 	 */
-	public static ConnectionFactory getInstance() throws DAOConfigurationException {
-
+	public static ConnectionFactory getInstance() throws DAOConfigurationException {		
+		if(instance == null){
+			instance = initializeInstance();
+		}
+		return instance;
+	}
+	
+	/**
+	 * Initialize driver of the ConnectionFactory
+	 * @return ConnectionFactory instance with drive initialized
+	 * @throws DAOConfigurationException
+	 */
+	private static ConnectionFactory initializeInstance() throws DAOConfigurationException {
+		
+		//Local variables initialization
 		Properties properties = new Properties();
 		String url = null;
 		String driver = null;
@@ -76,11 +88,10 @@ public class ConnectionFactory {
 			throw new DAOConfigurationException("Driver is missiing from classpath.", e);
 		}
 
-		// Instanciate and return single DAOFactory instance
-		ConnectionFactory instance = new ConnectionFactory(url, nomUtilisateur, motDePasse);
+		// Instantiate and return single DAOFactory instance
+		ConnectionFactory connectionFactory = new ConnectionFactory(url, nomUtilisateur, motDePasse);
 
-		return instance;
-
+		return connectionFactory;
 	}
 
 	
@@ -92,19 +103,4 @@ public class ConnectionFactory {
 	public Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(url, username, password);
 	}
-
-	/**
-	 * @return new instance of ComputerDAO
-	 */
-	public ComputerDAO getComputerDAO() {
-		return new ComputerDAOImpl(this);
-	}
-
-	/**
-	 * @return new instance of CompanyDAO
-	 */
-	public CompanyDAO getCompanyDAO() {
-		return new CompanyDAOImpl(this);
-	}
-
 }

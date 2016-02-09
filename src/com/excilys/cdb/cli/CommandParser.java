@@ -1,18 +1,18 @@
-package com.excilys.cli;
+package com.excilys.cdb.cli;
 
 import java.util.Scanner;
 
-import com.excilys.cli.impl.CreateComputerCmd;
-import com.excilys.cli.impl.DeleteComputerCmd;
-import com.excilys.cli.impl.DisplayAllCompanyCmd;
-import com.excilys.cli.impl.DisplayAllComputerCmd;
-import com.excilys.cli.impl.DisplayComputerDetailsCmd;
-import com.excilys.cli.impl.ExitCmd;
-import com.excilys.cli.impl.UpdateComputerCmd;
+import com.excilys.cdb.cli.impl.CreateComputerCmd;
+import com.excilys.cdb.cli.impl.DeleteComputerCmd;
+import com.excilys.cdb.cli.impl.DisplayAllCompanyCmd;
+import com.excilys.cdb.cli.impl.DisplayAllComputerCmd;
+import com.excilys.cdb.cli.impl.DisplayComputerDetailsCmd;
+import com.excilys.cdb.cli.impl.ExitCmd;
+import com.excilys.cdb.cli.impl.UpdateComputerCmd;
 
 /**
  * Commandline parser that manage client entries
- * @author excilys
+ * @author Aurelien.R
  *
  */
 public class CommandParser {

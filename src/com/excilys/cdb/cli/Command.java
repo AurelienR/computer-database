@@ -1,4 +1,4 @@
-package com.excilys.cli;
+package com.excilys.cdb.cli;
 
 /**
  * Basic command interface for commandlines

@@ -1,7 +1,11 @@
-package com.excilys.cli.impl;
+package com.excilys.cdb.cli.impl;
 
-import com.excilys.cli.Command;
-
+import com.excilys.cdb.cli.Command;
+/**
+ * CLI to exit the program
+ * @author Aurelien.R
+ *
+ */
 public class ExitCmd implements Command{
 	
 	public ExitCmd (){}

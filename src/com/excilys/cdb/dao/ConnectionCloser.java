@@ -1,4 +1,4 @@
-package com.excilys.dao;
+package com.excilys.cdb.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 /**
  * Utility class to close properly connection and related objects
- * @author excilys
+ * @author Aurelien.R
  *
  */
 public class ConnectionCloser{

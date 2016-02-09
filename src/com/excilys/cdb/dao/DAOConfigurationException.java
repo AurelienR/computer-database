@@ -1,4 +1,4 @@
-package com.excilys.dao;
+package com.excilys.cdb.dao;
 
 /**
  * Custom exception for config and setup DB connnection

@@ -1,14 +1,14 @@
-package com.excilys.mappers;
+package com.excilys.cdb.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.dao.impl.ComputerDAOImpl;
-import com.excilys.models.Company;
-import com.excilys.models.Computer;
+import com.excilys.cdb.dao.impl.ComputerDAOImpl;
+import com.excilys.cdb.models.Company;
+import com.excilys.cdb.models.Computer;
 
 public class ComputerMapper {
 	
@@ -28,9 +28,8 @@ public class ComputerMapper {
 			// Set computer fields
 			int computerId = results.getInt("computer.id");
 			String computerName = results.getString("computer.name");
-			Timestamp introduced = results.getTimestamp(ComputerDAOImpl.INTRO_COLUMN);
-			Timestamp discontinued = results.getTimestamp(ComputerDAOImpl.DISC_COLUMN);
-			
+			LocalDateTime introduced = results.getTimestamp(ComputerDAOImpl.INTRO_COLUMN).toLocalDateTime();
+			LocalDateTime discontinued = results.getTimestamp(ComputerDAOImpl.DISC_COLUMN).toLocalDateTime();
 			// Initialize related company
 			Company company =  new Company(results.getInt("company.id"),results.getString("company.name"));
 			// Initialize computer

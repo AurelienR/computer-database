@@ -1,12 +1,12 @@
-package com.excilys.mappers;
+package com.excilys.cdb.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.dao.impl.CompanyDAOImpl;
-import com.excilys.models.Company;
+import com.excilys.cdb.dao.impl.CompanyDAOImpl;
+import com.excilys.cdb.models.Company;
 
 public class CompanyMapper {
 	
