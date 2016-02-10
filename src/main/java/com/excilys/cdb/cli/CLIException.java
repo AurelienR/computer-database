@@ -1,5 +1,9 @@
 package com.excilys.cdb.cli;
-
+/**
+ * Exception for CLI execution
+ * @author Aurelien.R
+ *
+ */
 public class CLIException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;

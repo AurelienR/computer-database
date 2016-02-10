@@ -5,6 +5,12 @@ import java.util.List;
 import com.excilys.cdb.dao.impl.CompanyDAOImpl;
 import com.excilys.cdb.models.Company;
 
+/**
+ * Service layer to CompanyDAO
+ * 
+ * @author Aurelien.R
+ *
+ */
 public class CompanyService {
 	// Singleton
 	private static CompanyService instance;

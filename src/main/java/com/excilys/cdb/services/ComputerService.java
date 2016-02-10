@@ -6,6 +6,12 @@ import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.dao.impl.ComputerDAOImpl;
 import com.excilys.cdb.models.Computer;
 
+/**
+ * Service layer to ComputerDAO
+ * 
+ * @author Aurelien.R
+ *
+ */
 public class ComputerService {
 
 	// Singleton

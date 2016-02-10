@@ -13,13 +13,29 @@ import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.CompanyService;
 import com.excilys.cdb.services.ComputerService;
 
+/**
+ * Static methods to manage secure input and cli for client
+ * @author Aurelien.R
+ *
+ */
 public class InputCommandParser {
-
+	
+	//Methods
+	/**
+	 * Invite user to type a name, not required field
+	 * @param sc system input scanner
+	 * @return valid name from client input
+	 */
 	public static String getNameInput(Scanner sc) {
 		String name = sc.next();
 		return name;
 	}
 
+	/**
+	 * Invite user to type a name until the field is not empty
+	 * @param sc system input scanner
+	 * @return valid name from client input
+	 */
 	public static String getRequiredNameInput(Scanner sc) {
 		String name;
 		while ((name = sc.next()) == null || name.isEmpty()) {
@@ -28,6 +44,13 @@ public class InputCommandParser {
 		return name;
 	}
 
+	/**
+	 * Invite user to enter a date to a specific format, user can skip this step
+	 * @param sc system in scanner
+	 * @param dateFormat dateFormat string expected
+	 * @return related LocalDateTime instance
+	 * @throws ParseException
+	 */
 	public static LocalDateTime getDateInput(Scanner sc, String dateFormat) throws ParseException {
 		String dateStr;
 		while (!(dateStr = sc.nextLine()).isEmpty() && !isValidDate(dateStr, dateFormat)) {
@@ -39,6 +62,12 @@ public class InputCommandParser {
 		return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 	}
 
+	/**
+	 * Invite user to enter a company name and retry until input is matching Company name database
+	 * Can be skip by user
+	 * @param sc system in scanner
+	 * @return related list of company
+	 */
 	public static List<Company> getValidCompanyByName(Scanner sc) {
 		String companyName;
 		while (!(companyName = sc.nextLine()).isEmpty()
@@ -50,6 +79,12 @@ public class InputCommandParser {
 		return CompanyService.getInstance().findByName(companyName);
 	}
 
+	/**
+	 * Invite user to enter a company name and retry until input is matching Company name database
+	 * Cannot be skip by user
+	 * @param sc system in scanner
+	 * @return related list of company
+	 */
 	public static List<Company> getRequiredValidCompanyByName(Scanner sc) {
 		String companyName;
 		while ((companyName = sc.nextLine()) == null || companyName.isEmpty()
@@ -59,6 +94,12 @@ public class InputCommandParser {
 		return CompanyService.getInstance().findByName(companyName);
 	}
 
+	/**
+	 * Invite user to enter a computer name and retry until input is matching computer name database
+	 * Can be skip by user
+	 * @param sc system in scanner
+	 * @return related list of computers
+	 */
 	public static List<Computer> getValidComputerByName(Scanner sc) {
 		String computerName;
 		while (!(computerName = sc.nextLine()).isEmpty()
@@ -68,6 +109,12 @@ public class InputCommandParser {
 		return ComputerService.getInstance().findByName(computerName);
 	}
 
+	/**
+	 * Invite user to enter a computer name and retry until input is matching computer name database
+	 * Cannot be skip by user
+	 * @param sc system in scanner
+	 * @return related list of computers
+	 */
 	public static List<Computer> getRequiredValidComputerByName(Scanner sc) {
 		String computerName;
 		while ((computerName = sc.nextLine()) == null || computerName.isEmpty()
@@ -77,6 +124,12 @@ public class InputCommandParser {
 		return ComputerService.getInstance().findByName(computerName);
 	}
 
+	/**
+	 * Check if the dateStr is matching the expected dateFormatStr format
+	 * @param dateStr string to check
+	 * @param dateFormatStr string format expected
+	 * @return true if dateStr is matching dateFormatStr format, else return false
+	 */
 	private static boolean isValidDate(String dateStr, String dateFormatStr) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatStr);
 		dateFormat.setLenient(false);

@@ -37,6 +37,10 @@ public class CommandParser {
 		this.sc = new Scanner(System.in);
 	}
 
+	// Methods
+	/**
+	 * Parse client input, and give instruction to follow
+	 */
 	public void parseCmd() {
 		System.out.println("\nEnter a command:\n");
 		String cmdStr = sc.next();
@@ -70,7 +74,6 @@ public class CommandParser {
 		cmdInvoker.invoke();
 	}
 
-	// Methods
 	/**
 	 * Display in console all command line available for clients
 	 */
