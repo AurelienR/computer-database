@@ -49,18 +49,17 @@ public class ComputerService {
 		ComputerDAOImpl.getInstance().deleteComputer(id);
 	}
 
-	private void validateComputerDates(Computer computer) throws IllegalArgumentException {
+	private void validateComputerDates(Computer computer) throws ServiceException {
 		if (computer.getIntroduced() != null && computer.getDiscontinued() != null) {
 			if (computer.getIntroduced().isAfter(computer.getDiscontinued())) {
-				throw new IllegalArgumentException(
-						"Computer Introduced localdatetime attribute setted after discontinued localdatetime");
+				throw new ServiceException("Valitdation: Computer Introduced localdatetime attribute setted after discontinued localdatetime");
 			}
 		}
 	}
 
-	private void validateComputerName(Computer computer) throws IllegalArgumentException {
+	private void validateComputerName(Computer computer) throws ServiceException {
 		if (computer.getName() == null || computer.getName().isEmpty()) {
-			throw new IllegalArgumentException("Computer name should be not null or empty");
+			throw new ServiceException("Validation:Computer name should be not null or empty");
 		}
 	}
 }

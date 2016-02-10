@@ -15,7 +15,7 @@ import java.sql.Connection;
 
 public class ConnectionFactory {
 
-	private static final String PROPERTY_FILE = "com/excilys/cdb/dao/dao.properties";
+	private static final String PROPERTY_FILE = "dao.properties";
 	private static final String URL_PROPERTY = "url";
 	private static final String DRIVER_PROPERTY = "driver";
 	private static final String USERNAME_PROPERTY = "nomutilisateur";

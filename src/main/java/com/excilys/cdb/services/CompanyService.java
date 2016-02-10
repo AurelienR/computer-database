@@ -38,9 +38,9 @@ public class CompanyService {
 		CompanyDAOImpl.getInstance().insertCompany(company);
 	}
 
-	private void validateCompanyName(Company Company) throws IllegalArgumentException {
+	private void validateCompanyName(Company Company) throws ServiceException {
 		if (Company.getName() == null || Company.getName().isEmpty()) {
-			throw new IllegalArgumentException("Company name should be not null or empty");
+			throw new ServiceException("Company name should be not null or empty");
 		}
 	}
 }

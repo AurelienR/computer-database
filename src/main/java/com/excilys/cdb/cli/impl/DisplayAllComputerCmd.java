@@ -5,6 +5,7 @@ import com.excilys.cdb.cli.Command;
 import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.ComputerService;
+import com.excilys.cdb.services.ServiceException;
 
 /**
  * CLI to display all computers
@@ -25,6 +26,8 @@ public class DisplayAllComputerCmd implements Command {
 			for (Computer c : ComputerService.getInstance().findAll()) {
 				System.out.println(c);
 			}
+		} catch (ServiceException e) {
+			throw new CLIException("Illegal argument", e);
 		} catch (DAOException e) {
 			throw new CLIException("DAO exception", e);
 		}

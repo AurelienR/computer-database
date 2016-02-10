@@ -8,6 +8,7 @@ import com.excilys.cdb.cli.InputCommandParser;
 import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.ComputerService;
+import com.excilys.cdb.services.ServiceException;
 
 /**
  * CLI to delete a computer
@@ -38,6 +39,8 @@ public class DeleteComputerCmd implements Command {
 			ComputerService.getInstance().deleteComputer(computer.getId());
 
 		} catch (IllegalArgumentException e) {
+			throw new CLIException("Illegal argument", e);
+		} catch (ServiceException e) {
 			throw new CLIException("Illegal argument", e);
 		} catch (DAOException e) {
 			throw new CLIException("DAO exception", e);
