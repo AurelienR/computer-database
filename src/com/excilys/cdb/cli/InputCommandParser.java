@@ -16,34 +16,63 @@ import com.excilys.cdb.services.ComputerService;
 public class InputCommandParser {
 
 	public static String getNameInput(Scanner sc) {
+		String name = sc.next();
+		return name;
+	}
+
+	public static String getRequiredNameInput(Scanner sc) {
 		String name;
 		while ((name = sc.next()) == null || name.isEmpty()) {
-			System.out.println("Invalid input, retry Name:");
+			System.out.println("Invalid input, field required ,retry Name:");
 		}
 		return name;
 	}
 
-	public static LocalDateTime getDateInput(Scanner sc, String dateFormat) throws ParseException{
+	public static LocalDateTime getDateInput(Scanner sc, String dateFormat) throws ParseException {
 		String dateStr;
-		while(!(dateStr = sc.nextLine()).isEmpty() && !isValidDate(dateStr,dateFormat)){
+		while (!(dateStr = sc.nextLine()).isEmpty() && !isValidDate(dateStr, dateFormat)) {
 			System.out.println("Invalid input, retry Date:");
 		}
-		Date date = new SimpleDateFormat(dateFormat).parse(dateStr);	
+		if (dateStr.isEmpty())
+			return null;
+		Date date = new SimpleDateFormat(dateFormat).parse(dateStr);
 		return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 	}
-	
-	public static List<Company> getValidCompanyByName(Scanner sc){
+
+	public static List<Company> getValidCompanyByName(Scanner sc) {
 		String companyName;
-		while(!(companyName =sc.nextLine()).isEmpty() && CompanyService.getInstance().findByName(companyName).isEmpty()){
+		while (!(companyName = sc.nextLine()).isEmpty()
+				&& CompanyService.getInstance().findByName(companyName).isEmpty()) {
 			System.out.println("No Company Name matching, retry Company Name:");
+		}
+		if (companyName.isEmpty())
+			return null;
+		return CompanyService.getInstance().findByName(companyName);
+	}
+
+	public static List<Company> getRequiredValidCompanyByName(Scanner sc) {
+		String companyName;
+		while ((companyName = sc.nextLine()) == null || companyName.isEmpty()
+				|| CompanyService.getInstance().findByName(companyName).isEmpty()) {
+			System.out.println("No Company Name matching, required field ,retry Company Name:");
 		}
 		return CompanyService.getInstance().findByName(companyName);
 	}
-	
-	public static List<Computer> getValidComputerByName(Scanner sc){
+
+	public static List<Computer> getValidComputerByName(Scanner sc) {
 		String computerName;
-		while(!(computerName =sc.nextLine()).isEmpty() && ComputerService.getInstance().findByName(computerName).isEmpty()){
-			System.out.println("No Computer Name matching, retry Company Name:");
+		while (!(computerName = sc.nextLine()).isEmpty()
+				&& ComputerService.getInstance().findByName(computerName).isEmpty()) {
+			System.out.println("No Computer Name matching, retry Computer Name:");
+		}
+		return ComputerService.getInstance().findByName(computerName);
+	}
+
+	public static List<Computer> getRequiredValidComputerByName(Scanner sc) {
+		String computerName;
+		while ((computerName = sc.nextLine()) == null || computerName.isEmpty()
+				|| ComputerService.getInstance().findByName(computerName).isEmpty()) {
+			System.out.println("No Computer Name matching, required field, retry Computer Name:");
 		}
 		return ComputerService.getInstance().findByName(computerName);
 	}

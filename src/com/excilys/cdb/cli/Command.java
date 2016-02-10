@@ -1,8 +1,8 @@
 package com.excilys.cdb.cli;
 
 /**
- * Basic command interface for commandlines
- * Command pattern
+ * Basic command interface for commandlines Command pattern
+ * 
  * @author Aurelien.R
  *
  */

@@ -185,8 +185,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 		// Parameter validation and DB consistency
 		// Check name Field
 		if(computer.getName() == null || computer.getName().isEmpty()) throw new IllegalArgumentException("Name parameter must be not null or empty");
-		// Check introduced field
-		if(computer.getIntroduced() == null) throw new IllegalArgumentException("Introduced timestamp of computer parameter must be not null");
 		
 		// Init local variables
 		Connection con = null;
@@ -201,10 +199,19 @@ public class ComputerDAOImpl implements ComputerDAO {
 			ps = con.prepareStatement(INSERT_QUERY);
 			// Replace query fields
 			ps.setString(1,computer.getName());
-			ps.setTimestamp(2,Timestamp.valueOf(computer.getIntroduced()));
-			ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
+			
+			if(computer.getIntroduced() == null){
+				ps.setTimestamp(2,null);
+			}else{
+				ps.setTimestamp(2,Timestamp.valueOf(computer.getIntroduced()));
+			}
+			if(computer.getDiscontinued() == null){
+				ps.setTimestamp(3,null);
+			}else{
+				ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
+			}
+			
 			ps.setInt(4, computer.getCompany().getId());
-			ps.setInt(5, computer.getId());
 			
 			ps.executeUpdate();
 			con.commit();		
@@ -241,8 +248,16 @@ public class ComputerDAOImpl implements ComputerDAO {
 			ps = con.prepareStatement(UPDATE_QUERY);
 			// Replace query fields
 			ps.setString(1,computer.getName());
-			ps.setTimestamp(2,Timestamp.valueOf(computer.getIntroduced()));
-			ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
+			if(computer.getIntroduced() == null){
+				ps.setTimestamp(2,null);
+			}else{
+				ps.setTimestamp(2,Timestamp.valueOf(computer.getIntroduced()));
+			}
+			if(computer.getDiscontinued() == null){
+				ps.setTimestamp(3,null);
+			}else{
+				ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
+			}
 			ps.setInt(4, computer.getCompany().getId());
 			ps.setInt(5, computer.getId());	
 			

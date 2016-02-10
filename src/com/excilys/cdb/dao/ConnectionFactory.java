@@ -15,7 +15,7 @@ import java.sql.Connection;
 
 public class ConnectionFactory {
 
-	private static final String PROPERTY_FILE = "dao/dao.properties";
+	private static final String PROPERTY_FILE = "com/excilys/cdb/dao/dao.properties";
 	private static final String URL_PROPERTY = "url";
 	private static final String DRIVER_PROPERTY = "driver";
 	private static final String USERNAME_PROPERTY = "nomutilisateur";
@@ -24,7 +24,7 @@ public class ConnectionFactory {
 	private String url;
 	private String username;
 	private String password;
-	
+
 	// Singleton
 	private static ConnectionFactory instance;
 
@@ -35,31 +35,33 @@ public class ConnectionFactory {
 	}
 
 	/**
-	 * Get instance of ConnectionFactory object correctly initialize 
+	 * Get instance of ConnectionFactory object correctly initialize
+	 * 
 	 * @return ConnectionFactory object that give access to connections
 	 * @throws DAOConfigurationException
 	 */
-	public static ConnectionFactory getInstance() throws DAOConfigurationException {		
-		if(instance == null){
+	public static ConnectionFactory getInstance() throws DAOConfigurationException {
+		if (instance == null) {
 			instance = initializeInstance();
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * Initialize driver of the ConnectionFactory
+	 * 
 	 * @return ConnectionFactory instance with drive initialized
 	 * @throws DAOConfigurationException
 	 */
 	private static ConnectionFactory initializeInstance() throws DAOConfigurationException {
-		
-		//Local variables initialization
+
+		// Local variables initialization
 		Properties properties = new Properties();
 		String url = null;
 		String driver = null;
 		String nomUtilisateur = null;
 		String motDePasse = null;
-		
+
 		// Read DAO file property
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream fileProperties = classLoader.getResourceAsStream(PROPERTY_FILE);
@@ -94,9 +96,9 @@ public class ConnectionFactory {
 		return connectionFactory;
 	}
 
-	
 	/**
-	 * Open a connection to DB based on property 
+	 * Open a connection to DB based on property
+	 * 
 	 * @return Connection to DB
 	 * @throws SQLException
 	 */

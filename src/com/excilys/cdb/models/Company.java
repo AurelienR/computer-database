@@ -1,20 +1,20 @@
 package com.excilys.cdb.models;
 
-import java.util.Objects;
-
 /**
  * Model of a company
+ * 
  * @author Aurelien.R
  *
  */
 public class Company {
 	private int id;
 	private String name;
-	
-	public Company(){};
-	
-	public Company(int id, String name){
-		this.id =  id;
+
+	public Company() {
+	};
+
+	public Company(int id, String name) {
+		this.id = id;
 		this.name = name;
 	}
 
@@ -35,40 +35,40 @@ public class Company {
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(Company.class.getSimpleName())
-		.append(" :")
-		.append("id: ").append(Integer.toString(getId()))
-		.append(" name:").append(getName());
-		
+		sb.append(Company.class.getSimpleName()).append(" :").append("id: ").append(Integer.toString(getId()))
+				.append(" name:").append(getName());
+
 		return sb.toString();
 	}
 
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.getId(), this.getName());
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		// Check type
-	    if (obj == null) return false;
-	    if (obj == this) return true;
-	    if (!(obj instanceof Company))return false;
-	    
-	    Company companyObj = (Company)obj;	    
-	    // Check attributes
-	    // Check null 
-	    if(Objects.isNull(companyObj.getName()) && !Objects.isNull(this.getName())) return false;
-	    if(Objects.isNull(this.getName()) && !Objects.isNull(companyObj.getName())) return false;
-	    // Check values
-	    if(this.getId() != companyObj.getId()) return false;
-	    if(!this.getName().equals(companyObj.getName())) return false;
-	    
-	    return true;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Company other = (Company) obj;
+		if (id != other.id)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
-	
-	
+
 }

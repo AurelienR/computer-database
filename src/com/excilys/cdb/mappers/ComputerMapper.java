@@ -2,6 +2,7 @@ package com.excilys.cdb.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,27 @@ public class ComputerMapper {
 			// Set computer fields
 			int computerId = results.getInt("computer.id");
 			String computerName = results.getString("computer.name");
-			LocalDateTime introduced = results.getTimestamp(ComputerDAOImpl.INTRO_COLUMN).toLocalDateTime();
-			LocalDateTime discontinued = results.getTimestamp(ComputerDAOImpl.DISC_COLUMN).toLocalDateTime();
+
+			Timestamp introTimestamp = results.getTimestamp(ComputerDAOImpl.INTRO_COLUMN);
+			LocalDateTime introduced;
+			if(introTimestamp == null){
+				introduced = null;
+			}
+			else{
+				introduced = introTimestamp.toLocalDateTime();
+			}
+			
+			
+			Timestamp descTimestamp = results.getTimestamp(ComputerDAOImpl.DISC_COLUMN);
+			LocalDateTime discontinued;
+			if(descTimestamp == null){
+				discontinued = null;
+			}
+			else{
+				discontinued = descTimestamp.toLocalDateTime();
+			}
+			
+			
 			// Initialize related company
 			Company company =  new Company(results.getInt("company.id"),results.getString("company.name"));
 			// Initialize computer
