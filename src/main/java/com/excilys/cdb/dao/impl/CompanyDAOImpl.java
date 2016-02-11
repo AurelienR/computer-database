@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import com.excilys.cdb.dao.CompanyDAO;
@@ -166,7 +167,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 		return companyList;
 	}
 	@Override
-	public void insertCompany(Company company) throws DAOException, IllegalArgumentException {
+	public int insertCompany(Company company) throws DAOException, IllegalArgumentException {
 		
 		// Parameter validation
 		// Check name field
@@ -175,6 +176,8 @@ public class CompanyDAOImpl implements CompanyDAO {
 		// Get opened connection
 		Connection con = null;
 		PreparedStatement ps = null;
+		ResultSet results = null;
+		int id = -1;
 		
 		try {
 			// Get opened connection
@@ -182,11 +185,15 @@ public class CompanyDAOImpl implements CompanyDAO {
 			con.setAutoCommit(false);
 			
 			// Prepare query
-			ps = con.prepareStatement(INSERT_QUERY);
+			ps = con.prepareStatement(INSERT_QUERY,Statement.RETURN_GENERATED_KEYS);
 			// Replace query fields
 			ps.setString(1,company.getName());
 			
 			ps.executeUpdate();
+			results= ps.getGeneratedKeys();
+			if(results.next()){
+				id = results.getInt(1);
+			}
 			con.commit();		
 			
 		}catch (SQLException e) {
@@ -203,6 +210,8 @@ public class CompanyDAOImpl implements CompanyDAO {
 			// Close any connection related object
 			ConnectionCloser.silentCloses(ps, con);
 		}
+		
+		return id;
 	}
 	
 }

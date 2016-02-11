@@ -45,9 +45,10 @@ public interface ComputerDAO {
 	 * 
 	 * @param computer
 	 *            computer to store in DB
+	 * @return TODO
 	 * @throws DAOException
 	 */
-	void insertComputer(Computer computer) throws DAOException;
+	int insertComputer(Computer computer) throws DAOException;
 
 	/**
 	 * Update passed computer in the DB (find computer by its id)

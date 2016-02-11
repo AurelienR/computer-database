@@ -39,8 +39,9 @@ public interface CompanyDAO {
 	 * 
 	 * @param company
 	 *            company to store in DB
+	 * @return TODO
 	 * @throws DAOException
 	 */
-	void insertCompany(Company company) throws DAOException;
+	int insertCompany(Company company) throws DAOException;
 
 }

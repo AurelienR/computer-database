@@ -39,9 +39,9 @@ public class CompanyService {
 		return CompanyDAOImpl.getInstance().findByName(name);
 	}
 
-	public void createCompany(Company company) {
+	public int createCompany(Company company) {
 		validateCompanyName(company);
-		CompanyDAOImpl.getInstance().insertCompany(company);
+		return CompanyDAOImpl.getInstance().insertCompany(company);
 	}
 
 	private void validateCompanyName(Company Company) throws ServiceException {

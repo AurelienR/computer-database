@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -181,7 +182,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public void insertComputer(Computer computer) throws DAOException, IllegalArgumentException {
+	public int insertComputer(Computer computer) throws DAOException, IllegalArgumentException {
 		// Parameter validation and DB consistency
 		// Check name Field
 		if(computer.getName() == null || computer.getName().isEmpty()) throw new IllegalArgumentException("Name parameter must be not null or empty");
@@ -189,6 +190,8 @@ public class ComputerDAOImpl implements ComputerDAO {
 		// Init local variables
 		Connection con = null;
 		PreparedStatement ps = null;
+		ResultSet results = null;
+		int id = -1;
 		
 		try {
 			// Get opened connection
@@ -196,7 +199,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			con.setAutoCommit(false);
 			
 			// Prepare query
-			ps = con.prepareStatement(INSERT_QUERY);
+			ps = con.prepareStatement(INSERT_QUERY,Statement.RETURN_GENERATED_KEYS);
 			// Replace query fields
 			ps.setString(1,computer.getName());
 			
@@ -214,6 +217,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 			ps.setInt(4, computer.getCompany().getId());
 			
 			ps.executeUpdate();
+			if(results.next()){
+				id = results.getInt(1);
+			}
 			con.commit();		
 			
 		}catch (SQLException e) {
@@ -230,6 +236,8 @@ public class ComputerDAOImpl implements ComputerDAO {
 			// Close any connection related object
 			ConnectionCloser.silentCloses(ps, con);
 		}
+		
+		return id;
 	}
 
 	@Override

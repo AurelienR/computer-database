@@ -41,10 +41,10 @@ public class ComputerService {
 		return ComputerDAOImpl.getInstance().findByName(name);
 	}
 
-	public void createComputer(Computer computer) throws DAOException {
+	public int createComputer(Computer computer) throws DAOException {
 		validateComputerDates(computer);
 		validateComputerName(computer);
-		ComputerDAOImpl.getInstance().insertComputer(computer);
+		return ComputerDAOImpl.getInstance().insertComputer(computer);
 	}
 
 	public void updateComputer(Computer computer) throws DAOException {
