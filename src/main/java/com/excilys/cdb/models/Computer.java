@@ -72,9 +72,9 @@ public class Computer {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(Computer.class.getSimpleName()).append(" :").append("id: ").append(Integer.toString(getId()))
-				.append(" name:").append(getName()).append(" introduced:").append(getIntroduced())
-				.append(" discontinued:").append(getDiscontinued()).append(" Company:").append(getCompany().toString());
+		sb.append(Computer.class.getSimpleName()).append(": ").append("\n id: ").append(Integer.toString(getId()))
+				.append("\n name: ").append(getName()).append("\n introduced: ").append(getIntroduced())
+				.append("\n discontinued: ").append(getDiscontinued()).append("\n\tCompany: ").append(getCompany().toString());
 
 		return sb.toString();
 	}

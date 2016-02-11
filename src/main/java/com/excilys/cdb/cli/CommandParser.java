@@ -2,6 +2,9 @@ package com.excilys.cdb.cli;
 
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.cli.impl.CreateComputerCmd;
 import com.excilys.cdb.cli.impl.DeleteComputerCmd;
 import com.excilys.cdb.cli.impl.DisplayAllCompanyCmd;
@@ -17,7 +20,10 @@ import com.excilys.cdb.cli.impl.UpdateComputerCmd;
  *
  */
 public class CommandParser {
-
+	
+	// Logger
+	final static Logger logger = LoggerFactory.getLogger(CommandParser.class);
+	
 	// Constants
 	private static final String LIST_COMPANIES_CMD = "listcompanies";
 	private static final String LIST_COMPUTERS_CMD = "listcomputers";
@@ -43,6 +49,7 @@ public class CommandParser {
 	 */
 	public void parseCmd() {
 		System.out.println("\nEnter a command:\n");
+		logger.debug("Parsing command...");
 		String cmdStr = sc.next();
 		switch (cmdStr) {
 		case LIST_COMPANIES_CMD:
@@ -67,7 +74,7 @@ public class CommandParser {
 			cmdInvoker.setCommand(new ExitCmd());
 			break;
 		default:
-			System.out.println("Command not found : " + cmdStr);
+			logger.warn("Command not found : " + cmdStr);
 			return;
 
 		}

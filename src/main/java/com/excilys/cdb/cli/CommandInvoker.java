@@ -1,5 +1,8 @@
 package com.excilys.cdb.cli;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Executer any command passed Command Pattern
  * 
@@ -7,6 +10,10 @@ package com.excilys.cdb.cli;
  *
  */
 public class CommandInvoker {
+	// Logger
+	final static Logger logger = LoggerFactory.getLogger(CommandInvoker.class);
+	
+	// Command to invoke
 	Command command;
 
 	/**
@@ -15,6 +22,7 @@ public class CommandInvoker {
 	 * @param command
 	 */
 	public void setCommand(Command command) {
+		logger.debug("Set command to invoke: " + command.getClass().getSimpleName());
 		this.command = command;
 	}
 
@@ -22,6 +30,7 @@ public class CommandInvoker {
 	 * Execute the last command set
 	 */
 	public void invoke() {
+		logger.debug("Execute command: " + command.getClass().getSimpleName());
 		command.execute();
 	}
 }

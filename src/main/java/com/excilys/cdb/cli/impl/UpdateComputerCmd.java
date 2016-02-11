@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.cli.CLIException;
 import com.excilys.cdb.cli.Command;
 import com.excilys.cdb.cli.InputCommandParser;
@@ -22,6 +25,9 @@ import com.excilys.cdb.services.ServiceException;
  */
 public class UpdateComputerCmd implements Command {
 
+	// Logger
+	final static Logger logger = LoggerFactory.getLogger(UpdateComputerCmd.class);
+	
 	private final String dateFormat = "dd/MM/yyyy";
 	private Scanner sc;
 
@@ -39,11 +45,13 @@ public class UpdateComputerCmd implements Command {
 			System.out.println("Name of the computer to update:");
 			sc.nextLine();
 			Computer newComputer = InputCommandParser.getRequiredValidComputerByName(sc).get(0);
+			logger.debug("Computer retrieved: "+  newComputer);
 
 			// Get new name input
 			System.out.println("New Name:");
 			String newName = InputCommandParser.getNameInput(sc);
 			if (!newName.isEmpty()) {
+				logger.debug("computer.name: "+  newName);
 				newComputer.setName(newName);
 			}
 
@@ -52,22 +60,26 @@ public class UpdateComputerCmd implements Command {
 			sc.nextLine();
 			LocalDateTime introDate = InputCommandParser.getDateInput(sc, dateFormat);
 			if (introDate != null) {
+				logger.debug("computer.introduced: "+  introDate);
 				newComputer.setIntroduced(introDate);
 			}
 
 			System.out.println("Discontinued (" + dateFormat + "): ");
 			LocalDateTime discDate = InputCommandParser.getDateInput(sc, dateFormat);
 			if (introDate != null) {
+				logger.debug("computer.discontinued: "+  discDate);
 				newComputer.setIntroduced(discDate);
 			}
 
 			System.out.println("CompanyName ( must match existring one): ");
 			List<Company> companies;
-			if ((companies = InputCommandParser.getValidCompanyByName(sc)) != null) {
+			if ((companies = InputCommandParser.getValidCompanyByName(sc)) != null && !companies.isEmpty()) {
 				Company company = companies.get(0);
+				logger.debug("computer.company: "+ company);
 				newComputer.setCompany(company);
 			}
 
+			logger.debug("Try to update computer:" + newComputer);
 			ComputerService.getInstance().updateComputer(newComputer);
 
 		} catch (ParseException e) {

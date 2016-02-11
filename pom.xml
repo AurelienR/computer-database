@@ -34,7 +34,6 @@
 			<artifactId>logback-classic</artifactId>
 			<version>1.1.3</version>
 		</dependency>
-
 	</dependencies>
 	<build>
 		<finalName>computer-database</finalName>
