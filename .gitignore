@@ -9,6 +9,9 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
+### Mac ###
+*.DS_Store
+.DS_Store
 
 ### Java ###
 *.class
