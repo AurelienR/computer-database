@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.cdb.dao.impl.ComputerDAOImpl;
+import com.excilys.cdb.dtos.CompanyDTO;
 import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
+import com.excilys.cdb.utils.DateFormatManager;
 
 public class ComputerMapper {
 	
@@ -63,9 +65,15 @@ public class ComputerMapper {
 	}
 
 	public static ComputerDTO toComputerDTO(Computer computer){
-		String introStr = ((computer.getIntroduced() == null) ? "" : computer.getIntroduced().toString());
-		String discStr = ((computer.getDiscontinued() == null) ? "" : computer.getDiscontinued().toString());
-		return new ComputerDTO(computer.getId(),computer.getName(),introStr,discStr,CompanyMapper.toCompanyDTO(computer.getCompany()));
+
+		
+		int id = computer.getId();
+		String computerName = computer.getName();
+		String introStr = DateFormatManager.toHTMLDateString(computer.getIntroduced());
+		String discStr = DateFormatManager.toHTMLDateString(computer.getDiscontinued());
+		CompanyDTO companyDTO = CompanyMapper.toCompanyDTO(computer.getCompany());
+		
+		return new ComputerDTO(id,computerName,introStr,discStr, companyDTO);
 	}
 	
 	public static List<ComputerDTO> toComputerDTOList(List<Computer> computers){		

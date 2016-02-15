@@ -30,12 +30,12 @@
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" id="introduced"
-									value="${computer.introduced}">
+									value="">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" id="discontinued"
-									value="${computer.discontinued}">
+									value="">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> 

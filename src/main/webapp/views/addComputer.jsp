@@ -18,23 +18,23 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="addComputer" method="POST">
+                    <form id="addForm" action="addComputer" method="POST">
                         <fieldset>
-                            <div class="form-group">
+                            <div class="form-group  has-feedback">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" placeholder="Computer name">
+                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" required></input>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group  has-feedback">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date">
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date"></input>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group  has-feedback">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date"></input>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group  has-feedback">
                                 <label for="companyId">Company</label>
-                                <select class="form-control" id="companyId" >
+                                <select class="form-control" id="companyId" name="companyId" >
 									<option value="null">Nothing selected</option>
 									<c:forEach var="company" items="${requestScope.companies}">
 										<option value="${company.id}"
@@ -46,12 +46,17 @@
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
                             or
-                            <a href="dashboard.html" class="btn btn-default">Cancel</a>
+                            <a href="./computers" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </section>
+    <script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/jquery.validate.min.js"></script>
+	<script src="./js/fieldValidator.js"></script>
+	<script src="./js/addFormValidator.js"></script>
 </body>
 </html>
