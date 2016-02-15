@@ -1,11 +1,8 @@
-package com.excilys.cdb.services;
+package com.excilys.cdb.models;
 
 import java.util.List;
 
 import com.excilys.cdb.dao.impl.ComputerDAOImpl;
-import com.excilys.cdb.dtos.ComputerDTO;
-import com.excilys.cdb.dtos.ComputerPageDTO;
-import com.excilys.cdb.models.Computer;
 
 public class ComputerPage {
 	private int pageIndex;
@@ -43,14 +40,7 @@ public class ComputerPage {
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
-	
-	public ComputerPageDTO toComputerPageDTO(){
-		List<Computer> computers = this.getPage();
-		List<ComputerDTO> computerDTOs = Computer.toComputerDTOList(computers);
-		int pageCount = this.getPageCount();
-		return new ComputerPageDTO(pageIndex,pageSize,pageCount,computerDTOs);
-	}
-	
+		
 	public List<Computer> getPage(){
 		return getPage(pageIndex, pageSize);
 	}

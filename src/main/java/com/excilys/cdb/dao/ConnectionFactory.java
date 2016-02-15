@@ -87,7 +87,7 @@ public class ConnectionFactory {
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
-			throw new DAOConfigurationException("Driver is missiing from classpath.", e);
+			throw new DAOConfigurationException("Driver is missing from classpath.", e);
 		}
 
 		// Instantiate and return single DAOFactory instance

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dtos.CompanyDTO;
+import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.services.CompanyService;
 
@@ -38,7 +39,7 @@ public class NewComputerServlet extends HttpServlet {
 		
 		List<Company> companies = CompanyService.getInstance().findAll();
 		List<CompanyDTO> companyDTOs = new ArrayList<CompanyDTO>();
-		companies.parallelStream().forEachOrdered(c -> companyDTOs.add(c.toCompanyDTO()));		
+		companies.parallelStream().forEachOrdered(c -> companyDTOs.add(CompanyMapper.toCompanyDTO(c)));		
 		request.setAttribute("companies", companyDTOs);
 		request.getRequestDispatcher(ADD_COMPUTER_URI).forward(request, response);
 	}

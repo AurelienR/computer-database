@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.cdb.dao.impl.ComputerDAOImpl;
+import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
 
@@ -59,5 +60,17 @@ public class ComputerMapper {
 		}
 
 		return computerList;
+	}
+
+	public static ComputerDTO toComputerDTO(Computer computer){
+		String introStr = ((computer.getIntroduced() == null) ? "" : computer.getIntroduced().toString());
+		String discStr = ((computer.getDiscontinued() == null) ? "" : computer.getDiscontinued().toString());
+		return new ComputerDTO(computer.getId(),computer.getName(),introStr,discStr,CompanyMapper.toCompanyDTO(computer.getCompany()));
+	}
+	
+	public static List<ComputerDTO> toComputerDTOList(List<Computer> computers){		
+		List<ComputerDTO> computerDTOs = new ArrayList<ComputerDTO>();
+		computers.parallelStream().forEachOrdered(c -> computerDTOs.add(toComputerDTO(c)));
+		return computerDTOs;
 	}
 }

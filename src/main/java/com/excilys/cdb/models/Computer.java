@@ -1,10 +1,6 @@
 package com.excilys.cdb.models;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.excilys.cdb.dtos.ComputerDTO;
 
 /**
  * Model of a Computer
@@ -73,18 +69,6 @@ public class Computer {
 		this.introduced = introduced;
 	}
 	
-	public ComputerDTO toComputerDTO(){
-		String introStr = ((introduced == null) ? "" : introduced.toString());
-		String discStr = ((discontinued == null) ? "" : discontinued.toString());
-		return new ComputerDTO(id,name,introStr,discStr,company.toCompanyDTO());
-	}
-	
-	public static List<ComputerDTO> toComputerDTOList(List<Computer> computers){		
-		List<ComputerDTO> computerDTOs = new ArrayList<ComputerDTO>();
-		computers.parallelStream().forEachOrdered(c -> computerDTOs.add(c.toComputerDTO()));
-		return computerDTOs;
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

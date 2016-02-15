@@ -16,7 +16,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${computerCount}computers found</h1>
+			<h1 id="homeTitle">${computerCount} computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -93,31 +93,31 @@
 				<c:choose>
 					<c:when test="${page.pageSize==30}">
 						<a class="btn btn-default active"
-							href="./computers?page=${page.current}&pageSize=30">30</a>
+							href="./computers?page=1&pageSize=30">30</a>
 					</c:when>
 					<c:otherwise>
 						<a class="btn btn-default"
-							href="./computers?page=${page.current}&pageSize=30">30</a>
+							href="./computers?page=1&pageSize=30">30</a>
 					</c:otherwise>
 				</c:choose>
 				<c:choose>
 					<c:when test="${page.pageSize==50}">
 						<a class="btn btn-default active"
-							href="./computers?page=${page.current}&pageSize=50">50</a>
+							href="./computers?page=1&pageSize=50">50</a>
 					</c:when>
 					<c:otherwise>
 						<a class="btn btn-default"
-							href="./computers?page=${page.current}&pageSize=50">50</a>
+							href="./computers?page=1&pageSize=50">50</a>
 					</c:otherwise>
 				</c:choose>
 				<c:choose>
 					<c:when test="${page.pageSize==100}">
 						<a class="btn btn-default active"
-							href="./computers?page=${page.current}&pageSize=100">100</a>
+							href="./computers?page=1&pageSize=100">100</a>
 					</c:when>
 					<c:otherwise>
 						<a class="btn btn-default"
-							href="./computers?page=${page.current}&pageSize=100">100</a>
+							href="./computers?page=1&pageSize=100">100</a>
 					</c:otherwise>
 				</c:choose>
 			</div>

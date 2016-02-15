@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.cdb.dao.impl.CompanyDAOImpl;
+import com.excilys.cdb.dtos.CompanyDTO;
 import com.excilys.cdb.models.Company;
 
 public class CompanyMapper {
@@ -25,5 +26,15 @@ public class CompanyMapper {
 		}
 		
 		return companyList;
+	}
+	
+	public static CompanyDTO toCompanyDTO(Company company){
+		return new CompanyDTO(company.getId(),company.getName());
+	}	
+	
+	public static List<CompanyDTO> toCompanyDTOList(List<Company> companies){		
+		List<CompanyDTO> companyDTOs = new ArrayList<CompanyDTO>();
+		companies.parallelStream().forEachOrdered(c -> companyDTOs.add(toCompanyDTO(c)));
+		return companyDTOs;
 	}
 }

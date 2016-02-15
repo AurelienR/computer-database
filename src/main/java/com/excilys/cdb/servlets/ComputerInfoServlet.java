@@ -12,9 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.cdb.dtos.CompanyDTO;
 import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.dtos.ComputerPageDTO;
+import com.excilys.cdb.mappers.CompanyMapper;
+import com.excilys.cdb.mappers.ComputerMapper;
+import com.excilys.cdb.mappers.ComputerPageMapper;
 import com.excilys.cdb.models.Company;
+import com.excilys.cdb.models.ComputerPage;
 import com.excilys.cdb.services.CompanyService;
-import com.excilys.cdb.services.ComputerPage;
 import com.excilys.cdb.services.ComputerService;
 
 /**
@@ -26,6 +29,7 @@ public class ComputerInfoServlet extends HttpServlet {
 	
 	public static final String LIST_COMPUTERS_URI = "/views/dashboard.jsp";
 	private static final String EDIT_COMPUTER_URI = "/views/editComputer.jsp";
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -45,10 +49,10 @@ public class ComputerInfoServlet extends HttpServlet {
 		// if url type is GET "/computers?id=..."
 		if ((idStr = request.getParameter("id")) != null){
 			int id = Integer.parseInt(idStr);
-			ComputerDTO computerDTO = ComputerService.getInstance().findById(id).get(0).toComputerDTO();
+			ComputerDTO computerDTO = ComputerMapper.toComputerDTO(ComputerService.getInstance().findById(id).get(0));
 			
 			List<Company> companies = CompanyService.getInstance().findAll();
-			List<CompanyDTO> companyDTOs = Company.toCompanyDTOList(companies);
+			List<CompanyDTO> companyDTOs = CompanyMapper.toCompanyDTOList(companies);
 			
 			request.setAttribute("companies", companyDTOs);
 			request.setAttribute("computer", computerDTO);
@@ -58,9 +62,11 @@ public class ComputerInfoServlet extends HttpServlet {
 		else if((pageStr = request.getParameter("page")) != null && (pageSizeStr = request.getParameter("pageSize")) != null){
 			int pageIndex =  Integer.parseInt(pageStr);
 			int pageSize = Integer.parseInt(pageSizeStr);
+			
 			ComputerPage page = new ComputerPage(pageIndex,pageSize);
-			ComputerPageDTO pageDTO = page.toComputerPageDTO();
+			ComputerPageDTO pageDTO =  ComputerPageMapper.toComputerPageDTO(page);
 			int computerCount = ComputerService.getInstance().findAll().size();
+			
 			request.setAttribute("page", pageDTO);
 			request.setAttribute("computerCount", computerCount);
 			request.getRequestDispatcher(LIST_COMPUTERS_URI).forward(request, response);
@@ -70,7 +76,7 @@ public class ComputerInfoServlet extends HttpServlet {
 			int pageIndex =  1;
 			int pageSize = 30;
 			ComputerPage page = new ComputerPage(pageIndex,pageSize);
-			ComputerPageDTO pageDTO = page.toComputerPageDTO();
+			ComputerPageDTO pageDTO = ComputerPageMapper.toComputerPageDTO(page);
 			int computerCount = ComputerService.getInstance().findAll().size();
 			request.setAttribute("page", pageDTO);
 			request.setAttribute("computerCount", computerCount);
