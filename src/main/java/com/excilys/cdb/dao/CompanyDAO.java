@@ -13,6 +13,15 @@ public interface CompanyDAO {
 	 * @throws DAOException
 	 */
 	List<Company> findAll() throws DAOException;
+	
+	
+	/**
+	 * @param startRow
+	 * @param size
+	 * @return
+	 * @throws DAOException
+	 */
+	public List<Company> findRange(int startRow, int size) throws DAOException;
 
 	/**
 	 * Find a company stored in DB by its id

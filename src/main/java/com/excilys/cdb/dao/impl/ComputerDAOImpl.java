@@ -28,6 +28,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	// SQL Queries
 	private final String FIND_ALL_QUERY ="SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id";
+	private final String FIND_RANGE_QUERY = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY computer.id LIMIT ? OFFSET ?";
 	private final String FIND_BYID_QUERY = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id=?";
 	private final String FIND_BYNAME_QUERY ="SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name=?";
 	private final String INSERT_QUERY = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
@@ -217,6 +218,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			ps.setInt(4, computer.getCompany().getId());
 			
 			ps.executeUpdate();
+			results= ps.getGeneratedKeys();
 			if(results.next()){
 				id = results.getInt(1);
 			}
@@ -324,8 +326,47 @@ public class ComputerDAOImpl implements ComputerDAO {
 		}
 		
 	}
-
-
-
+	
+	@Override
+	public List<Computer> findRange(int startRow, int size) throws DAOException {
+		
+		// Init local variables
+				Connection con = null;
+				ResultSet results = null;
+				PreparedStatement ps = null;
+				List<Computer> computerList = null;
+				
+				try {
+					// Get opened connection
+					con = ConnectionFactory.getInstance().getConnection();
+					con.setAutoCommit(false);
+					
+					// Prepare query
+					ps = con.prepareStatement(FIND_RANGE_QUERY);
+					ps.setInt(1, size);
+					ps.setInt(2, startRow);
+					results = ps.executeQuery();
+					
+					// Deserialize resultSet to a list of computer
+					computerList = ComputerMapper.getComputersFromResults(results);
+					con.commit();
+					
+				} catch (SQLException e) {
+					// Try to recover previous DB state
+					try {
+						con.rollback();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+						throw new DAOException("Failed to Rollback on findAll method",e1);
+					}
+					throw new DAOException("Failed on findRange method, SQLException",e);	
+				}
+				finally{
+					// Close any connection related object
+					ConnectionCloser.silentCloses(results, ps, con);
+				}
+				
+				return computerList;
+	}
 
 }

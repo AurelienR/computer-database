@@ -22,6 +22,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	
 	// SQL Queries
 	private final String FIND_ALL_QUERY = "SELECT * FROM company";
+	private final String FIND_RANGE_QUERY = "SELECT * FROM company ORDER BY id DESC LIMIT ? OFFSET ?";
 	private final String FIND_BYID_QUERY = "SELECT * FROM company WHERE id=?";
 	private final String FIND_BYNAME_QUERY = "SELECT * FROM company WHERE name=?";
 	private final String INSERT_QUERY = "INSERT INTO company (name) VALUES (?)";;
@@ -212,6 +213,43 @@ public class CompanyDAOImpl implements CompanyDAO {
 		}
 		
 		return id;
+	}
+	
+	@Override
+	public List<Company> findRange(int startRow, int size) throws DAOException {
+		
+		Connection con = null;
+		ResultSet results = null;
+		PreparedStatement ps = null;
+		List<Company> companyList = null;
+		
+		try {
+			con = ConnectionFactory.getInstance().getConnection();
+			con.setAutoCommit(false);
+			
+			ps = con.prepareStatement(FIND_RANGE_QUERY);
+			ps.setInt(1,size);
+			ps.setInt(2, startRow);
+			results = ps.executeQuery();
+			
+			companyList = CompanyMapper.getCompaniesFromResults(results);
+			
+			con.commit();
+			
+		} catch (SQLException e) {			
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				throw new DAOException("Failed to Rollback on findAll method",e1);	
+			}			
+			throw new DAOException("Failed on findRange method, SQLException",e);			
+		}
+		finally{
+			ConnectionCloser.silentCloses(results,ps,con);
+		}
+		
+		return companyList;
 	}
 	
 }

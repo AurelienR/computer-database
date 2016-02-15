@@ -1,5 +1,10 @@
 package com.excilys.cdb.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.excilys.cdb.dtos.CompanyDTO;
+
 /**
  * Model of a company
  * 
@@ -34,6 +39,17 @@ public class Company {
 		this.name = name;
 	}
 
+	public CompanyDTO toCompanyDTO(){
+		return new CompanyDTO(id,name);
+	}
+	
+	
+	public static List<CompanyDTO> toCompanyDTOList(List<Company> companies){		
+		List<CompanyDTO> companyDTOs = new ArrayList<CompanyDTO>();
+		companies.parallelStream().forEachOrdered(c -> companyDTOs.add(c.toCompanyDTO()));
+		return companyDTOs;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

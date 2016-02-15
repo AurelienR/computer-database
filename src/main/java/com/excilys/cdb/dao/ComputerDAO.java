@@ -19,7 +19,16 @@ public interface ComputerDAO {
 	 * @throws DAOException
 	 */
 	List<Computer> findAll() throws DAOException;
-
+	
+	
+	/**
+	 * @param startRow
+	 * @param size
+	 * @return
+	 * @throws DAOException
+	 */
+	List<Computer> findRange(int startRow, int size) throws DAOException;
+	
 	/**
 	 * Find a computer stored in DB by its id
 	 * 

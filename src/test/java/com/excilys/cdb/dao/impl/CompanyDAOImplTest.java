@@ -2,8 +2,6 @@ package com.excilys.cdb.dao.impl;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
@@ -66,27 +64,4 @@ public class CompanyDAOImplTest{
 		assertEquals(refCompanyName,testCompanyName);
 		assertEquals(refRowCount,testRowCount);
 	}
-	
-	@Test
-	public void listAllCompanyTest() throws Exception {
-		
-		// Prepare company to insert
-		IDatabaseConnection conn = cfm.getDatabaseTester().getConnection();
-		
-		// List all company
-		List<Company> companies =CompanyDAOImpl.getInstance().findAll();
-		
-		// Get DB state
-		conn = cfm.getDatabaseTester().getConnection();
-	
-		IDataSet dbSet = conn.createDataSet();
-		ITable companyTable = dbSet.getTable(TABLE_NAME);
-		String testCompanyName = companyTable.getValue(companyTable.getRowCount()-1, "name").toString();
-		int testRowCount = conn.getRowCount(TABLE_NAME);		
-		
-		// Tests
-
-						
-	}
-
 }
