@@ -58,7 +58,7 @@ public class ComputerService {
 	private void validateComputerDates(Computer computer) throws ServiceException {
 		if (computer.getIntroduced() != null && computer.getDiscontinued() != null) {
 			if (computer.getIntroduced().isAfter(computer.getDiscontinued())) {
-				throw new ServiceException("Valitdation: Computer Introduced localdatetime attribute setted after discontinued localdatetime");
+				throw new ServiceException("Valitdation: Computer Introduced localdatetime attribute "+computer.getIntroduced()+" setted after discontinued "+computer.getDiscontinued()+" localdatetime");
 			}
 		}
 	}

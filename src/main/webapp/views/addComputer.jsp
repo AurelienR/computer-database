@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form id="addForm" action="addComputer" method="POST">
+                    <form id="addForm" action="./createComputer" method="POST">
                         <fieldset>
                             <div class="form-group  has-feedback">
                                 <label for="computerName">Computer name</label>
@@ -55,7 +55,6 @@
     </section>
     <script src="./js/jquery.min.js"></script>
 	<script src="./js/bootstrap.min.js"></script>
-	<script src="./js/jquery.validate.min.js"></script>
 	<script src="./js/fieldValidator.js"></script>
 	<script src="./js/addFormValidator.js"></script>
 </body>

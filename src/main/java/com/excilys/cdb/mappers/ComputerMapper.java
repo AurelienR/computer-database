@@ -65,7 +65,6 @@ public class ComputerMapper {
 	}
 
 	public static ComputerDTO toComputerDTO(Computer computer){
-
 		
 		int id = computer.getId();
 		String computerName = computer.getName();
@@ -80,5 +79,14 @@ public class ComputerMapper {
 		List<ComputerDTO> computerDTOs = new ArrayList<ComputerDTO>();
 		computers.parallelStream().forEachOrdered(c -> computerDTOs.add(toComputerDTO(c)));
 		return computerDTOs;
+	}
+	
+	public static Computer toComputer(ComputerDTO computerDTO){		
+		int id = computerDTO.getId();
+		String computerName = computerDTO.getName();
+		LocalDateTime intro = DateFormatManager.parseHTMLDateString(computerDTO.getIntroduced());
+		LocalDateTime disc = DateFormatManager.parseHTMLDateString(computerDTO.getDiscontinued());
+		Company company = CompanyMapper.toCompany(computerDTO.getCompany());
+		return new Computer(id, computerName, company, disc, intro);
 	}
 }

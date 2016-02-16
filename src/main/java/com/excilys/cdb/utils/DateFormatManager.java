@@ -9,7 +9,8 @@ import java.util.Date;
 
 public class DateFormatManager {
 	
-	public static String HTML_DATE_FORMAT="dd/MM/yyyy";
+	public static String HTML_DATE_FORMAT="yyyy-MM-dd";
+	public static String DISPLAY_DATE_FORMAT="dd-MM-yyyy";
 	
 	public static String toDateString(LocalDateTime date, String dateFormat){
 		if(date == null) return "";
@@ -48,5 +49,13 @@ public class DateFormatManager {
 	
 	public static String toHTMLDateString(LocalDateTime date){
 		return toDateString(date, HTML_DATE_FORMAT);	
+	}
+	
+	public static LocalDateTime parseDisplayDateString(String dateStr) throws DateFormatManagerException{
+		return parseDate(dateStr, DISPLAY_DATE_FORMAT);	
+	}
+	
+	public static String toDisplayDateString(LocalDateTime date){
+		return toDateString(date, DISPLAY_DATE_FORMAT);	
 	}
 }

@@ -7,7 +7,9 @@ import java.util.List;
 
 import com.excilys.cdb.dao.impl.CompanyDAOImpl;
 import com.excilys.cdb.dtos.CompanyDTO;
+import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.models.Company;
+import com.excilys.cdb.models.Computer;
 
 public class CompanyMapper {
 	
@@ -30,7 +32,11 @@ public class CompanyMapper {
 	
 	public static CompanyDTO toCompanyDTO(Company company){
 		return new CompanyDTO(company.getId(),company.getName());
-	}	
+	}
+	
+	public static Company toCompany(CompanyDTO companyDTO){
+		return new Company(companyDTO.getId(),companyDTO.getName());
+	}
 	
 	public static List<CompanyDTO> toCompanyDTOList(List<Company> companies){		
 		List<CompanyDTO> companyDTOs = new ArrayList<CompanyDTO>();
