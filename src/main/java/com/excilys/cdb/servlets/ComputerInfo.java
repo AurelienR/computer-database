@@ -12,19 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.cdb.dtos.CompanyDTO;
 import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.dtos.ComputerPageDTO;
-import com.excilys.cdb.mappers.CompanyMapper;
-import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.mappers.ComputerPageMapper;
-import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.ComputerPage;
-import com.excilys.cdb.services.CompanyService;
-import com.excilys.cdb.services.ComputerService;
+import com.excilys.cdb.services.CompanyDTOService;
+import com.excilys.cdb.services.ComputerDTOService;
 
 /**
  * Servlet implementation class ComputersServlet
+ * 
+ * Retrieve informations of one or all computers
  */
 @WebServlet("/computers") 
-public class ComputerInfoServlet extends HttpServlet {
+public class ComputerInfo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String LIST_COMPUTERS_URI = "/views/dashboard.jsp";
@@ -33,7 +32,7 @@ public class ComputerInfoServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ComputerInfoServlet() {
+    public ComputerInfo() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -46,40 +45,60 @@ public class ComputerInfoServlet extends HttpServlet {
 		String idStr;
 		String pageStr;
 		String pageSizeStr;
-		// if url type is GET "/computers?id=..."
+		// URL GET "/computers?id=..."
 		if ((idStr = request.getParameter("id")) != null){
+			// Parse Id
 			int id = Integer.parseInt(idStr);
-			ComputerDTO computerDTO = ComputerMapper.toComputerDTO(ComputerService.getInstance().findById(id).get(0));
 			
-			List<Company> companies = CompanyService.getInstance().findAll();
-			List<CompanyDTO> companyDTOs = CompanyMapper.toCompanyDTOList(companies);
+			// Retrieve company et computers
+			ComputerDTO computerDTO = ComputerDTOService.getInstance().findById(id).get(0);
+			List<CompanyDTO> companyDTOs = CompanyDTOService.getInstance().findAll();
 			
+			// Prepare request
 			request.setAttribute("companies", companyDTOs);
 			request.setAttribute("computer", computerDTO);
+			
+			// Forward to jsp
 			request.getRequestDispatcher(EDIT_COMPUTER_URI).forward(request, response);
 		}
-		// if url type is GET "/computers?page=...&pageSize=..."
+		// URL GET "/computers?page=...&pageSize=..."
 		else if((pageStr = request.getParameter("page")) != null && (pageSizeStr = request.getParameter("pageSize")) != null){
+			
+			// Retrieve parameters
 			int pageIndex =  Integer.parseInt(pageStr);
 			int pageSize = Integer.parseInt(pageSizeStr);
 			
+			// Retrieve related dashboard page
 			ComputerPage page = new ComputerPage(pageIndex,pageSize);
 			ComputerPageDTO pageDTO =  ComputerPageMapper.toComputerPageDTO(page);
-			int computerCount = ComputerService.getInstance().findAll().size();
 			
+			// Get computer count
+			int computerCount = ComputerDTOService.getInstance().findAll().size();
+			
+			// Prepare request
 			request.setAttribute("page", pageDTO);
 			request.setAttribute("computerCount", computerCount);
+			
+			// Forward to jsp
 			request.getRequestDispatcher(LIST_COMPUTERS_URI).forward(request, response);
 		}
-		// if url type is GET "/computers..."
+		// URL: GET "/computers..."
 		else{
+			
+			// Initialize dashboard Page
 			int pageIndex =  1;
 			int pageSize = 30;
 			ComputerPage page = new ComputerPage(pageIndex,pageSize);
 			ComputerPageDTO pageDTO = ComputerPageMapper.toComputerPageDTO(page);
-			int computerCount = ComputerService.getInstance().findAll().size();
+			
+			// Get computer count
+			int computerCount = ComputerDTOService.getInstance().findAll().size();
+			
+			// Prepare request
 			request.setAttribute("page", pageDTO);
 			request.setAttribute("computerCount", computerCount);
+			
+			// Forward request
 			request.getRequestDispatcher(LIST_COMPUTERS_URI).forward(request, response);
 		}
 	}
@@ -88,7 +107,6 @@ public class ComputerInfoServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 }

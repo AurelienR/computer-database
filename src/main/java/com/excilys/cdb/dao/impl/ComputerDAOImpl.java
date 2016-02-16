@@ -215,7 +215,12 @@ public class ComputerDAOImpl implements ComputerDAO {
 				ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
 			}
 			
-			ps.setInt(4, computer.getCompany().getId());
+			if( computer.getCompany() == null){
+				ps.setNull(4, java.sql.Types.BIGINT);
+			}
+			else{
+				ps.setInt(4, computer.getCompany().getId());
+			}
 			
 			ps.executeUpdate();
 			results= ps.getGeneratedKeys();

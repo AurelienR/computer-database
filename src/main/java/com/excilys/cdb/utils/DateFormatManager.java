@@ -13,13 +13,14 @@ public class DateFormatManager {
 	public static String DISPLAY_DATE_FORMAT="dd-MM-yyyy";
 	
 	public static String toDateString(LocalDateTime date, String dateFormat){
-		if(date == null) return "";
+		if(date == null) return null;
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
 		return date.format(formatter);
 	}
 	
 	public static LocalDateTime parseDate(String dateStr, String dateFormat) throws DateFormatManagerException{
+		if(dateStr == null || dateStr.isEmpty()) return null;
 		
 		Date date;
 		try {
@@ -41,6 +42,10 @@ public class DateFormatManager {
 			return false;
 		}
 		return true;
+	}
+	
+	public static boolean isValidHTMLStringFormat(String dateStr){
+		return isValidStringFormat(dateStr, HTML_DATE_FORMAT);
 	}
 	
 	public static LocalDateTime parseHTMLDateString(String dateStr) throws DateFormatManagerException{

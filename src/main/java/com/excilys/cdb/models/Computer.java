@@ -2,16 +2,29 @@ package com.excilys.cdb.models;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.excilys.cdb.validator.bean.ComputerDates;
+
+
 /**
  * Model of a Computer
  * 
  * @author Aurelien.R
  *
  */
+
+@ComputerDates
 public class Computer {
+	
 	// Attributes
+	@Min(value=0, message="Computer id doit être supérieur à {value}")
 	private int id = 0;
-	private Company company;
+	private Company company;	
+	@NotNull(message="Computer name should be not null") 
+	@Size(min=0,message = "Computer name cannot be empty string")
 	private String name;
 	private LocalDateTime discontinued;
 	private LocalDateTime introduced;

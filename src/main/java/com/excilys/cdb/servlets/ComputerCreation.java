@@ -10,22 +10,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dtos.CompanyDTO;
 import com.excilys.cdb.dtos.ComputerDTO;
-import com.excilys.cdb.mappers.ComputerMapper;
-import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.services.ComputerService;
+import com.excilys.cdb.services.ComputerDTOService;
 
 /**
  * Servlet implementation class CreateComputerServlet
+ * 
+ * Servlet to add a new computer to DB based on POST parameters
  */
 @WebServlet("/createComputer") 
-public class CreateComputerServlet extends HttpServlet {
+public class ComputerCreation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreateComputerServlet() {
+    public ComputerCreation() {
         super();
     }
 
@@ -42,24 +42,29 @@ public class CreateComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		// Retrieve Computer information
-		int id = -1;
+		int id = 0;
 		String nameStr = request.getParameter("computerName");
 		String introducedStr = request.getParameter("introduced");
 		String discontinuedStr = request.getParameter("discontinued");
-		int companyId = Integer.parseInt(request.getParameter("companyId"));
+		
+		// Retrieve related Company
+		int companyId;		
+		CompanyDTO companyDTO;
+		try{
+			companyId = Integer.parseInt(request.getParameter("companyId"));
+			companyDTO =  new CompanyDTO(companyId, null);
+		} catch(NumberFormatException e){
+			companyDTO = null;
+		}	
 		
 		// Instanciate related ComputerDTO
-		CompanyDTO companyDTO =  new CompanyDTO(companyId, "");		
 		ComputerDTO computerDTO = new ComputerDTO(id, nameStr, introducedStr, discontinuedStr, companyDTO);
 		
-		// Map computerDTO to computer
-		Computer computer = ComputerMapper.toComputer(computerDTO);
-		
 		// Add computer to DB
-		ComputerService.getInstance().createComputer(computer);
+		ComputerDTOService.getInstance().createComputer(computerDTO);
 		
 		// Forward toDashboard
-		request.getRequestDispatcher(ComputerInfoServlet.LIST_COMPUTERS_URI).forward(request, response);
+		request.getRequestDispatcher("./computers").forward(request, response);
 	}
 		
 }

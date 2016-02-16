@@ -30,9 +30,13 @@ public class ComputerMapper {
 		while(results.next()){
 			
 			// Set computer fields
+			
+			// Id
 			int computerId = results.getInt("computer.id");
+			// Name
 			String computerName = results.getString("computer.name");
-
+			
+			// Introduced
 			Timestamp introTimestamp = results.getTimestamp(ComputerDAOImpl.INTRO_COLUMN);
 			LocalDateTime introduced;
 			if(introTimestamp == null){
@@ -42,7 +46,7 @@ public class ComputerMapper {
 				introduced = introTimestamp.toLocalDateTime();
 			}
 			
-			
+			// Discontinued
 			Timestamp descTimestamp = results.getTimestamp(ComputerDAOImpl.DISC_COLUMN);
 			LocalDateTime discontinued;
 			if(descTimestamp == null){
@@ -64,6 +68,11 @@ public class ComputerMapper {
 		return computerList;
 	}
 
+	/**
+	 * Map a Computer to a ComputerDTO
+	 * @param computer Computer to map
+	 * @return related ComputerDTO
+	 */
 	public static ComputerDTO toComputerDTO(Computer computer){
 		
 		int id = computer.getId();
@@ -75,12 +84,22 @@ public class ComputerMapper {
 		return new ComputerDTO(id,computerName,introStr,discStr, companyDTO);
 	}
 	
-	public static List<ComputerDTO> toComputerDTOList(List<Computer> computers){		
+	/**
+	 * Map a list of Computer to ComputerDTOs
+	 * @param computers list of Computer
+	 * @return list of ComputerDTOs
+	 */
+	public static List<ComputerDTO> toComputerDTOList(List<Computer> computers){	
 		List<ComputerDTO> computerDTOs = new ArrayList<ComputerDTO>();
 		computers.parallelStream().forEachOrdered(c -> computerDTOs.add(toComputerDTO(c)));
 		return computerDTOs;
 	}
 	
+	/**
+	 * Map a ComputerDTO to a Computer
+	 * @param computerDTO ComputerDTO to map
+	 * @return related Computer
+	 */
 	public static Computer toComputer(ComputerDTO computerDTO){		
 		int id = computerDTO.getId();
 		String computerName = computerDTO.getName();

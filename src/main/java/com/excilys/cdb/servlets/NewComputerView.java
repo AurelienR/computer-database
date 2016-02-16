@@ -1,7 +1,6 @@
 package com.excilys.cdb.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,15 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dtos.CompanyDTO;
-import com.excilys.cdb.mappers.CompanyMapper;
-import com.excilys.cdb.models.Company;
-import com.excilys.cdb.services.CompanyService;
+import com.excilys.cdb.services.CompanyDTOService;
 
 /**
  * Servlet implementation class NewComputerServlet
+ * 
+ * Servlet in charge of prepare new computer view
  */
 @WebServlet("/newComputer") 
-public class NewComputerServlet extends HttpServlet {
+public class NewComputerView extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private static final String ADD_COMPUTER_URI = "/views/addComputer.jsp";
@@ -27,7 +26,7 @@ public class NewComputerServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NewComputerServlet() {
+    public NewComputerView() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,10 +36,13 @@ public class NewComputerServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		List<Company> companies = CompanyService.getInstance().findAll();
-		List<CompanyDTO> companyDTOs = new ArrayList<CompanyDTO>();
-		companies.parallelStream().forEachOrdered(c -> companyDTOs.add(CompanyMapper.toCompanyDTO(c)));		
+		// Retrieve companyDTOs list
+		List<CompanyDTO> companyDTOs = CompanyDTOService.getInstance().findAll();
+
+		// Prepare request
 		request.setAttribute("companies", companyDTOs);
+		
+		// Forward to new computer view
 		request.getRequestDispatcher(ADD_COMPUTER_URI).forward(request, response);
 	}
 

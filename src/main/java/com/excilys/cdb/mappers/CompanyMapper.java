@@ -7,9 +7,7 @@ import java.util.List;
 
 import com.excilys.cdb.dao.impl.CompanyDAOImpl;
 import com.excilys.cdb.dtos.CompanyDTO;
-import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.models.Company;
-import com.excilys.cdb.models.Computer;
 
 public class CompanyMapper {
 	
@@ -30,14 +28,37 @@ public class CompanyMapper {
 		return companyList;
 	}
 	
+	/**
+	 * Map a Company to a CompanyDTO
+	 * @param company Company to map
+	 * @return related CompanyDTO
+	 */
 	public static CompanyDTO toCompanyDTO(Company company){
+		
+		if(company == null){
+			return null;
+		}
+		
 		return new CompanyDTO(company.getId(),company.getName());
 	}
 	
+	/**
+	 * Map a CompanyDTO to a Company
+	 * @param companyDTO Company to map
+	 * @return related CompanyDTO
+	 */
 	public static Company toCompany(CompanyDTO companyDTO){
+		if(companyDTO == null){
+			return null;
+		}
 		return new Company(companyDTO.getId(),companyDTO.getName());
 	}
 	
+	/**
+	 * Map a list of Company to a list of CompanyDTO
+	 * @param companies List of Company to map
+	 * @return related List of CompanyDTO
+	 */
 	public static List<CompanyDTO> toCompanyDTOList(List<Company> companies){		
 		List<CompanyDTO> companyDTOs = new ArrayList<CompanyDTO>();
 		companies.parallelStream().forEachOrdered(c -> companyDTOs.add(toCompanyDTO(c)));

@@ -1,25 +1,28 @@
 package com.excilys.cdb.servlets;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.cdb.services.ComputerService;
+import com.excilys.cdb.services.ComputerDTOService;
 
 /**
  * Servlet implementation class DeleteComputerServlet
+ * 
+ * Servlet in charge of deleting computers
  */
 @WebServlet("/deleteComputer") 
-public class DeleteComputerServlet extends HttpServlet {
+public class ComputerDeletion extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteComputerServlet() {
+    public ComputerDeletion() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,15 +39,19 @@ public class DeleteComputerServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String idsStr = request.getParameter("selection");
 		
+		// Retrieve parameters
+		String idsStr = request.getParameter("selection");		
 		String[] ids = idsStr.split(",");
 		
+		// Delete each computer by id
 		for(String idStr : ids){
+			// Car can throw exception
 			int id = Integer.parseInt(idStr);
-			ComputerService.getInstance().deleteComputer(id);
+			ComputerDTOService.getInstance().deleteComputer(id);
 		}		
 		
+		// Forward request
 		request.getRequestDispatcher("computers").forward(request, response);
 	}
 

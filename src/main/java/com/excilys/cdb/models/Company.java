@@ -1,5 +1,7 @@
 package com.excilys.cdb.models;
 
+import javax.validation.constraints.Min;
+
 /**
  * Model of a company
  * 
@@ -7,7 +9,8 @@ package com.excilys.cdb.models;
  *
  */
 public class Company {
-	private int id;
+	@Min(value=0, message="Company id doit être supérieur à {value}")
+	private int id =0;
 	private String name;
 
 	public Company() {
