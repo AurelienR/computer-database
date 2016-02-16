@@ -59,7 +59,8 @@ public class CompanyMapper {
 	 * @param companies List of Company to map
 	 * @return related List of CompanyDTO
 	 */
-	public static List<CompanyDTO> toCompanyDTOList(List<Company> companies){		
+	public static List<CompanyDTO> toCompanyDTOList(List<Company> companies){
+		if(companies == null) return null;
 		List<CompanyDTO> companyDTOs = new ArrayList<CompanyDTO>();
 		companies.parallelStream().forEachOrdered(c -> companyDTOs.add(toCompanyDTO(c)));
 		return companyDTOs;
