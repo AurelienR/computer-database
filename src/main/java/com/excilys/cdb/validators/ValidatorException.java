@@ -1,4 +1,4 @@
-package com.excilys.cdb.validator;
+package com.excilys.cdb.validators;
 
 public class ValidatorException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

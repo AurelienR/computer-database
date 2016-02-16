@@ -2,7 +2,7 @@ package com.excilys.cdb.models;
 
 import java.util.List;
 
-import com.excilys.cdb.dao.impl.ComputerDAOImpl;
+import com.excilys.cdb.daos.impl.ComputerDAOImpl;
 
 public class ComputerPage {
 	private int pageIndex;

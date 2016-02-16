@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.cli.CLIException;
 import com.excilys.cdb.cli.Command;
 import com.excilys.cdb.cli.InputCommandParser;
-import com.excilys.cdb.dao.DAOException;
+import com.excilys.cdb.daos.DAOException;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.ComputerService;

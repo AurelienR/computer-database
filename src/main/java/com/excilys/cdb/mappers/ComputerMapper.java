@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.cdb.dao.impl.ComputerDAOImpl;
+import com.excilys.cdb.daos.impl.ComputerDAOImpl;
 import com.excilys.cdb.dtos.CompanyDTO;
 import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.models.Company;

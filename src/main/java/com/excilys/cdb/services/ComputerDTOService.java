@@ -2,13 +2,13 @@ package com.excilys.cdb.services;
 
 import java.util.List;
 
-import com.excilys.cdb.dao.DAOException;
-import com.excilys.cdb.dao.impl.ComputerDAOImpl;
+import com.excilys.cdb.daos.DAOException;
+import com.excilys.cdb.daos.impl.ComputerDAOImpl;
 import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.validator.CompanyDTOValidator;
-import com.excilys.cdb.validator.ComputerDTOValidator;
+import com.excilys.cdb.validators.CompanyDTOValidator;
+import com.excilys.cdb.validators.ComputerDTOValidator;
 
 /**
  * Service layer to ComputerDAO

@@ -1,4 +1,4 @@
-package com.excilys.cdb.validator;
+package com.excilys.cdb.validators;
 
 import java.time.LocalDateTime;
 

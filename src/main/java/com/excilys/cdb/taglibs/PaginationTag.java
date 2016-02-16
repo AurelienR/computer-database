@@ -1,4 +1,4 @@
-package com.excilys.cdb.taglib;
+package com.excilys.cdb.taglibs;
 
 import java.io.Writer;
 

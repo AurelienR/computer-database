@@ -69,7 +69,17 @@ $(function() {
     };
 }( jQuery ));
 
-
+//Display date to correct format
+(function ( $ ) {
+    $.fn.formatDate = function(dateStr) {
+    	var d = new Date(dateStr);
+    	var day = date.getDate();
+    	var month = date.getMonth();
+    	var year = date.getFullYear();
+    	
+    	return day+"/"+month+"/"+year;
+    };
+}( jQuery ));
 
 //Event handling
 //Onkeydown

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="paginationLib" prefix="pagination"%>
 <%@ page isELIgnored="false"%>
 <html>
@@ -70,8 +71,15 @@
 								class="cb" value="${computer.id}"></td>
 							<td><a href="./computers?id=${computer.id}" onclick="">${computer.name}</a>
 							</td>
-							<td>${computer.introduced}</td>
-							<td>${computer.discontinued}</td>
+
+							<td>
+								<fmt:parseDate pattern="yyyy-MM-dd" value="${computer.introduced}" var="parsedDate" />
+								<fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
+							</td>
+							<td>								
+								<fmt:parseDate pattern="yyyy-MM-dd" value="${computer.discontinued}" var="parsedDate" />
+								<fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
+							</td>
 							<td>${computer.company.name}</td>
 						</tr>
 					</c:forEach>

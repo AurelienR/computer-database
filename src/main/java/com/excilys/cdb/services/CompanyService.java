@@ -2,11 +2,11 @@ package com.excilys.cdb.services;
 
 import java.util.List;
 
-import com.excilys.cdb.dao.DAOException;
-import com.excilys.cdb.dao.impl.CompanyDAOImpl;
+import com.excilys.cdb.daos.DAOException;
+import com.excilys.cdb.daos.impl.CompanyDAOImpl;
 import com.excilys.cdb.models.Company;
-import com.excilys.cdb.validator.CompanyValidator;
-import com.excilys.cdb.validator.ValidatorException;
+import com.excilys.cdb.validators.CompanyValidator;
+import com.excilys.cdb.validators.ValidatorException;
 
 /**
  * Service layer to CompanyDAO

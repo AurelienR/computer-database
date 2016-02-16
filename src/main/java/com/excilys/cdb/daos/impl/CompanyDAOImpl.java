@@ -1,4 +1,4 @@
-package com.excilys.cdb.dao.impl;
+package com.excilys.cdb.daos.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import com.excilys.cdb.dao.CompanyDAO;
-import com.excilys.cdb.dao.ConnectionCloser;
-import com.excilys.cdb.dao.ConnectionFactory;
-import com.excilys.cdb.dao.DAOException;
+import com.excilys.cdb.daos.CompanyDAO;
+import com.excilys.cdb.daos.ConnectionCloser;
+import com.excilys.cdb.daos.ConnectionFactory;
+import com.excilys.cdb.daos.DAOException;
 import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.models.Company;
 

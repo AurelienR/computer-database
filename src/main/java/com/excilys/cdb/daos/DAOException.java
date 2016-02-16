@@ -1,4 +1,4 @@
-package com.excilys.cdb.dao;
+package com.excilys.cdb.daos;
 
 /**
  * Custom exception for DAO database access

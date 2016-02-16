@@ -1,4 +1,4 @@
-package com.excilys.cdb.dao.impl;
+package junit.com.excilys.cdb.dao.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +23,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.excilys.cdb.dao.ConnectionFactory;
-import com.excilys.cdb.dao.DAOConfigurationException;
+import com.excilys.cdb.daos.ConnectionFactory;
+import com.excilys.cdb.daos.DAOConfigurationException;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ConnectionFactory.class)

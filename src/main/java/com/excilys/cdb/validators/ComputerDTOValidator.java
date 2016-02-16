@@ -1,4 +1,4 @@
-package com.excilys.cdb.validator;
+package com.excilys.cdb.validators;
 
 import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.utils.DateFormatManager;

@@ -1,4 +1,4 @@
-package com.excilys.cdb.validator.bean;
+package com.excilys.cdb.validators.bean;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

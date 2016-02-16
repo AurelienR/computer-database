@@ -1,4 +1,4 @@
-package com.excilys.cdb.dao.impl;
+package junit.com.excilys.cdb.dao.impl;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,7 +12,8 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.excilys.cdb.dao.ConnectionFactory;
+import com.excilys.cdb.daos.ConnectionFactory;
+import com.excilys.cdb.daos.impl.CompanyDAOImpl;
 import com.excilys.cdb.models.Company;
 
 @RunWith(PowerMockRunner.class)
