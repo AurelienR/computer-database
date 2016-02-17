@@ -32,4 +32,32 @@ public class ComputerDTOValidator extends ModelValidator{
 			throw new ValidatorException("Date "+dateStr+" is not matching date format " + DateFormatManager.HTML_DATE_FORMAT);
 		}
 	}
+	
+	public static void checkDateFormatIfNotNull(String dateStr) throws ValidatorException {
+		if(dateStr != null && !dateStr.isEmpty()){
+			if(!DateFormatManager.isValidHTMLStringFormat(dateStr)){
+				throw new ValidatorException("Date "+dateStr+" is not matching date format " + DateFormatManager.HTML_DATE_FORMAT);
+			}
+		}
+	}
+	
+	public static void checkDateFormatIfNotNull(ComputerDTO computerDTO) throws ValidatorException {
+		checkDateFormatIfNotNull(computerDTO.getIntroduced());
+		checkDateFormatIfNotNull(computerDTO.getDiscontinued());
+	}
+	
+	public static void validate(ComputerDTO computerDTO) throws ValidatorException {
+		
+		// Validate computerDTO
+		ComputerDTOValidator.checkValidId(computerDTO.getId());
+		ComputerDTOValidator.checkNameNotNull(computerDTO.getName());
+		ComputerDTOValidator.checkNameNotEmpty(computerDTO.getName());
+		ComputerDTOValidator.checkDateConsistency(computerDTO);
+		ComputerDTOValidator.checkDateFormatIfNotNull(computerDTO);
+		
+		// Validate related companyDTO
+		if(computerDTO.getCompany() != null){
+			CompanyDTOValidator.checkValidId(computerDTO.getCompany().getId());
+		}
+	}
 }

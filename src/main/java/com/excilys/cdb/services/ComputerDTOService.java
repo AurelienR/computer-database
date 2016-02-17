@@ -7,7 +7,6 @@ import com.excilys.cdb.daos.impl.ComputerDAOImpl;
 import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.validators.CompanyDTOValidator;
 import com.excilys.cdb.validators.ComputerDTOValidator;
 
 /**
@@ -70,15 +69,7 @@ public class ComputerDTOService {
 	public int createComputer(ComputerDTO computerDTO){
 
 		// Validate computerDTO
-		ComputerDTOValidator.checkValidId(computerDTO.getId());
-		ComputerDTOValidator.checkNameNotNull(computerDTO.getName());
-		ComputerDTOValidator.checkNameNotEmpty(computerDTO.getName());
-		ComputerDTOValidator.checkDateConsistency(computerDTO);			
-		
-		// Validate related companyDTO
-		if(computerDTO.getCompany() != null){
-			CompanyDTOValidator.checkValidId(computerDTO.getCompany().getId());
-		}
+		ComputerDTOValidator.validate(computerDTO);
 		
 		// Map
 		Computer computer = ComputerMapper.toComputer(computerDTO);
@@ -89,16 +80,8 @@ public class ComputerDTOService {
 
 	public void updateComputer(ComputerDTO computerDTO){
 		
-		// Validate computerDTO
-		ComputerDTOValidator.checkValidId(computerDTO.getId());
-		ComputerDTOValidator.checkNameNotNull(computerDTO.getName());
-		ComputerDTOValidator.checkNameNotEmpty(computerDTO.getName());
-		ComputerDTOValidator.checkDateConsistency(computerDTO);			
-		
-		// Validate related companyDTO
-		if(computerDTO.getCompany() != null){
-			CompanyDTOValidator.checkValidId(computerDTO.getCompany().getId());
-		}
+		// validate computerDTO
+		ComputerDTOValidator.validate(computerDTO);
 		
 		// Map
 		Computer computer = ComputerMapper.toComputer(computerDTO);

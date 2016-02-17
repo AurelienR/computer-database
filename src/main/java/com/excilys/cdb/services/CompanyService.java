@@ -53,8 +53,7 @@ public class CompanyService {
 
 	public int createCompany(Company company) throws DAOException, ValidatorException{		
 		// Validate Company
-		CompanyValidator.checkNameNotEmpty(company.getName());
-		CompanyValidator.checkNameNotNull(company.getName());
+		CompanyValidator.validate(company);
 		
 		// Insert Company
 		return CompanyDAOImpl.getInstance().insertCompany(company);

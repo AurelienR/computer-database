@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib uri="paginationLib" prefix="pagination"%>
+<%@ taglib prefix="myLib" tagdir="/WEB-INF/tags"%>
 <%@ page isELIgnored="false"%>
 <html>
 <head>
@@ -13,7 +13,10 @@
 <link href="./css/main.css" rel="stylesheet" media="screen" />
 </head>
 <body>
-	<jsp:include page="header.jsp" />	
+	<jsp:include page="header.jsp">
+		<jsp:param name="currPage" value="${page.current}" />
+		<jsp:param name="pageSize" value="${page.pageSize}" />
+	</jsp:include>
 
 	<section id="main">
 		<div class="container">
@@ -91,10 +94,7 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 
-			<c:url var="pageUri"
-				value="./computers?page=##&pageSize=${page.pageSize}" />
-			<pagination:display currPage="${page.current}"
-				totalPages="${page.pageCount}" uri="${pageUri}" />
+			<myLib:pagination target="./computers" currPage="${page.current}" totalPages="${page.pageCount}" pageSize="${page.pageSize}" />
 
 
 			<div class="btn-group btn-group-sm pull-right" role="group">

@@ -65,9 +65,7 @@ public class CompanyDTOService {
 	public int createCompany(CompanyDTO companyDTO) {
 		
 		// Validate company
-		CompanyDTOValidator.checkNameNotNull(companyDTO.getName());
-		CompanyDTOValidator.checkNameNotEmpty(companyDTO.getName());
-		CompanyDTOValidator.checkValidId(companyDTO.getId());
+		CompanyDTOValidator.validate(companyDTO);
 		
 		// Map
 		Company company = CompanyMapper.toCompany(companyDTO);

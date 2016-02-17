@@ -55,14 +55,8 @@ public class ComputerService {
 
 	public int createComputer(Computer computer) throws DAOException, ValidatorException{
 		
-		// Validate Computer
-		ComputerValidator.checkNameNotNull(computer.getName());
-		ComputerValidator.checkNameNotEmpty(computer.getName());
-		ComputerValidator.checkDatesConsistence(computer);
-		// Check related company
-		if(computer.getCompany() != null){
-			CompanyValidator.checkValidId(computer.getCompany().getId());
-		}
+		// Validate computer
+		ComputerValidator.validate(computer);
 		
 		// Create computers
 		return ComputerDAOImpl.getInstance().insertComputer(computer);
@@ -71,13 +65,7 @@ public class ComputerService {
 	public void updateComputer(Computer computer) throws DAOException, ValidatorException{
 		
 		// Validate computer
-		ComputerValidator.checkValidId(computer.getId());
-		ComputerValidator.checkNameNotNull(computer.getName());
-		ComputerValidator.checkNameNotEmpty(computer.getName());
-		// Check related company
-		if(computer.getCompany() != null){
-			CompanyValidator.checkValidId(computer.getCompany().getId());
-		}
+		ComputerValidator.validate(computer);
 		
 		// Update computer
 		ComputerDAOImpl.getInstance().updateComputer(computer);

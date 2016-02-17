@@ -24,4 +24,16 @@ public class ComputerValidator extends ModelValidator {
 			throw new ValidatorException("Discontinued date should not be set before introduced date");
 		}		
 	}
+	
+	public static void validate(Computer computer) throws ValidatorException{
+		// Validate computer
+		ComputerValidator.checkValidId(computer.getId());
+		ComputerValidator.checkNameNotNull(computer.getName());
+		ComputerValidator.checkNameNotEmpty(computer.getName());
+		// Check related company
+		if(computer.getCompany() != null){
+			CompanyValidator.checkValidId(computer.getCompany().getId());
+		}
+		
+	}
 }
