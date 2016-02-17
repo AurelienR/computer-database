@@ -100,32 +100,38 @@
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<c:choose>
 					<c:when test="${page.pageSize==30}">
-						<a class="btn btn-default active"
-							href="./computers?page=1&pageSize=30">30</a>
+					<myLib:link target="./computers"
+						pageIndex="1" pageSize="30" classe="btn btn-default active">30
+    	   			</myLib:link>
 					</c:when>
 					<c:otherwise>
-						<a class="btn btn-default"
-							href="./computers?page=1&pageSize=30">30</a>
+					<myLib:link target="./computers"
+						pageIndex="1" pageSize="30" classe="btn btn-default">30
+    	   			</myLib:link>
 					</c:otherwise>
 				</c:choose>
 				<c:choose>
 					<c:when test="${page.pageSize==50}">
-						<a class="btn btn-default active"
-							href="./computers?page=1&pageSize=50">50</a>
+					<myLib:link target="./computers"
+						pageIndex="1" pageSize="50" classe="btn btn-default active">50
+    	   			</myLib:link>
 					</c:when>
 					<c:otherwise>
-						<a class="btn btn-default"
-							href="./computers?page=1&pageSize=50">50</a>
+					<myLib:link target="./computers"
+						pageIndex="1" pageSize="50" classe="btn btn-default">50
+    	   			</myLib:link>
 					</c:otherwise>
 				</c:choose>
 				<c:choose>
 					<c:when test="${page.pageSize==100}">
-						<a class="btn btn-default active"
-							href="./computers?page=1&pageSize=100">100</a>
+					<myLib:link target="./computers"
+						pageIndex="1" pageSize="100" classe="btn btn-default active">100
+    	   			</myLib:link>
 					</c:when>
 					<c:otherwise>
-						<a class="btn btn-default"
-							href="./computers?page=1&pageSize=100">100</a>
+					<myLib:link target="./computers"
+						pageIndex="1" pageSize="100" classe="btn btn-default">100
+    	   			</myLib:link>
 					</c:otherwise>
 				</c:choose>
 			</div>

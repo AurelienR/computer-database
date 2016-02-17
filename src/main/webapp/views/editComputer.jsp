@@ -10,7 +10,12 @@
 <link href="./css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-	<jsp:include page="header.jsp" />
+
+	<jsp:include page="header.jsp">
+		<jsp:param name="currPage" value="1" />
+		<jsp:param name="pageSize" value="30" />
+	</jsp:include>
+
 	<section id="main">
 		<div class="container">
 			<div class="row">
@@ -29,17 +34,15 @@
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced"
-									value="">
+									type="date" class="form-control" id="introduced" value="">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued"
-									value="">
+									type="date" class="form-control" id="discontinued" value="">
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> 
-								<select	class="form-control" id="companyId">
+								<label for="companyId">Company</label> <select
+									class="form-control" id="companyId">
 									<option value="null">Nothing selected</option>
 									<c:forEach var="company" items="${requestScope.companies}">
 										<option value="${company.id}"
