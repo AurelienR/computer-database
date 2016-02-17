@@ -2,7 +2,8 @@ package com.excilys.cdb.services;
 
 import java.util.List;
 
-import com.excilys.cdb.daos.DAOException;
+import javax.validation.ValidationException;
+
 import com.excilys.cdb.daos.impl.ComputerDAOImpl;
 import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.mappers.ComputerMapper;
@@ -32,7 +33,11 @@ public class ComputerDTOService {
 		return instance;
 	}
 
-	public List<ComputerDTO> findAll() throws DAOException {
+	public int count(){
+		return ComputerService.getInstance().count();
+	}
+	
+	public List<ComputerDTO> findAll() {
 		
 		// Retrieve computers
 		List<Computer> computers = ComputerService.getInstance().findAll();
@@ -41,7 +46,7 @@ public class ComputerDTOService {
 		return ComputerMapper.toComputerDTOList(computers);
 	}
 
-	public List<ComputerDTO> findById(int id){
+	public List<ComputerDTO> findById(int id) throws ValidationException {
 		
 		// Validate id
 		ComputerDTOValidator.checkValidId(id);
@@ -53,7 +58,7 @@ public class ComputerDTOService {
 		return ComputerMapper.toComputerDTOList(computers);
 	}
 
-	public List<ComputerDTO> findByName(String name){
+	public List<ComputerDTO> findByName(String name) throws ValidationException {
 		
 		// Validate name
 		ComputerDTOValidator.checkNameNotNull(name);
@@ -66,7 +71,7 @@ public class ComputerDTOService {
 		return ComputerMapper.toComputerDTOList(computers);
 	}
 
-	public int createComputer(ComputerDTO computerDTO){
+	public int createComputer(ComputerDTO computerDTO) throws ValidationException {
 
 		// Validate computerDTO
 		ComputerDTOValidator.validate(computerDTO);
@@ -78,7 +83,7 @@ public class ComputerDTOService {
 		return ComputerService.getInstance().createComputer(computer);
 	}
 
-	public void updateComputer(ComputerDTO computerDTO){
+	public void updateComputer(ComputerDTO computerDTO) throws ValidationException {
 		
 		// validate computerDTO
 		ComputerDTOValidator.validate(computerDTO);
@@ -90,7 +95,7 @@ public class ComputerDTOService {
 		ComputerDAOImpl.getInstance().updateComputer(computer);
 	}
 
-	public void deleteComputer(int id){
+	public void deleteComputer(int id) throws ValidationException {
 		
 		// Validate id
 		ComputerDTOValidator.checkValidId(id);

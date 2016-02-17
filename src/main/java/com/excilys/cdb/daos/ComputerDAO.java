@@ -11,6 +11,14 @@ import com.excilys.cdb.models.Computer;
  *
  */
 public interface ComputerDAO {
+	
+	/**
+	 * Count computer stored in DB
+	 * 
+	 * @return number of computer
+	 * @throws DAOException
+	 */
+	int count() throws DAOException;
 
 	/**
 	 * Find all computer stored in DB

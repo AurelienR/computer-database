@@ -73,7 +73,7 @@ public class ComputerInfo extends HttpServlet {
 			ComputerPageDTO pageDTO =  ComputerPageMapper.toComputerPageDTO(page);
 			
 			// Get computer count
-			int computerCount = ComputerDTOService.getInstance().findAll().size();
+			int computerCount = ComputerDTOService.getInstance().count();
 			
 			// Prepare request
 			request.setAttribute("page", pageDTO);
@@ -92,7 +92,7 @@ public class ComputerInfo extends HttpServlet {
 			ComputerPageDTO pageDTO = ComputerPageMapper.toComputerPageDTO(page);
 			
 			// Get computer count
-			int computerCount = ComputerDTOService.getInstance().findAll().size();
+			int computerCount = ComputerDTOService.getInstance().count();
 			
 			// Prepare request
 			request.setAttribute("page", pageDTO);

@@ -31,8 +31,12 @@ public class ComputerService {
 		}
 		return instance;
 	}
+	
+	public int count() throws DAOException{
+		return ComputerDAOImpl.getInstance().count();
+	}
 
-	public List<Computer> findAll() throws DAOException, ValidatorException {
+	public List<Computer> findAll() throws DAOException {
 		return ComputerDAOImpl.getInstance().findAll();
 	}
 

@@ -27,6 +27,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	public static final String DISC_COLUMN = "discontinued";	
 
 	// SQL Queries
+	private final String COUNT_QUERY ="SELECT COUNT(*) FROM computer";
 	private final String FIND_ALL_QUERY ="SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id";
 	private final String FIND_RANGE_QUERY = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY computer.id LIMIT ? OFFSET ?";
 	private final String FIND_BYID_QUERY = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id=?";
@@ -372,6 +373,39 @@ public class ComputerDAOImpl implements ComputerDAO {
 				}
 				
 				return computerList;
+	}
+
+	@Override
+	public int count() throws DAOException {
+		// Init local variables
+		Connection con = null;
+		ResultSet results = null;
+		Statement ps = null;
+		int count= -1;
+		
+		try {
+			// Get opened connection
+			con = ConnectionFactory.getInstance().getConnection();
+			con.setAutoCommit(true);
+			
+			// Prepare query
+			ps = con.createStatement(); 
+			results = ps.executeQuery(COUNT_QUERY);
+			
+			// Get count
+			results.next();
+			count = results.getInt(1);
+			
+			
+		} catch (SQLException e) {
+			throw new DAOException("Failed on count method, SQLException",e);	
+		}
+		finally{
+			// Close any connection related object
+			ConnectionCloser.silentCloses(results, ps, con);
+		}
+		
+		return count;
 	}
 
 }
