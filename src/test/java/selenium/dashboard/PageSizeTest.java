@@ -20,7 +20,7 @@ public class PageSizeTest {
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
-  private final String RESULTS_XPATH = "//table[@id='results']/tbody/tr";
+  private final String RESULTS_XPATH = "//tbody[@id='results']/tr";
   
   
   @Before

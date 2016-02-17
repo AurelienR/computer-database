@@ -81,7 +81,6 @@
 			<artifactId>validation-api</artifactId>
 			<version>1.0.0.GA</version>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.el</groupId>
 			<artifactId>javax.el-api</artifactId>
@@ -95,6 +94,18 @@
 	</dependencies>
 	<build>
 		<finalName>computer-database</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -106,46 +117,55 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.0</version>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
 				<executions>
 					<execution>
-						<id>tomcat-run</id>
+						<id>unit-tests</id>
+						<phase>test</phase>
 						<goals>
-							<goal>run</goal>
+							<goal>test</goal>
 						</goals>
-						<phase>pre-test</phase>
 						<configuration>
-							<fork>true</fork>
+							<skip>false</skip>
+							<excludes>
+								<exclude>${project.basedir}/**/selenium/**/*.java</exclude>
+							</excludes>
 						</configuration>
 					</execution>
 					<execution>
-						<id>tomcat-shutdown</id>
-						<phase>post-test</phase>
+						<id>integration-tests</id>
 						<goals>
-							<goal>shutdown</goal>
+							<goal>test</goal>
 						</goals>
+						<configuration>
+							<skip>false</skip>
+							<includes>
+								<include>${project.basedir}/**/selenium/**/*.java</include>
+							</includes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.1</version>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.13</version>
+				<configuration>
+					<includes>
+						<include>${project.basedir}/src/test/java/selenium/**/*.java</include>
+						<exclude>${project.basedir}/src/test/java/junit/**/*.java</exclude>
+					</includes>
+				</configuration>
 				<executions>
 					<execution>
-						<phase>test</phase>
+						<id>failsafe-integration-tests</id>
+						<phase>integration-test</phase>
 						<goals>
-							<goal>run</goal>
+							<goal>integration-test</goal>
 						</goals>
-						<configuration>
-							<tasks>
-								<echo>Using env.test.properties</echo>
-								<copy file="src/main/resources/properties/env.test.properties"
-									tofile="${project.build.outputDirectory}/properties/env.properties" />
-							</tasks>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-  <company ID="1" NAME="Apple"/>
-  <company ID="2" NAME="IBM"/>
-  <company ID="3" NAME="Acer"/>
-  <computer NAME="MacBook" COMPANY_ID="1"/>
-  <computer NAME="IBM_Computer" COMPANY_ID="2"/>
-  <computer NAME="Acer_Computer" COMPANY_ID="3"/>
-</dataset>
