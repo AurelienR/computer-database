@@ -6,7 +6,7 @@
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
 	<packaging>war</packaging>
-	<version>0.2.1</version>
+	<version>0.3.0-SNAPSHOT</version>
 	<name>computerdatabase Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
@@ -33,7 +33,7 @@
 
 	<!-- Dependencies -->
 	<dependencies>
-	
+
 		<!-- Dev dependencies -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -83,6 +83,13 @@
 			<version>${mysql-connector.version}</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp</artifactId>
+			<version>0.8.0.RELEASE</version>
+			<scope>compile</scope>
+		</dependency>
+
 
 		<!-- Test dependencies -->
 		<dependency>
@@ -135,11 +142,11 @@
 		</dependency>
 
 	</dependencies>
-	
+
 	<build>
-		
+
 		<finalName>computer-database</finalName>
-		
+
 		<!-- Filtering ressources -->
 		<resources>
 			<resource>
@@ -153,10 +160,10 @@
 				<filtering>true</filtering>
 			</testResource>
 		</testResources>
-		
+
 		<!-- Maven plugins -->
 		<plugins>
-		
+
 			<!-- Compiler -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -167,7 +174,7 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
-			
+
 			<!-- Tests -->
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -202,7 +209,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
@@ -223,7 +230,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 </project>
