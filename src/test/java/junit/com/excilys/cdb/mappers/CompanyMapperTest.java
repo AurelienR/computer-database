@@ -3,6 +3,9 @@ package junit.com.excilys.cdb.mappers;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +36,9 @@ public class CompanyMapperTest {
 		company = null;
 	}
 
+	/**
+	 * Test toCompanyDTO method with null parameter
+	 */
 	@Test
 	public void toCompanyDTONullParameterTest(){
 		try {
@@ -43,6 +49,9 @@ public class CompanyMapperTest {
 		}
 	}
 	
+	/**
+	 * Test toCompanyDTO method with invalid company as parameter
+	 */
 	@Test
 	public void toCompanyDTOInvalidCompanyTest(){
 		
@@ -60,6 +69,9 @@ public class CompanyMapperTest {
 		}
 	}
 	
+	/**
+	 * Test toCompanyDTO with a valid company
+	 */
 	@Test
 	public void toCompanyDTOValidCompanyTest(){
 		
@@ -77,6 +89,9 @@ public class CompanyMapperTest {
 		}
 	}
 	
+	/**
+	 * Test toCompany with a null CompanyDTO parameter
+	 */
 	@Test
 	public void toCompanyNullParameterTest(){
 		try {
@@ -88,6 +103,9 @@ public class CompanyMapperTest {
 		}
 	}
 	
+	/**
+	 * Test toCompany with an invalid CompanyDTO parameter
+	 */
 	@Test
 	public void toCompanyInvalidCompanyDTOest(){
 		
@@ -105,6 +123,9 @@ public class CompanyMapperTest {
 		}
 	}
 	
+	/**
+	 * Test toCompany with a valid CompanyDTO parameter
+	 */
 	@Test
 	public void toCompanyValidCompanyDTOTest(){
 		
@@ -121,4 +142,49 @@ public class CompanyMapperTest {
 			fail("Exception thrown should not be thrown");
 		}
 	}
+	
+	/**
+	 * Test toCompanyDTOList with a null parameter
+	 */
+	@Test
+	public void toCompanyDTOListNullParamTest(){
+				
+		try {
+			List<CompanyDTO> resultCompany = CompanyMapper.toCompanyDTOList(null);
+			assertNull(resultCompany);
+		}
+		catch(Throwable t) {
+			fail("Exception thrown should not be thrown");
+		}
+	}
+	
+	/**
+	 * Test toCompanyDTOList with an invalid list company parameter parameter
+	 */
+	@Test
+	public void toCompanyDTOListInvalidParamTest(){
+		
+		int id = -1;
+		String name = null;
+		
+		when(company.getId()).thenReturn(id);
+		when(company.getName()).thenReturn(name);		
+		List<Company> companies =  new ArrayList<Company>();
+		companies.add(null);
+		companies.add(company);
+		
+		int count = companies.size();
+		
+		try {
+			List<CompanyDTO> resultCompanyDTOs = CompanyMapper.toCompanyDTOList(companies);
+			assertNull(resultCompanyDTOs.get(0));
+			assertEquals(count,resultCompanyDTOs.size());
+			assertEquals(id,resultCompanyDTOs.get(1).getId());
+			assertNull(resultCompanyDTOs.get(1).getName());
+		}
+		catch(Throwable t) {
+			fail("Exception thrown should not be thrown");
+		}
+	}
+	
 }

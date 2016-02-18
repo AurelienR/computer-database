@@ -75,6 +75,10 @@ public class ComputerMapper {
 	 */
 	public static ComputerDTO toComputerDTO(Computer computer){
 		
+		if(computer == null){
+			return null;
+		}
+		
 		int id = computer.getId();
 		String computerName = computer.getName();
 		String introStr = DateFormatManager.toHTMLDateString(computer.getIntroduced());
@@ -89,7 +93,10 @@ public class ComputerMapper {
 	 * @param computers list of Computer
 	 * @return list of ComputerDTOs
 	 */
-	public static List<ComputerDTO> toComputerDTOList(List<Computer> computers){	
+	public static List<ComputerDTO> toComputerDTOList(List<Computer> computers){
+		if(computers == null){
+			return null;
+		}
 		List<ComputerDTO> computerDTOs = new ArrayList<ComputerDTO>();
 		computers.parallelStream().forEachOrdered(c -> computerDTOs.add(toComputerDTO(c)));
 		return computerDTOs;
@@ -100,7 +107,10 @@ public class ComputerMapper {
 	 * @param computerDTO ComputerDTO to map
 	 * @return related Computer
 	 */
-	public static Computer toComputer(ComputerDTO computerDTO){		
+	public static Computer toComputer(ComputerDTO computerDTO){
+		if(computerDTO == null){
+			return null;
+		}
 		int id = computerDTO.getId();
 		String computerName = computerDTO.getName();
 		LocalDateTime intro = DateFormatManager.parseHTMLDateString(computerDTO.getIntroduced());
