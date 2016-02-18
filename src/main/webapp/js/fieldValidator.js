@@ -1,6 +1,7 @@
 function isValidDate(dateStr){
     var matches = /^(\d{4})[-\/](\d{2})[-\/](\d{2})$/.exec(dateStr);
     if (matches == null) return false;
+    if(isGreaterThan("1970-01-01", dateStr)) return false
     return true
 }
 

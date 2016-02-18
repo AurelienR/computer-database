@@ -50,7 +50,7 @@ function validationIntroducedDisplay(inputElement){
 		setSuccessDisplay(inputElement);
 	}
 	else{
-		setFailureDisplay(inputElement,"Format dd/MM/yyyy");
+		setFailureDisplay(inputElement,"<ul><li> Format dd/MM/yyyy </li><li>Cannot be set before 01/01/1970</li><ul>");
 	}
 }
 
@@ -66,7 +66,7 @@ function validationDiscontinuedDisplay(inputElement){
 		setSuccessDisplay(inputElement);
 	}
 	else{
-		setFailureDisplay(inputElement,"Format dd/MM/yyyy and greater than introduced date");
+		setFailureDisplay(inputElement,"<ul><li> Format dd/MM/yyyy </li><li>Cannot be set before 01/01/1970</li> <li> Greater than introduced date </li><ul>");
 	}
 }
 
@@ -154,7 +154,7 @@ function setFailureDisplay(inputElement,errorMessageStr){
 		errorMessageElement.remove();
 	}
 	
-	parentDivElement.append("<div class=\"alert alert-danger\"> <strong>Danger</strong>  "+errorMessageStr+"  </div>")
+	parentDivElement.append("<div class=\"alert alert-danger\"> <strong>Danger:</strong>  "+errorMessageStr+"  </div>")
 	parentDivElement.append("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");	
 };
 
