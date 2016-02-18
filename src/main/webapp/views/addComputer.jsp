@@ -61,7 +61,7 @@
 	</section>
 	<script src="./js/jquery.min.js"></script>
 	<script src="./js/bootstrap.min.js"></script>
-	<script src="./js/fieldValidator.js"></script>
-	<script src="./js/addFormValidator.js"></script>
+	<script src="./js/utilValidator.js"></script>
+	<script src="./js/computerFormValidator.js"></script>
 </body>
 </html>

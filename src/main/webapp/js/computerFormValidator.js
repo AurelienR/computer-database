@@ -175,7 +175,7 @@ function isIntroducedValid(){
 	var introduced = $("#introduced").val();
 	var discontinued = $("#discontinued").val();
 	
-	if(!isEmptyField(introduced) && !isEmptyField(discontinued) && isGreaterThan(introduced,discontinued)) return false;
+	if((isEmptyField(introduced) || !isValidDate(introduced)) && !isEmptyField(discontinued) ) return false
 	if(!isEmptyField(introduced) && !isValidDate(introduced)) return false;
 	
 	return true;
@@ -188,9 +188,8 @@ function isIntroducedValid(){
 function isDiscontinuedValid(){
 	
 	var introduced = $("#introduced").val();
-	var discontinued = $("#discontinued").val();
-	
-	if((isEmptyField(introduced) || !isValidDate(introduced)) && !isEmptyField(discontinued) ) return false
+	var discontinued = $("#discontinued").val();	
+
 	if(!isEmptyField(discontinued) && !isEmptyField(introduced) && isGreaterThan(introduced,discontinued)) return false;
 	if(!isEmptyField(discontinued) && !isValidDate(discontinued)) return false;
 	

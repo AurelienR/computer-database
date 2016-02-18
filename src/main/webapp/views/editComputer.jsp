@@ -24,25 +24,25 @@
 						${computer.id}</div>
 					<h1>Edit Computer</h1>
 
-					<form action="editComputer" method="POST">
-						<input type="hidden" value="0" />
+					<form action="./editComputer" method="POST">
+						<input type="hidden" id="id" name="id" value="${computer.id}" />
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName"
+									type="text" class="form-control" id="computerName" name="computerName"
 									value="${computer.name}">
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced" value="">
+									type="date" class="form-control" id="introduced" name="introduced" value="${computer.introduced}">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued" value="">
+									type="date" class="form-control" id="discontinued" name="discontinued" value="${computer.discontinued}">
 							</div>
-							<div class="form-group">
+							<div class="form-group  has-feedback">
 								<label for="companyId">Company</label> <select
-									class="form-control" id="companyId">
+									class="form-control" id="companyId" name="companyId">
 									<option value="null">Nothing selected</option>
 									<c:forEach var="company" items="${requestScope.companies}">
 										<option value="${company.id}"
@@ -60,5 +60,9 @@
 			</div>
 		</div>
 	</section>
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/utilValidator.js"></script>
+	<script src="./js/computerFormValidator.js"></script>
 </body>
 </html>
