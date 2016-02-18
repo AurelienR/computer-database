@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.cdb.dtos.CompanyDTO;
 import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.dtos.ComputerPageDTO;
-import com.excilys.cdb.mappers.ComputerPageMapper;
-import com.excilys.cdb.models.ComputerPage;
+import com.excilys.cdb.dtos.ComputerPageDTOCreator;
+import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.services.CompanyDTOService;
 import com.excilys.cdb.services.ComputerDTOService;
 
@@ -68,12 +68,13 @@ public class ComputerInfo extends HttpServlet {
 			int pageIndex =  Integer.parseInt(pageStr);
 			int pageSize = Integer.parseInt(pageSizeStr);
 			
-			// Retrieve related dashboard page
-			ComputerPage page = new ComputerPage(pageIndex,pageSize);
-			ComputerPageDTO pageDTO =  ComputerPageMapper.toComputerPageDTO(page);
-			
 			// Get computer count
 			int computerCount = ComputerDTOService.getInstance().count();
+			
+			// Retrieve related dashboard page
+			QueryPageParameter qp = new QueryPageParameter(pageIndex, pageSize);
+			List<ComputerDTO> computerDTOs = ComputerDTOService.getInstance().findByQuery(qp);
+			ComputerPageDTO pageDTO =  ComputerPageDTOCreator.createPage(pageIndex, pageSize, computerCount, computerDTOs);
 			
 			// Prepare request
 			request.setAttribute("page", pageDTO);
@@ -88,11 +89,14 @@ public class ComputerInfo extends HttpServlet {
 			// Initialize dashboard Page
 			int pageIndex =  1;
 			int pageSize = 30;
-			ComputerPage page = new ComputerPage(pageIndex,pageSize);
-			ComputerPageDTO pageDTO = ComputerPageMapper.toComputerPageDTO(page);
 			
 			// Get computer count
 			int computerCount = ComputerDTOService.getInstance().count();
+			
+			// Retrieve related dashboard page
+			QueryPageParameter qp = new QueryPageParameter(pageIndex, pageSize);
+			List<ComputerDTO> computerDTOs = ComputerDTOService.getInstance().findByQuery(qp);
+			ComputerPageDTO pageDTO =  ComputerPageDTOCreator.createPage(pageIndex, pageSize, computerCount, computerDTOs);
 			
 			// Prepare request
 			request.setAttribute("page", pageDTO);

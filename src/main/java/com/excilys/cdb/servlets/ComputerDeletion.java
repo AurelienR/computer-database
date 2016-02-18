@@ -52,7 +52,7 @@ public class ComputerDeletion extends HttpServlet {
 		}		
 		
 		// Forward request
-		request.getRequestDispatcher("computers").forward(request, response);
+		request.getRequestDispatcher("./computers").forward(request, response);
 	}
 
 }

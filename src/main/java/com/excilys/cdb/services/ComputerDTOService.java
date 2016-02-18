@@ -8,7 +8,9 @@ import com.excilys.cdb.daos.impl.ComputerDAOImpl;
 import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.models.Computer;
+import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.validators.ComputerDTOValidator;
+import com.excilys.cdb.validators.QueryPageParameterValidator;
 
 /**
  * Service layer to ComputerDAO
@@ -33,6 +35,19 @@ public class ComputerDTOService {
 		return instance;
 	}
 
+	public List<ComputerDTO> findByQuery(QueryPageParameter qp){
+		
+		// Validate queryParameter
+		QueryPageParameterValidator.validate(qp);
+		
+		// Retrieve computer
+		List<Computer> computers = ComputerService.getInstance().findByQuery(qp);
+		
+		// Map
+		return ComputerMapper.toComputerDTOList(computers);
+	}
+	
+	
 	public int count(){
 		return ComputerService.getInstance().count();
 	}

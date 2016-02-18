@@ -3,6 +3,7 @@ package com.excilys.cdb.daos;
 import java.util.List;
 
 import com.excilys.cdb.models.Computer;
+import com.excilys.cdb.models.QueryPageParameter;
 
 /**
  * Interface for managing Computer data with the database
@@ -11,6 +12,14 @@ import com.excilys.cdb.models.Computer;
  *
  */
 public interface ComputerDAO {
+	
+	/**
+	 * Return list of computer based on QueryParameters
+	 * @param queryParameter queryParameters to based the request on
+	 * @return related List of computers
+	 * @throws DAOException
+	 */
+	List<Computer> findByQuery(QueryPageParameter queryParameter) throws DAOException;
 	
 	/**
 	 * Count computer stored in DB

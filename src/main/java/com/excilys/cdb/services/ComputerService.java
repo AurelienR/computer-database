@@ -5,8 +5,9 @@ import java.util.List;
 import com.excilys.cdb.daos.DAOException;
 import com.excilys.cdb.daos.impl.ComputerDAOImpl;
 import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.validators.CompanyValidator;
+import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.validators.ComputerValidator;
+import com.excilys.cdb.validators.QueryPageParameterValidator;
 import com.excilys.cdb.validators.ValidatorException;
 
 /**
@@ -30,6 +31,19 @@ public class ComputerService {
 			instance = new ComputerService();
 		}
 		return instance;
+	}
+	
+	public List<Computer> findByQuery(QueryPageParameter qp) throws DAOException, ValidatorException {
+		
+		// Validate queryParameter
+		QueryPageParameterValidator.validate(qp);
+		
+		// Return computers
+		return ComputerDAOImpl.getInstance().findByQuery(qp);
+	}
+	
+	public List<Computer> findRange(int startRow, int size){		
+		return ComputerDAOImpl.getInstance().findRange(startRow, size);
 	}
 	
 	public int count() throws DAOException{

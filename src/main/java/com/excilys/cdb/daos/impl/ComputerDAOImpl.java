@@ -14,6 +14,7 @@ import com.excilys.cdb.daos.ConnectionFactory;
 import com.excilys.cdb.daos.DAOException;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.models.Computer;
+import com.excilys.cdb.models.QueryPageParameter;
 
 /**
  * Manage computer data operation with the Database
@@ -334,7 +335,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 	
 	@Override
-	public List<Computer> findRange(int startRow, int size) throws DAOException {
+	public List<Computer> findRange(int offset, int limit) throws DAOException {
 		
 		// Init local variables
 				Connection con = null;
@@ -349,8 +350,8 @@ public class ComputerDAOImpl implements ComputerDAO {
 					
 					// Prepare query
 					ps = con.prepareStatement(FIND_RANGE_QUERY);
-					ps.setInt(1, size);
-					ps.setInt(2, startRow);
+					ps.setInt(1, limit);
+					ps.setInt(2, offset);
 					results = ps.executeQuery();
 					
 					// Deserialize resultSet to a list of computer
@@ -406,6 +407,48 @@ public class ComputerDAOImpl implements ComputerDAO {
 		}
 		
 		return count;
+	}
+
+	@Override
+	public List<Computer> findByQuery(QueryPageParameter qp) {
+		
+		// Init local variables
+		Connection con = null;
+		ResultSet results = null;
+		PreparedStatement ps = null;
+		List<Computer> computerList = null;
+		
+		try {
+			// Get opened connection
+			con = ConnectionFactory.getInstance().getConnection();
+			con.setAutoCommit(false);
+			
+			// Prepare query
+			ps = con.prepareStatement(FIND_RANGE_QUERY);
+			ps.setInt(1, qp.getLimit());
+			ps.setInt(2, qp.getOffset());
+			results = ps.executeQuery();
+			
+			// Deserialize resultSet to a list of computer
+			computerList = ComputerMapper.getComputersFromResults(results);
+			con.commit();
+			
+		} catch (SQLException e) {
+			// Try to recover previous DB state
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				throw new DAOException("Failed to Rollback on findAll method",e1);
+			}
+			throw new DAOException("Failed on findRange method, SQLException",e);	
+		}
+		finally{
+			// Close any connection related object
+			ConnectionCloser.silentCloses(results, ps, con);
+		}
+		
+		return computerList;
 	}
 
 }
