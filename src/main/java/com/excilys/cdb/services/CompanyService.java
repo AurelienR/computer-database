@@ -67,12 +67,13 @@ public class CompanyService {
 	public void deleteCompany(int id) throws DAOException, ValidatorException {
 		
 		CompanyValidator.checkValidId(id);
+		
 		Connection con = null;
 		
 		try{
 			con = ConnectionFactory.getInstance().getConnection();
 			con.setAutoCommit(false);
-			ComputerDAOImpl.getInstance().resetCompanyId(con, id);
+			ComputerDAOImpl.getInstance().deleteByCompanyId(con, id);
 			CompanyDAOImpl.getInstance().deleteCompany(con,id);	
 			
 			con.commit();

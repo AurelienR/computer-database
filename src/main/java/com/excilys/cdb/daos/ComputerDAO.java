@@ -97,11 +97,11 @@ public interface ComputerDAO {
 	void deleteComputer(int id) throws DAOException;
 
 	/**
-	 * Reset the computers company id by the default value with the specified company id
-	 * 
+	 * Delete the computers by there company id
+	 *  
 	 * @param con current connection used
 	 * @param companyId companyId to reset on computers
 	 * @throws DAOException
 	 */
-	void resetCompanyId(Connection con, int companyId) throws DAOException;
+	void deleteByCompanyId(Connection con, int companyId) throws DAOException;
 }

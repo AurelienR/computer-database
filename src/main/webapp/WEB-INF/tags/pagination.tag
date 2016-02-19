@@ -5,6 +5,9 @@
 <%@ attribute name="currPage" required="true" type="java.lang.Integer"%>
 <%@ attribute name="pageSize" required="true" type="java.lang.Integer"%>
 <%@ attribute name="totalPages" required="true" type="java.lang.Integer"%>
+<%@ attribute name="order" required="false" type="java.lang.String"%>
+<%@ attribute name="orderBy" required="false" type="java.lang.String"%>
+<%@ attribute name="search" required="false" type="java.lang.String"%>
 
 
 
@@ -25,7 +28,7 @@
 	<!-- Previous Button -->
 	<c:if test="${currPage != 1}">
 		<li><myLib:link target="${target}" pageIndex="${currPage - 1}"
-				pageSize="${pageSize}">
+				pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">
 				<span aria-hidden="true">&larr; Previous</span>
 			</myLib:link></li>
 	</c:if>
@@ -34,12 +37,12 @@
 	<c:choose>
 		<c:when test="${currPage == 1}">
 			<li class="active"><myLib:link target="${target}"
-					pageIndex="${1}" pageSize="${pageSize}">1
+					pageIndex="${1}" pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">1
 				</myLib:link></li>
 		</c:when>
 		<c:otherwise>
 			<li><myLib:link target="${target}" pageIndex="${1}"
-					pageSize="${pageSize}">1
+					pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">1
 				</myLib:link>
 			</li>
 		</c:otherwise>
@@ -59,14 +62,14 @@
 			</c:when>
 			<c:when test="${i == currPage}">
 				<li class="active"><myLib:link target="${target}"
-						pageIndex="${i}" pageSize="${pageSize}">
+						pageIndex="${i}" pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">
     	   			${i}
     	   		</myLib:link>
 				<li>
 			</c:when>
 			<c:otherwise>
 				<li><myLib:link target="${target}" pageIndex="${i}"
-						pageSize="${pageSize}">
+						pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">
 					${i}
 				</myLib:link></li>
 			</c:otherwise>
@@ -83,12 +86,12 @@
 	<c:choose>
 		<c:when test="${totalPages == currPage}">
 			<li class="active"><myLib:link target="${target}"
-					pageIndex="${totalPages}" pageSize="${pageSize}">${totalPages}
+					pageIndex="${totalPages}" pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">${totalPages}
 				</myLib:link></li>
 		</c:when>
 		<c:otherwise>
 			<li><myLib:link target="${target}" pageIndex="${totalPages}"
-					pageSize="${pageSize}">${totalPages}
+					pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">${totalPages}
 				</myLib:link></li>
 		</c:otherwise>
 	</c:choose>
@@ -97,7 +100,7 @@
 	<!-- Next Button -->
 	<c:if test="${currPage != totalPages}">
 		<li><myLib:link target="${target}" pageIndex="${currPage + 1}"
-				pageSize="${pageSize}">
+				pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">
 				<span aria-hidden="true">Next &rarr;</span>
 			</myLib:link></li>
 	</c:if>

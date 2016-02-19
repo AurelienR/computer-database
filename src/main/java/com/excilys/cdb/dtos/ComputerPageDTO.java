@@ -3,14 +3,19 @@ package com.excilys.cdb.dtos;
 import java.util.List;
 
 public class ComputerPageDTO {
-	public int current;
-	public int pageSize;
+	public int current = 1;
+	public int pageSize = 30;
 	public int pageCount;
 	public List<ComputerDTO> computers;
 	
 	public ComputerPageDTO(int current, int pageSize, int pageCount, List<ComputerDTO> computers){
 		this.current = current;
 		this.pageSize = pageSize;
+		this.pageCount = pageCount;
+		this.computers = computers;
+	}
+	
+	public ComputerPageDTO(int pageCount, List<ComputerDTO> computers){
 		this.pageCount = pageCount;
 		this.computers = computers;
 	}

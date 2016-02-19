@@ -14,6 +14,7 @@ import com.excilys.cdb.dtos.ComputerDTO;
 import com.excilys.cdb.dtos.ComputerPageDTO;
 import com.excilys.cdb.dtos.ComputerPageDTOCreator;
 import com.excilys.cdb.models.QueryPageParameter;
+import com.excilys.cdb.models.QueryPageParameterCreator;
 import com.excilys.cdb.services.CompanyDTOService;
 import com.excilys.cdb.services.ComputerDTOService;
 
@@ -42,11 +43,17 @@ public class ComputerInfo extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String idStr;
-		String pageStr;
-		String pageSizeStr;
+		// Retrieve parameters
+		String idStr  = request.getParameter("id");
+		String pageStr = request.getParameter("page");
+		String pageSizeStr = request.getParameter("pageSize");
+		String orderByStr = request.getParameter("orderBy");
+		String orderStr = request.getParameter("order");
+		String searchStr = request.getParameter("search");
+		
+		
 		// URL GET "/computers?id=..."
-		if ((idStr = request.getParameter("id")) != null){
+		if (idStr != null){
 			// Parse Id
 			int id = Integer.parseInt(idStr);
 			
@@ -62,47 +69,23 @@ public class ComputerInfo extends HttpServlet {
 			request.getRequestDispatcher(EDIT_COMPUTER_URI).forward(request, response);
 		}
 		// URL GET "/computers?page=...&pageSize=..."
-		else if((pageStr = request.getParameter("page")) != null && (pageSizeStr = request.getParameter("pageSize")) != null){
-			
-			// Retrieve parameters
-			int pageIndex =  Integer.parseInt(pageStr);
-			int pageSize = Integer.parseInt(pageSizeStr);
-			
+		else {
+
 			// Get computer count
-			int computerCount = ComputerDTOService.getInstance().count();
+			int computerCount = ComputerDTOService.getInstance().count();			
+
+			// Get related query
+			QueryPageParameter qp = QueryPageParameterCreator.Create(pageStr, pageSizeStr, searchStr, orderByStr, orderStr);
 			
-			// Retrieve related dashboard page
-			QueryPageParameter qp = new QueryPageParameter(pageIndex, pageSize);
+			// Retrieve DTOs
 			List<ComputerDTO> computerDTOs = ComputerDTOService.getInstance().findByQuery(qp);
-			ComputerPageDTO pageDTO =  ComputerPageDTOCreator.createPage(pageIndex, pageSize, computerCount, computerDTOs);
+			ComputerPageDTO pageDTO =  ComputerPageDTOCreator.createPage(qp.getPageIndex() , qp.getPageSize() , computerCount, computerDTOs);
 			
 			// Prepare request
 			request.setAttribute("page", pageDTO);
 			request.setAttribute("computerCount", computerCount);
 			
 			// Forward to jsp
-			request.getRequestDispatcher(LIST_COMPUTERS_URI).forward(request, response);
-		}
-		// URL: GET "/computers..."
-		else{
-			
-			// Initialize dashboard Page
-			int pageIndex =  1;
-			int pageSize = 30;
-			
-			// Get computer count
-			int computerCount = ComputerDTOService.getInstance().count();
-			
-			// Retrieve related dashboard page
-			QueryPageParameter qp = new QueryPageParameter(pageIndex, pageSize);
-			List<ComputerDTO> computerDTOs = ComputerDTOService.getInstance().findByQuery(qp);
-			ComputerPageDTO pageDTO =  ComputerPageDTOCreator.createPage(pageIndex, pageSize, computerCount, computerDTOs);
-			
-			// Prepare request
-			request.setAttribute("page", pageDTO);
-			request.setAttribute("computerCount", computerCount);
-			
-			// Forward request
 			request.getRequestDispatcher(LIST_COMPUTERS_URI).forward(request, response);
 		}
 	}

@@ -31,12 +31,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private final String COUNT_QUERY ="SELECT COUNT(*) FROM computer";
 	private final String FIND_ALL_QUERY ="SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id";
 	private final String FIND_RANGE_QUERY = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY computer.id LIMIT ? OFFSET ?";
+	private final String FIND_BY_QUERY_PARAM_QUERY = "SELECT computer.name AS name, computer.id AS id, company.name AS companyName, computer.introduced, computer.discontinued, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id  WHERE (computer.name LIKE ? OR company.name LIKE ? ) ORDER BY ? ? LIMIT ? OFFSET ?";
 	private final String FIND_BYID_QUERY = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id=?";
 	private final String FIND_BYNAME_QUERY ="SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name=?";
 	private final String INSERT_QUERY = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
 	private final String UPDATE_QUERY = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 	private final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
-	private final String RESET_COMPANY_QUERY = "UPDATE computer SET company_id=? WHERE company_id=?";
+	private final String DELETE_BYCOMPANY_QUERY = "DELETE FROM computer WHERE company_id=?";
 	
 	//Singleton
 	private static ComputerDAO instance;
@@ -431,9 +432,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 			con.setAutoCommit(false);
 			
 			// Prepare query
-			ps = con.prepareStatement(FIND_RANGE_QUERY);
-			ps.setInt(1, qp.getLimit());
-			ps.setInt(2, qp.getOffset());
+			ps = con.prepareStatement(FIND_BY_QUERY_PARAM_QUERY);
+			ps.setString(1, qp.getSearch());
+			ps.setString(2, qp.getSearch());
+			ps.setString(3, qp.getOrderBy().toString());
+			ps.setString(4, qp.getOrder().toString());
+			ps.setInt(5,qp.getLimit());
+			ps.setInt(6,qp.getOffset());
 			results = ps.executeQuery();
 			
 			// Deserialize resultSet to a list of computer
@@ -448,7 +453,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 				e1.printStackTrace();
 				throw new DAOException("Failed to Rollback on findAll method",e1);
 			}
-			throw new DAOException("Failed on findRange method, SQLException",e);	
+			throw new DAOException("Failed on findByQuery method, SQLException",e);	
 		}
 		finally{
 			// Close any connection related object
@@ -459,15 +464,14 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public void resetCompanyId(Connection con, int companyId) throws DAOException {
+	public void deleteByCompanyId(Connection con, int companyId) throws DAOException {
 		
 		PreparedStatement ps = null;
 		
 		// Prepare query
 		try {
-			ps = con.prepareStatement(RESET_COMPANY_QUERY);
-			ps.setNull(1, java.sql.Types.BIGINT);		
-			ps.setInt(2, companyId);
+			ps = con.prepareStatement(DELETE_BYCOMPANY_QUERY);
+			ps.setInt(1, companyId);
 			
 			ps.executeUpdate();
 			

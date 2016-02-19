@@ -4,10 +4,18 @@ import java.util.List;
 
 public class ComputerPageDTOCreator {
 
-	public static ComputerPageDTO createPage(int pageIndex,int pageSize, int totalRows, List<ComputerDTO> computerDTOs){
+	public static ComputerPageDTO createPage(int pageIndex, int pageSize, int totalRows, List<ComputerDTO> computerDTOs){
+			
+		if(pageIndex < 1){
+			pageIndex = 1;
+		}
+		if(pageSize < 1){
+			pageSize = 30;
+		}
 		
 		int count = getPageCount(pageSize, totalRows);
-		ComputerPageDTO computerPageDTO = new ComputerPageDTO(pageIndex, pageSize, count, computerDTOs);
+		ComputerPageDTO computerPageDTO = new ComputerPageDTO(pageIndex,pageSize,count, computerDTOs);
+		
 		return computerPageDTO;		
 	}
 	
