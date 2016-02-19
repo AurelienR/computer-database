@@ -36,6 +36,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private final String INSERT_QUERY = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
 	private final String UPDATE_QUERY = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 	private final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
+	private final String RESET_COMPANY_QUERY = "UPDATE computer SET company_id=? WHERE company_id=?";
 	
 	//Singleton
 	private static ComputerDAO instance;
@@ -457,4 +458,23 @@ public class ComputerDAOImpl implements ComputerDAO {
 		return computerList;
 	}
 
+	@Override
+	public void resetCompanyId(Connection con, int companyId) throws DAOException {
+		
+		PreparedStatement ps = null;
+		
+		// Prepare query
+		try {
+			ps = con.prepareStatement(RESET_COMPANY_QUERY);
+			ps.setNull(1, java.sql.Types.BIGINT);		
+			ps.setInt(2, companyId);
+			
+			ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw new DAOException("Cannot reset following company id: "+companyId, e);
+		} finally {
+			ConnectionCloser.silentClose(ps);
+		}		
+	}
 }

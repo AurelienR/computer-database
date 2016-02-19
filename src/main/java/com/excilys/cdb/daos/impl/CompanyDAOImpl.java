@@ -10,6 +10,7 @@ import java.util.List;
 import com.excilys.cdb.daos.CompanyDAO;
 import com.excilys.cdb.daos.ConnectionCloser;
 import com.excilys.cdb.daos.ConnectionFactory;
+import com.excilys.cdb.daos.DAOConfigurationException;
 import com.excilys.cdb.daos.DAOException;
 import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.models.Company;
@@ -25,7 +26,8 @@ public class CompanyDAOImpl implements CompanyDAO {
 	private final String FIND_RANGE_QUERY = "SELECT * FROM company ORDER BY id DESC LIMIT ? OFFSET ?";
 	private final String FIND_BYID_QUERY = "SELECT * FROM company WHERE id=?";
 	private final String FIND_BYNAME_QUERY = "SELECT * FROM company WHERE name=?";
-	private final String INSERT_QUERY = "INSERT INTO company (name) VALUES (?)";;
+	private final String INSERT_QUERY = "INSERT INTO company (name) VALUES (?)";
+	private final String DELETE_QUERY = "DELETE FROM company WHERE id=?";
 	
 	// Singleton
 	private static CompanyDAO instance;
@@ -251,5 +253,30 @@ public class CompanyDAOImpl implements CompanyDAO {
 		
 		return companyList;
 	}
+
+	@Override
+	public void deleteCompany(Connection con, int id) throws DAOException {
+		
+		PreparedStatement ps = null;		
+		
+		try {			
+			// Prepare query
+			ps = con.prepareStatement(DELETE_QUERY);
+			
+			// Replace query fields
+			ps.setInt(1,id);
+			
+			// Execute query
+			ps.executeUpdate();
+
+		}  catch (SQLException e) {
+			throw new DAOException("Failed to delete company");
+		}
+		finally {
+			ConnectionCloser.silentClose(ps);
+		}
+	}
+	
+	
 	
 }

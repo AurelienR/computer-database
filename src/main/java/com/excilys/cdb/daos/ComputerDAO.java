@@ -1,5 +1,6 @@
 package com.excilys.cdb.daos;
 
+import java.sql.Connection;
 import java.util.List;
 
 import com.excilys.cdb.models.Computer;
@@ -12,15 +13,17 @@ import com.excilys.cdb.models.QueryPageParameter;
  *
  */
 public interface ComputerDAO {
-	
+
 	/**
 	 * Return list of computer based on QueryParameters
-	 * @param queryParameter queryParameters to based the request on
+	 * 
+	 * @param queryParameter
+	 *            queryParameters to based the request on
 	 * @return related List of computers
 	 * @throws DAOException
 	 */
 	List<Computer> findByQuery(QueryPageParameter queryParameter) throws DAOException;
-	
+
 	/**
 	 * Count computer stored in DB
 	 * 
@@ -36,8 +39,7 @@ public interface ComputerDAO {
 	 * @throws DAOException
 	 */
 	List<Computer> findAll() throws DAOException;
-	
-	
+
 	/**
 	 * @param startRow
 	 * @param size
@@ -45,7 +47,7 @@ public interface ComputerDAO {
 	 * @throws DAOException
 	 */
 	List<Computer> findRange(int startRow, int size) throws DAOException;
-	
+
 	/**
 	 * Find a computer stored in DB by its id
 	 * 
@@ -93,4 +95,13 @@ public interface ComputerDAO {
 	 * @throws DAOException
 	 */
 	void deleteComputer(int id) throws DAOException;
+
+	/**
+	 * Reset the computers company id by the default value with the specified company id
+	 * 
+	 * @param con current connection used
+	 * @param companyId companyId to reset on computers
+	 * @throws DAOException
+	 */
+	void resetCompanyId(Connection con, int companyId) throws DAOException;
 }

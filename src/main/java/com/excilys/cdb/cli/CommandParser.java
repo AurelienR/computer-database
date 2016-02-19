@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.cli.impl.CreateComputerCmd;
+import com.excilys.cdb.cli.impl.DeleteCompanyCmd;
 import com.excilys.cdb.cli.impl.DeleteComputerCmd;
 import com.excilys.cdb.cli.impl.DisplayAllCompanyCmd;
 import com.excilys.cdb.cli.impl.DisplayAllComputerCmd;
@@ -26,6 +27,7 @@ public class CommandParser {
 	
 	// Constants
 	private static final String LIST_COMPANIES_CMD = "listcompanies";
+	private static final String DELETE_COMPANY_CMD = "deletecompany";
 	private static final String LIST_COMPUTERS_CMD = "listcomputers";
 	private static final String GET_COMPUTER_DETAILS_CMD = "computerdetails";
 	private static final String CREATE_COMPUTER_CMD = "createcomputer";
@@ -54,6 +56,9 @@ public class CommandParser {
 		switch (cmdStr) {
 		case LIST_COMPANIES_CMD:
 			cmdInvoker.setCommand(new DisplayAllCompanyCmd());
+			break;
+		case DELETE_COMPANY_CMD:
+			cmdInvoker.setCommand(new DeleteCompanyCmd(sc));
 			break;
 		case LIST_COMPUTERS_CMD:
 			cmdInvoker.setCommand(new DisplayAllComputerCmd());
@@ -86,10 +91,16 @@ public class CommandParser {
 	 */
 	public void displayAvailableCmds() {
 		StringBuilder sb = new StringBuilder("\n-----------------------------------------------------\n");
-		sb.append("LIST OF COMMANDS:\n").append(LIST_COMPANIES_CMD).append('\n').append(LIST_COMPUTERS_CMD).append('\n')
-				.append(GET_COMPUTER_DETAILS_CMD).append('\n').append(CREATE_COMPUTER_CMD).append('\n')
-				.append(UPDATE_COMPUTER_CMD).append('\n').append(DELETE_COMPUTER_CMD).append('\n').append(EXIT_CMD)
-				.append('\n').append("\n-----------------------------------------------------\n");
+		sb.append("LIST OF COMMANDS:\n")
+				.append(LIST_COMPANIES_CMD).append('\n')
+				.append(DELETE_COMPANY_CMD).append('\n')
+				.append(LIST_COMPUTERS_CMD).append('\n')
+				.append(GET_COMPUTER_DETAILS_CMD).append('\n')
+				.append(CREATE_COMPUTER_CMD).append('\n')
+				.append(UPDATE_COMPUTER_CMD).append('\n')
+				.append(DELETE_COMPUTER_CMD).append('\n')
+				.append(EXIT_CMD).append('\n')
+				.append("\n-----------------------------------------------------\n");
 		System.out.println(sb);
 	}
 

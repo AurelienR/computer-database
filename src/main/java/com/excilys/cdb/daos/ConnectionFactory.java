@@ -17,7 +17,7 @@ import com.jolbox.bonecp.BoneCPConfig;
 
 public class ConnectionFactory {
 
-	private static final String PROPERTY_FILE = "/properties/dao.properties";
+	private static final String PROPERTY_FILE = "./properties/dao.properties";
 	private static final String URL_PROPERTY = "url";
 	private static final String DRIVER_PROPERTY = "driver";
 	private static final String USERNAME_PROPERTY = "nomutilisateur";
@@ -72,7 +72,7 @@ public class ConnectionFactory {
 		// Read DAO file property
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream fileProperties = classLoader.getResourceAsStream(PROPERTY_FILE);
-
+		
 		// Check DAO file has been read correctly
 		if (fileProperties == null) {
 			throw new DAOConfigurationException("Property file " + PROPERTY_FILE + " not found.");
