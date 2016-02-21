@@ -71,19 +71,15 @@ public class ComputerInfo extends HttpServlet {
 		// URL GET "/computers?page=...&pageSize=..."
 		else {
 
-			// Get computer count
-			int computerCount = ComputerDTOService.getInstance().count();			
-
 			// Get related query
 			QueryPageParameter qp = QueryPageParameterCreator.Create(pageStr, pageSizeStr, searchStr, orderByStr, orderStr);
 			
 			// Retrieve DTOs
 			List<ComputerDTO> computerDTOs = ComputerDTOService.getInstance().findByQuery(qp);
-			ComputerPageDTO pageDTO =  ComputerPageDTOCreator.createPage(qp.getPageIndex() , qp.getPageSize() , computerCount, computerDTOs);
+			ComputerPageDTO pageDTO =  ComputerPageDTOCreator.createPage(qp, computerDTOs);
 			
 			// Prepare request
 			request.setAttribute("page", pageDTO);
-			request.setAttribute("computerCount", computerCount);
 			
 			// Forward to jsp
 			request.getRequestDispatcher(LIST_COMPUTERS_URI).forward(request, response);

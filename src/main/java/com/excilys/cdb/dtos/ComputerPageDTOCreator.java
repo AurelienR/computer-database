@@ -2,19 +2,21 @@ package com.excilys.cdb.dtos;
 
 import java.util.List;
 
+import com.excilys.cdb.models.QueryPageParameter;
+
 public class ComputerPageDTOCreator {
 
-	public static ComputerPageDTO createPage(int pageIndex, int pageSize, int totalRows, List<ComputerDTO> computerDTOs){
+	public static ComputerPageDTO createPage(QueryPageParameter qp, List<ComputerDTO> computerDTOs){
 			
-		if(pageIndex < 1){
-			pageIndex = 1;
+		if(qp.getPageIndex() < 1){
+			qp.setPageIndex(1);
 		}
-		if(pageSize < 1){
-			pageSize = 30;
+		if(qp.getPageSize() < 1){
+			qp.setPageSize(30);
 		}
 		
-		int count = getPageCount(pageSize, totalRows);
-		ComputerPageDTO computerPageDTO = new ComputerPageDTO(pageIndex,pageSize,count, computerDTOs);
+		int count = getPageCount(qp.getPageSize(), qp.getMatchinRowCount());
+		ComputerPageDTO computerPageDTO = new ComputerPageDTO(qp,count, computerDTOs);
 		
 		return computerPageDTO;		
 	}

@@ -10,10 +10,7 @@
 </head>
 <body>
 
-	<jsp:include page="header.jsp">
-		<jsp:param name="currPage" value="1" />
-		<jsp:param name="pageSize" value="30" />
-	</jsp:include>
+	<jsp:include page="header.jsp"/>
 
 	<section id="main">
 		<div class="container">

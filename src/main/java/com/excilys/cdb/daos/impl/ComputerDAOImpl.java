@@ -31,7 +31,8 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private final String COUNT_QUERY ="SELECT COUNT(*) FROM computer";
 	private final String FIND_ALL_QUERY ="SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id";
 	private final String FIND_RANGE_QUERY = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY computer.id LIMIT ? OFFSET ?";
-	private final String FIND_BY_QUERY_PARAM_QUERY = "SELECT computer.name AS name, computer.id AS id, company.name AS companyName, computer.introduced, computer.discontinued, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id  WHERE (computer.name LIKE ? OR company.name LIKE ? ) ORDER BY ? ? LIMIT ? OFFSET ?";
+	private final String FIND_BY_QUERY_PARAM_QUERY = "SELECT SQL_CALC_FOUND_ROWS * FROM computer LEFT JOIN company ON computer.company_id = company.id  WHERE (computer.name LIKE ? OR company.name LIKE ? ) ORDER BY %s %s LIMIT ? OFFSET ?";
+	private final String COUNT_MATCHING_ROWS_QUERY = "SELECT FOUND_ROWS()";
 	private final String FIND_BYID_QUERY = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id=?";
 	private final String FIND_BYNAME_QUERY ="SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name=?";
 	private final String INSERT_QUERY = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
@@ -372,7 +373,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 						con.rollback();
 					} catch (SQLException e1) {
 						e1.printStackTrace();
-						throw new DAOException("Failed to Rollback on findAll method",e1);
+						throw new DAOException("Failed to Rollback on findRange method",e1);
 					}
 					throw new DAOException("Failed on findRange method, SQLException",e);	
 				}
@@ -432,17 +433,32 @@ public class ComputerDAOImpl implements ComputerDAO {
 			con.setAutoCommit(false);
 			
 			// Prepare query
-			ps = con.prepareStatement(FIND_BY_QUERY_PARAM_QUERY);
-			ps.setString(1, qp.getSearch());
-			ps.setString(2, qp.getSearch());
-			ps.setString(3, qp.getOrderBy().toString());
-			ps.setString(4, qp.getOrder().toString());
-			ps.setInt(5,qp.getLimit());
-			ps.setInt(6,qp.getOffset());
+			String query = String.format(FIND_BY_QUERY_PARAM_QUERY, qp.getOrderBy().toString(),qp.getOrder().toString());
+			ps = con.prepareStatement(query);
+			
+			// Set fields
+			ps.setString(1, qp.getQuerySearch());
+			ps.setString(2, qp.getQuerySearch());			
+			ps.setInt(3,qp.getLimit());
+			ps.setInt(4,qp.getOffset());
 			results = ps.executeQuery();
 			
 			// Deserialize resultSet to a list of computer
 			computerList = ComputerMapper.getComputersFromResults(results);
+			con.commit();
+			
+			// Close connection elements
+			ConnectionCloser.silentClose(results);
+			ConnectionCloser.silentClose(ps);
+			
+			// Get matching rows
+			ps = con.prepareStatement(COUNT_MATCHING_ROWS_QUERY);
+			results = ps.executeQuery();
+			
+			// Set matching rows count in query parameter
+			results.next();
+			qp.setMatchinRowCount(results.getInt(1));
+			
 			con.commit();
 			
 		} catch (SQLException e) {
@@ -450,8 +466,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			try {
 				con.rollback();
 			} catch (SQLException e1) {
-				e1.printStackTrace();
-				throw new DAOException("Failed to Rollback on findAll method",e1);
+				throw new DAOException("Failed to Rollback on findByQuery method",e1);
 			}
 			throw new DAOException("Failed on findByQuery method, SQLException",e);	
 		}

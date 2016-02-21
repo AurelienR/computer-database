@@ -4,9 +4,10 @@ public class QueryPageParameter {
 	
 	private int pageIndex = 1;
 	private int pageSize = 30;
-	private String search = "%";
+	private String search = "";
 	private OrderBy orderBy = OrderBy.id;
 	private Order order = Order.ASC;
+	private int matchinRowCount = 0;
 	
 	
 	public QueryPageParameter(){}
@@ -31,9 +32,13 @@ public class QueryPageParameter {
 	public String getSearch() {
 		return search;
 	}
+	
+	public String getQuerySearch() {
+		return "%"+search+"%";
+	}
 
 	public void setSearch(String search) {
-		this.search = "%"+search;
+		this.search = search;
 	}
 
 
@@ -66,5 +71,23 @@ public class QueryPageParameter {
 	
 	public int getLimit() {
 		return pageSize;
-	}			
+	}
+
+
+	/**
+	 * @return the matchinRowCount
+	 */
+	public int getMatchinRowCount() {
+		return matchinRowCount;
+	}
+
+
+	/**
+	 * @param matchinRowCount the matchinRowCount to set
+	 */
+	public void setMatchinRowCount(int matchinRowCount) {
+		this.matchinRowCount = matchinRowCount;
+	}		
+	
+	
 }

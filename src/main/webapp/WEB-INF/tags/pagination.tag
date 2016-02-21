@@ -16,60 +16,48 @@
 
 	<c:set var="range" value="5" />
 	<%-- amount of page links to be displayed --%>
-	<c:set var="radius" value="${range / 2}" />
+	<c:set var="radius" value="2" />
 	<%-- minimum link range ahead/behind --%>
 
 	<c:set var="begin"
-		value="${((currPage - radius) > 0 ? ((currPage - radius) < (totalPages - range + 1) ? (currPage - radius) : (totalPages - range)) : 1) + 1 }" />
+		value="${((currPage - radius) > 1 ? ((currPage - radius) < (totalPages - range + 1) ? ((currPage - radius) < 1 ? 1 : (currPage - radius)) : ((totalPages - range + 1) < 1 ? 1 : (totalPages - range + 1))) : 1)}" />
 	<c:set var="end"
-		value="${(currPage + radius) < totalPages ? ((currPage + radius) > range ? (currPage + radius) : range) : totalPages-1}" />
+		value="${(currPage + radius) < totalPages ? ((currPage + radius) > range ? ((currPage + radius) > totalPages ? totalPages : (currPage + radius)) : (range > totalPages ? totalPages : range)) : totalPages}" />
 
 
 	<!-- Previous Button -->
 	<c:if test="${currPage != 1}">
 		<li><myLib:link target="${target}" pageIndex="${currPage - 1}"
-				pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">
+				pageSize="${pageSize}" order="${order}" orderBy="${orderBy}"
+				search="${search}">
 				<span aria-hidden="true">&larr; Previous</span>
 			</myLib:link></li>
 	</c:if>
 
-	<!-- First page -->
-	<c:choose>
-		<c:when test="${currPage == 1}">
-			<li class="active"><myLib:link target="${target}"
-					pageIndex="${1}" pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">1
+	<!-- Dots and first page -->
+	<c:if test="${(begin) != 1}">
+		<li><myLib:link target="${target}" pageIndex="1"
+				pageSize="${pageSize}" order="${order}" orderBy="${orderBy}"
+				search="${search}">1
 				</myLib:link></li>
-		</c:when>
-		<c:otherwise>
-			<li><myLib:link target="${target}" pageIndex="${1}"
-					pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">1
-				</myLib:link>
-			</li>
-		</c:otherwise>
-	</c:choose>
-
-	<!-- Dots -->
-	<c:if test="${(currPage) > range - 1}">
 		<li><a class="disabled">...</a></li>
 	</c:if>
 
 	<!-- PageNumber -->
 	<c:forEach var="i" begin="${begin}" end="${end}">
 		<c:choose>
-			<c:when test="${i == 1}">
-			</c:when>
-			<c:when test="${i == totalPages}">
-			</c:when>
 			<c:when test="${i == currPage}">
 				<li class="active"><myLib:link target="${target}"
-						pageIndex="${i}" pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">
+						pageIndex="${i}" pageSize="${pageSize}" order="${order}"
+						orderBy="${orderBy}" search="${search}">
     	   			${i}
     	   		</myLib:link>
 				<li>
 			</c:when>
 			<c:otherwise>
 				<li><myLib:link target="${target}" pageIndex="${i}"
-						pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">
+						pageSize="${pageSize}" order="${order}" orderBy="${orderBy}"
+						search="${search}">
 					${i}
 				</myLib:link></li>
 			</c:otherwise>
@@ -77,30 +65,21 @@
 	</c:forEach>
 
 
-	<!-- Dots -->
-	<c:if test="${(currPage + range - 1) < totalPages}">
+	<!-- Dots and first page -->
+	<c:if test="${end != totalPages}">
 		<li><a class="disabled">...</a></li>
+		<li><myLib:link target="${target}" pageIndex="${totalPages}"
+				pageSize="${pageSize}" order="${order}" orderBy="${orderBy}"
+				search="${search}">${totalPages}
+				</myLib:link></li>
 	</c:if>
-
-	<!-- Last page -->
-	<c:choose>
-		<c:when test="${totalPages == currPage}">
-			<li class="active"><myLib:link target="${target}"
-					pageIndex="${totalPages}" pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">${totalPages}
-				</myLib:link></li>
-		</c:when>
-		<c:otherwise>
-			<li><myLib:link target="${target}" pageIndex="${totalPages}"
-					pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">${totalPages}
-				</myLib:link></li>
-		</c:otherwise>
-	</c:choose>
 
 
 	<!-- Next Button -->
 	<c:if test="${currPage != totalPages}">
 		<li><myLib:link target="${target}" pageIndex="${currPage + 1}"
-				pageSize="${pageSize}" order="${order}" orderBy="${orderBy}" search="${search}">
+				pageSize="${pageSize}" order="${order}" orderBy="${orderBy}"
+				search="${search}">
 				<span aria-hidden="true">Next &rarr;</span>
 			</myLib:link></li>
 	</c:if>
