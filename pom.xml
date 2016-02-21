@@ -12,6 +12,7 @@
 
 	<!-- Define properties -->
 	<properties>
+		<!-- Versions -->
 		<java.version>1.8</java.version>
 		<junit.version>4.12</junit.version>
 		<h2db.version>1.4.191</h2db.version>
@@ -87,7 +88,7 @@
 		<dependency>
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
-			<version>0.8.0.RELEASE</version>
+			<version>${boneCP.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -103,7 +104,7 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2db.version}</version>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.dbunit</groupId>
@@ -177,61 +178,105 @@
 			</plugin>
 
 			<!-- Tests -->
+
+			<!-- Unit Tests -->
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12.4</version>
 				<configuration>
-					<skip>true</skip>
+					<includes>
+						<include>junit/com/excilys/cdb/AllUnitTests.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+
+			<!-- Integration Tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.19.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<includes>
+						<include>selenium/AllIntegrationTests.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+
+			<!-- Embbeded server -->
+			<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven2-plugin</artifactId>
+				<version>1.2.0</version>
+				<configuration>
+					<container>
+						<containerId>tomcat7x</containerId>
+						<zipUrlInstaller>
+							<url>http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.32/bin/apache-tomcat-8.0.32.zip
+							</url>
+							<downloadDir>${project.build.directory}/downloads</downloadDir>
+							<extractDir>${project.build.directory}/extracts</extractDir>
+						</zipUrlInstaller>
+					</container>
 				</configuration>
 				<executions>
 					<execution>
-						<id>unit-tests</id>
-						<phase>test</phase>
+						<id>start-tomcat</id>
+						<phase>pre-integration-test</phase>
 						<goals>
-							<goal>test</goal>
+							<goal>start</goal>
 						</goals>
-						<configuration>
-							<skip>false</skip>
-							<excludes>
-								<exclude>${project.basedir}/**/selenium/**/*.java</exclude>
-							</excludes>
-						</configuration>
 					</execution>
 					<execution>
-						<id>integration-tests</id>
+						<id>stop-tomcat</id>
+						<phase>post-integration-test</phase>
 						<goals>
-							<goal>test</goal>
+							<goal>stop</goal>
 						</goals>
-						<configuration>
-							<skip>false</skip>
-							<includes>
-								<include>${project.basedir}/**/selenium/**/*.java</include>
-							</includes>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.13</version>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4</version>
 				<configuration>
-					<includes>
-						<include>${project.basedir}/src/test/java/selenium/**/*.java</include>
-						<exclude>${project.basedir}/src/test/java/junit/**/*.java</exclude>
-					</includes>
+					<!-- specify UTF-8, ISO-8859-1 or any other file encoding -->
+					<encoding>UTF-8</encoding>
 				</configuration>
-				<executions>
-					<execution>
-						<id>failsafe-integration-tests</id>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>integration-test</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 
 		</plugins>
 	</build>
+	
+	<!-- Profiles -->
+	<profiles>
+		<profile>
+			<id>test</id>
+			<properties>
+				<db.driverClass>com.mysql.jdbc.Driver</db.driverClass>
+				<db.connectionURL>jdbc:mysql://localhost:3306/computer-database-db_TEST?zeroDateTimeBehavior=convertToNull</db.connectionURL>
+				<db.username>admincdb</db.username>
+				<db.password>qwerty1234</db.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>development</id>
+			<properties>
+				<db.driverClass>com.mysql.jdbc.Driver</db.driverClass>
+				<db.connectionURL>jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull</db.connectionURL>
+				<db.username>admincdb</db.username>
+				<db.password>qwerty1234</db.password>
+			</properties>
+		</profile>
+	</profiles>
 </project>

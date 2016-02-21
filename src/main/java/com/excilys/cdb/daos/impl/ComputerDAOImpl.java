@@ -457,7 +457,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			
 			// Set matching rows count in query parameter
 			results.next();
-			qp.setMatchinRowCount(results.getInt(1));
+			qp.setMatchingRowCount(results.getInt(1));
 			
 			con.commit();
 			

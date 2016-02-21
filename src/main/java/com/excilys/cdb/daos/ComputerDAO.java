@@ -73,7 +73,7 @@ public interface ComputerDAO {
 	 * 
 	 * @param computer
 	 *            computer to store in DB
-	 * @return TODO
+	 * @return return the id of the computer inserted
 	 * @throws DAOException
 	 */
 	int insertComputer(Computer computer) throws DAOException;

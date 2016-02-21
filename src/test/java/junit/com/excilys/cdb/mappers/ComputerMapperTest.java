@@ -164,7 +164,7 @@ public class ComputerMapperTest {
 	}
 	
 	/**
-	 * Test toComputer with an invalid ComputerDTO parameter
+	 * Test toComputer with an invalid ComputerDTO dates format
 	 */
 	@Test(expected = DateFormatManagerException.class)  
 	public void toComputerInvalidDateFormatTest(){
@@ -178,6 +178,9 @@ public class ComputerMapperTest {
 		ComputerMapper.toComputer(computerDTO);
 	}
 	
+	/**
+	 * Test toComputer method with a valid computer
+	 */
 	@Test
 	public void toComputerValidComputerDTOTest(){
 		

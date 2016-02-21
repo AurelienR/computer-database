@@ -21,7 +21,7 @@ public class ComputerPageDTO {
 		this.orderBy = qp.getOrderBy().name();
 		this.order = qp.getOrder().name();
 		this.search = qp.getSearch();
-		this.matchingRowCount = qp.getMatchinRowCount();
+		this.matchingRowCount = qp.getMatchingRowCount();
 		this.computers = computers;
 	}
 	

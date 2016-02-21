@@ -7,7 +7,7 @@ public class QueryPageParameter {
 	private String search = "";
 	private OrderBy orderBy = OrderBy.id;
 	private Order order = Order.ASC;
-	private int matchinRowCount = 0;
+	private int matchingRowCount = 0;
 	
 	
 	public QueryPageParameter(){}
@@ -62,6 +62,10 @@ public class QueryPageParameter {
 	}
 
 
+	/**
+	 * Calculate SQL offset based on pageIndex and pageSize
+	 * @return offset
+	 */
 	public int getOffset() {			
 		if(pageIndex < 1){
 			pageIndex = 1;
@@ -69,6 +73,10 @@ public class QueryPageParameter {
 		return (pageIndex - 1)* pageSize;
 	}
 	
+	/**
+	 * Return limit parameter for query
+	 * @return limit
+	 */
 	public int getLimit() {
 		return pageSize;
 	}
@@ -77,17 +85,16 @@ public class QueryPageParameter {
 	/**
 	 * @return the matchinRowCount
 	 */
-	public int getMatchinRowCount() {
-		return matchinRowCount;
+	public int getMatchingRowCount() {
+		return matchingRowCount;
 	}
 
 
 	/**
 	 * @param matchinRowCount the matchinRowCount to set
 	 */
-	public void setMatchinRowCount(int matchinRowCount) {
-		this.matchinRowCount = matchinRowCount;
-	}		
-	
+	public void setMatchingRowCount(int matchinRowCount) {
+		this.matchingRowCount = matchinRowCount;
+	}			
 	
 }

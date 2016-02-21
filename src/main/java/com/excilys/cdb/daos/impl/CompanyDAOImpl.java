@@ -10,7 +10,6 @@ import java.util.List;
 import com.excilys.cdb.daos.CompanyDAO;
 import com.excilys.cdb.daos.ConnectionCloser;
 import com.excilys.cdb.daos.ConnectionFactory;
-import com.excilys.cdb.daos.DAOConfigurationException;
 import com.excilys.cdb.daos.DAOException;
 import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.models.Company;

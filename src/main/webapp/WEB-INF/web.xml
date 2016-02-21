@@ -10,7 +10,7 @@
 			<taglib-location>/WEB-INF/pagination.tld</taglib-location>
 		</taglib>
 	</jsp-config>
-	<servlet>
+<!-- 	<servlet>
 		<description>
 		</description>
 		<display-name>NewComputerServlet</display-name>
@@ -42,7 +42,7 @@
 	<servlet-mapping>
 		<servlet-name>ComputerDeletion</servlet-name>
 		<url-pattern>/DeleteComputerServlet</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping> -->
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>

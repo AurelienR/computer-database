@@ -35,7 +35,6 @@ public class ComputerInfo extends HttpServlet {
      */
     public ComputerInfo() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**

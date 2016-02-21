@@ -15,7 +15,7 @@ public class ComputerPageDTOCreator {
 			qp.setPageSize(30);
 		}
 		
-		int count = getPageCount(qp.getPageSize(), qp.getMatchinRowCount());
+		int count = getPageCount(qp.getPageSize(), qp.getMatchingRowCount());
 		ComputerPageDTO computerPageDTO = new ComputerPageDTO(qp,count, computerDTOs);
 		
 		return computerPageDTO;		

@@ -49,7 +49,7 @@ public interface CompanyDAO {
 	 * 
 	 * @param company
 	 *            company to store in DB
-	 * @return TODO
+	 * @return return id of the company inserted
 	 * @throws DAOException
 	 */
 	int insertCompany(Company company) throws DAOException;
