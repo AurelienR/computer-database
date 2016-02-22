@@ -28,6 +28,10 @@ public class CompanyService {
 	};
 
 	// Methods
+	/**
+	 * Singleton access method
+	 * @return unique instance of CompanyService
+	 */
 	public static CompanyService getInstance() {
 		if (instance == null) {
 			instance = new CompanyService();
@@ -35,10 +39,23 @@ public class CompanyService {
 		return instance;
 	}
 
+	/**
+	 * All companies stored in DB
+	 * @return List of all Companies
+	 * @throws DAOException issues with DB
+	 * @throws ValidatorException validation of data
+	 */
 	public List<Company> findAll() throws DAOException, ValidatorException {
 		return CompanyDAOImpl.getInstance().findAll();
 	}
 
+	/**
+	 * Find a Company by its id
+	 * @param id id of the Company to find
+	 * @return List of matching Companies
+	 * @throws DAOException issues with DB
+	 * @throws ValidatorException issue with validation of Data
+	 */
 	public List<Company> findById(int id) throws DAOException, ValidatorException {
 		// Validate id
 		CompanyValidator.checkValidId(id);
@@ -47,6 +64,13 @@ public class CompanyService {
 		return CompanyDAOImpl.getInstance().findById(id);
 	}
 
+	/**
+	 * Find a companies by name
+	 * @param name name of companies to find
+	 * @return return a list of matching Company
+	 * @throws DAOException issue with DB
+	 * @throws ValidatorException issue with data
+	 */
 	public List<Company> findByName(String name) throws DAOException, ValidatorException {
 		// Validate Name
 		CompanyValidator.checkNameNotNull(name);
@@ -56,6 +80,13 @@ public class CompanyService {
 		return CompanyDAOImpl.getInstance().findByName(name);
 	}
 
+	/**
+	 * Add the passed company to de DB
+	 * @param company company to add to DB
+	 * @return id of the company created
+	 * @throws DAOException issues with DB
+	 * @throws ValidatorException issues with data
+	 */
 	public int createCompany(Company company) throws DAOException, ValidatorException {		
 		// Validate Company
 		CompanyValidator.validate(company);
@@ -64,6 +95,12 @@ public class CompanyService {
 		return CompanyDAOImpl.getInstance().insertCompany(company);
 	}
 	
+	/**
+	 * Delete the Company by its 
+	 * @param id id of the Company to find
+	 * @throws DAOException issues with DB
+	 * @throws ValidatorException issues with data
+	 */
 	public void deleteCompany(int id) throws DAOException, ValidatorException {
 		
 		CompanyValidator.checkValidId(id);

@@ -1,5 +1,10 @@
 package com.excilys.cdb.models;
 
+/**
+ * Enum  of orderBy possibilities
+ * @author excilys
+ *
+ */
 public enum OrderBy {
 	
 	id("computer.id"),

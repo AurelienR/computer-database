@@ -30,6 +30,10 @@ public class CompanyDTOService {
 		return instance;
 	}
 
+	/**
+	 * Find all companies in DB
+	 * @return list of all CompanyDTOs objects
+	 */
 	public List<CompanyDTO> findAll() {
 		
 		// Retrieve companyDTOs
@@ -37,6 +41,11 @@ public class CompanyDTOService {
 		return CompanyMapper.toCompanyDTOList(companies);
 	}
 
+	/**
+	 * Find a company by its id
+	 * @param id id of the company to search
+	 * @return List of matching CompanyDTOs
+	 */
 	public List<CompanyDTO> findById(int id) {		
 		
 		// Validate id
@@ -49,6 +58,11 @@ public class CompanyDTOService {
 		return CompanyMapper.toCompanyDTOList(companies);
 	}
 
+	/**
+	 * Find companies by name
+	 * @param name name of the company to search
+	 * @return List of matching CompanyDTos
+	 */
 	public List<CompanyDTO> findByName(String name) {
 		
 		// Validate name
@@ -62,6 +76,11 @@ public class CompanyDTOService {
 		return CompanyMapper.toCompanyDTOList(companies);
 	}
 
+	/**
+	 * Add given CompanyDTO to db
+	 * @param companyDTO company to add
+	 * @return id of the created company
+	 */
 	public int createCompany(CompanyDTO companyDTO) {
 		
 		// Validate company

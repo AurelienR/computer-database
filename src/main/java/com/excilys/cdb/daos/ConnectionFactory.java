@@ -51,9 +51,9 @@ public class ConnectionFactory {
 	}
 
 	/**
-	 * Initialize driver of the ConnectionFactory
+	 * Initialize connection pool of the ConnectionFactory
 	 * 
-	 * @return ConnectionFactory instance with drive initialized
+	 * @return ConnectionFactory instance with connection pool initialized
 	 * @throws DAOConfigurationException
 	 */
 	private static ConnectionFactory initializeInstance() throws DAOConfigurationException {

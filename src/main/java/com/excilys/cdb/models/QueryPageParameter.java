@@ -1,5 +1,11 @@
 package com.excilys.cdb.models;
 
+/**
+ * Prepare SQL query parameters in order to perpare Computer page
+ * 
+ * @author AurelienR
+ *
+ */
 public class QueryPageParameter {
 	
 	private int pageIndex = 1;

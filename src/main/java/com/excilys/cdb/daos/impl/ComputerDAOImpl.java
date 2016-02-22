@@ -307,6 +307,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		
 	}
 
+
 	@Override
 	public void deleteComputer(int id) {
 		// Init local variables

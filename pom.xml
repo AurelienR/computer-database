@@ -250,7 +250,6 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.4</version>
 				<configuration>
-					<!-- specify UTF-8, ISO-8859-1 or any other file encoding -->
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>

@@ -28,6 +28,10 @@ public class ComputerDTOService {
 	};
 
 	// Methods
+	/**
+	 * Singleton method access
+	 * @return unique instance of ComputerDTOService
+	 */
 	public static ComputerDTOService getInstance() {
 		if (instance == null) {
 			instance = new ComputerDTOService();
@@ -35,6 +39,11 @@ public class ComputerDTOService {
 		return instance;
 	}
 
+	/**
+	 * Find computers based on QueryPageParameter criterias
+	 * @param qp query parameter to search with
+	 * @return List of computers matching
+	 */
 	public List<ComputerDTO> findByQuery(QueryPageParameter qp){
 		
 		// Validate queryParameter
