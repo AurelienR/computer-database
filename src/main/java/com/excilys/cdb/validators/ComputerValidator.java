@@ -37,13 +37,34 @@ public class ComputerValidator extends ModelValidator {
 	 * @param disc discontinued date to check
 	 * @throws ValidatorException if inconsitent dates are detected
 	 */
-	public static void checkDatesConsistence(LocalDateTime intro, LocalDateTime disc) throws ValidatorException{
+	public static void checkDatesConsistence(LocalDateTime intro, LocalDateTime disc) throws ValidatorException {
 		if(disc != null && intro == null){
 			throw new ValidatorException("Discontinued date should not be set if introduced date is null");
 		} 
 		if(disc != null && intro != null &&  disc.isBefore(intro)){
 			throw new ValidatorException("Discontinued date should not be set before introduced date");
 		}		
+	}
+	
+	/**
+	 * Check starting row
+	 * @param startingRow starting row to check
+	 */
+	public static void checkStartingRow(int startingRow) throws ValidatorException {
+		if(startingRow < 0){
+			throw new ValidatorException("Starting row of range cannot be < 0, startingrow: "+startingRow);
+		} 
+	}
+	
+	/**
+	 * Check size parameter
+	 * @param size size to check
+	 * @throws ValidatorException if size is < 0
+	 */
+	public static void checkSize(int size) throws ValidatorException {
+		if(size < 0){
+			throw new ValidatorException("Size of range searched cannot be < 0, size: "+size);
+		} 
 	}
 	
 	/**

@@ -59,7 +59,13 @@ public class ComputerService {
 	 * @param size size of the range
 	 * @return related List of computers
 	 */
-	public List<Computer> findRange(int startRow, int size){		
+	public List<Computer> findRange(int startRow, int size){
+		
+		// Validate parameters
+		ComputerValidator.checkStartingRow(startRow);
+		ComputerValidator.checkSize(size);		
+		
+		// Retrieve computers
 		return ComputerDAOImpl.getInstance().findRange(startRow, size);
 	}
 	

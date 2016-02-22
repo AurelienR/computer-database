@@ -31,6 +31,7 @@
 		<javax.el.version>3.0.0</javax.el.version>
 		<hibernate-validator.version>4.1.0.Final</hibernate-validator.version>
 		<boneCP.version>0.8.0.RELEASE</boneCP.version>
+		<easymock.version>3.4</easymock.version>
 	</properties>
 
 	<!-- Dependencies -->
@@ -142,6 +143,12 @@
 			<version>${powermockito-junit4.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>${easymock.version}</version>
+		</dependency>
+
 
 	</dependencies>
 
@@ -256,7 +263,7 @@
 
 		</plugins>
 	</build>
-	
+
 	<!-- Profiles -->
 	<profiles>
 		<profile>

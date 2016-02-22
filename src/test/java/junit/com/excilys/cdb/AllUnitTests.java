@@ -6,13 +6,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import com.excilys.cdb.services.ComputerService;
+
 import DBUnit.DBUnitManager;
 import junit.com.excilys.cdb.mappers.CompanyMapperTest;
 import junit.com.excilys.cdb.mappers.ComputerMapperTest;
 
 
 @RunWith(Suite.class)
-@SuiteClasses({CompanyMapperTest.class, ComputerMapperTest.class})
+@SuiteClasses({CompanyMapperTest.class, ComputerMapperTest.class, ComputerService.class})
 public class AllUnitTests {
 	
 	private static DBUnitManager dbUnit;
