@@ -92,6 +92,8 @@ public class ComputerServiceTest {
    */
   @Test(expected = ValidatorException.class)
   public void deleteByIdNegativeParamTest() {
-
+    int testedId = -2;
+    ComputerService.getInstance().deleteComputer(testedId);
+    EasyMock.expectLastCall().once();
   }
 }

@@ -1,11 +1,9 @@
 package junit.com.excilys.cdb;
 
-import com.excilys.cdb.services.ComputerService;
-
 import dbunit.DbUnitManager;
-
 import junit.com.excilys.cdb.mappers.CompanyMapperTest;
 import junit.com.excilys.cdb.mappers.ComputerMapperTest;
+import junit.com.excilys.cdb.services.ComputerServiceTest;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -14,7 +12,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ CompanyMapperTest.class, ComputerMapperTest.class, ComputerService.class })
+@SuiteClasses({ CompanyMapperTest.class, ComputerMapperTest.class, ComputerServiceTest.class })
 public class AllUnitTests {
 
   private static DbUnitManager dbUnit;

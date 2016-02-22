@@ -16,41 +16,19 @@ import java.util.Properties;
 
 public class DbUnitManager {
 
-  /** The Constant PROPERTY_FILE. */
   private static final String PROPERTY_FILE = "properties/dao.properties";
-  
-  /** The Constant URL_PROPERTY. */
   private static final String URL_PROPERTY = "url";
-  
-  /** The Constant DRIVER_PROPERTY. */
-  private static final String DRIVER_PROPERTY = "driver";
-  
-  /** The Constant USERNAME_PROPERTY. */
   private static final String USERNAME_PROPERTY = "nomutilisateur";
-  
-  /** The Constant PASSWORD_PROPERTY. */
   private static final String PASSWORD_PROPERTY = "motdepasse";
-  
-  /** The Constant SCHEMA_SQL. */
   public static final String SCHEMA_SQL = "src/test/resources/config/1-SCHEMA.sql";
-  
-  /** The Constant PRIVILEGES_SQL. */
   public static final String PRIVILEGES_SQL = "src/test/resources/config/2-PRIVILEGES.sql";
-  
-  /** The Constant ENTRIES_SQL. */
   public static final String ENTRIES_SQL = "src/test/resources/config/3-ENTRIES.sql";
 
-  /** The url. */
+
   private String url;
-  
-  /** The username. */
   private String username;
-  
-  /** The password. */
   private String password;
   
-  /** The driver. */
-  private String driver;
 
   /**
    * Instantiates a new db unit manager.
@@ -82,7 +60,6 @@ public class DbUnitManager {
     // Extract file property fields
     properties.load(fileProperties);
     this.url = properties.getProperty(URL_PROPERTY);
-    this.driver = Class.forName(properties.getProperty(DRIVER_PROPERTY)).getName();
     this.username = properties.getProperty(USERNAME_PROPERTY);
     this.password = properties.getProperty(PASSWORD_PROPERTY);
   }
