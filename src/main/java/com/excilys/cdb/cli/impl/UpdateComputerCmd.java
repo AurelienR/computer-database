@@ -1,21 +1,21 @@
 package com.excilys.cdb.cli.impl;
 
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Scanner;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.excilys.cdb.cli.CLIException;
+import com.excilys.cdb.cli.CliException;
 import com.excilys.cdb.cli.Command;
 import com.excilys.cdb.cli.InputCommandParser;
-import com.excilys.cdb.daos.DAOException;
+import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.ComputerService;
 import com.excilys.cdb.services.ServiceException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * CLI to update a computer
@@ -25,73 +25,74 @@ import com.excilys.cdb.services.ServiceException;
  */
 public class UpdateComputerCmd implements Command {
 
-	// Logger
-	final static Logger logger = LoggerFactory.getLogger(UpdateComputerCmd.class);
-	
-	private final String dateFormat = "dd/MM/yyyy";
-	private Scanner sc;
+  // Logger
+  static final Logger logger = LoggerFactory.getLogger(UpdateComputerCmd.class);
 
-	public UpdateComputerCmd(Scanner sc) {
-		this.sc = sc;
-	}
+  private final String dateFormat = "dd/MM/yyyy";
+  private Scanner sc;
 
-	@Override
-	public void execute() {
+  public UpdateComputerCmd(Scanner sc) {
+    this.sc = sc;
+  }
 
-		try {
-			System.out.println("Update a computer:");
+  @Override
+  public void execute() {
 
-			// Get name input [required]
-			System.out.println("Name of the computer to update:");
-			sc.nextLine();
-			Computer newComputer = InputCommandParser.getRequiredValidComputerByName(sc).get(0);
-			logger.debug("Computer retrieved: "+  newComputer);
+    try {
+      System.out.println("Update a computer:");
 
-			// Get new name input
-			System.out.println("New Name:");
-			String newName = InputCommandParser.getNameInput(sc);
-			if (!newName.isEmpty()) {
-				logger.debug("computer.name: "+  newName);
-				newComputer.setName(newName);
-			}
+      // Get name input [required]
+      System.out.println("Name of the computer to update:");
+      sc.nextLine();
+      Computer newComputer = InputCommandParser.getRequiredValidComputerByName(sc).get(0);
+      logger.debug("Computer retrieved: " + newComputer);
 
-			// Get
-			System.out.println("Introduced (" + dateFormat + "): ");
-			sc.nextLine();
-			LocalDateTime introDate = InputCommandParser.getDateInput(sc, dateFormat);
-			if (introDate != null) {
-				logger.debug("computer.introduced: "+  introDate);
-				newComputer.setIntroduced(introDate);
-			}
+      // Get new name input
+      System.out.println("New Name:");
+      String newName = InputCommandParser.getNameInput(sc);
+      if (!newName.isEmpty()) {
+        logger.debug("computer.name: " + newName);
+        newComputer.setName(newName);
+      }
 
-			System.out.println("Discontinued (" + dateFormat + "): ");
-			LocalDateTime discDate = InputCommandParser.getDateInput(sc, dateFormat);
-			if (introDate != null) {
-				logger.debug("computer.discontinued: "+  discDate);
-				newComputer.setIntroduced(discDate);
-			}
+      // Get
+      System.out.println("Introduced (" + dateFormat + "): ");
+      sc.nextLine();
+      LocalDateTime introDate = InputCommandParser.getDateInput(sc, dateFormat);
+      if (introDate != null) {
+        logger.debug("computer.introduced: " + introDate);
+        newComputer.setIntroduced(introDate);
+      }
 
-			System.out.println("CompanyName ( must match existring one): ");
-			List<Company> companies;
-			if ((companies = InputCommandParser.getValidCompanyByName(sc)) != null && !companies.isEmpty()) {
-				Company company = companies.get(0);
-				logger.debug("computer.company: "+ company);
-				newComputer.setCompany(company);
-			}
+      System.out.println("Discontinued (" + dateFormat + "): ");
+      LocalDateTime discDate = InputCommandParser.getDateInput(sc, dateFormat);
+      if (introDate != null) {
+        logger.debug("computer.discontinued: " + discDate);
+        newComputer.setIntroduced(discDate);
+      }
 
-			logger.debug("Try to update computer:" + newComputer);
-			ComputerService.getInstance().updateComputer(newComputer);
+      System.out.println("CompanyName ( must match existring one): ");
+      List<Company> companies;
+      if ((companies = InputCommandParser.getValidCompanyByName(sc)) != null
+          && !companies.isEmpty()) {
+        Company company = companies.get(0);
+        logger.debug("computer.company: " + company);
+        newComputer.setCompany(company);
+      }
 
-		} catch (ParseException e) {
-			throw new CLIException("Parsing exception", e);
-		} catch (IllegalArgumentException e) {
-			throw new CLIException("Illegal argument", e);
-		} catch (ServiceException e) {
-			throw new CLIException("Illegal argument", e);
-		} catch (DAOException e) {
-			throw new CLIException("DAO exception", e);
-		}
+      logger.debug("Try to update computer:" + newComputer);
+      ComputerService.getInstance().updateComputer(newComputer);
 
-	}
+    } catch (ParseException e) {
+      throw new CliException("Parsing exception", e);
+    } catch (IllegalArgumentException e) {
+      throw new CliException("Illegal argument", e);
+    } catch (ServiceException e) {
+      throw new CliException("Illegal argument", e);
+    } catch (DaoException e) {
+      throw new CliException("DAO exception", e);
+    }
+
+  }
 
 }

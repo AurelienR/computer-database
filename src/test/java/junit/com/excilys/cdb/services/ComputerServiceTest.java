@@ -1,6 +1,9 @@
 package junit.com.excilys.cdb.services;
 
-import java.util.List;
+import com.excilys.cdb.daos.impl.ComputerDaoImpl;
+import com.excilys.cdb.models.Computer;
+import com.excilys.cdb.services.ComputerService;
+import com.excilys.cdb.validators.ValidatorException;
 
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -10,70 +13,85 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.excilys.cdb.daos.impl.ComputerDAOImpl;
-import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.services.ComputerService;
-import com.excilys.cdb.validators.ValidatorException;
+import java.util.List;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ComputerServiceTest.
+ */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(ComputerDAOImpl.class)
+@PrepareForTest(ComputerDaoImpl.class)
 public class ComputerServiceTest {
 
-	ComputerDAOImpl computerDAO;
-	List<Computer> computers;
-	
-	
-	
-	@Before
-	public void init(){		
-		// Mock ComputerDAO
-		PowerMockito.mockStatic(ComputerDAOImpl.class);
-		computerDAO = EasyMock.createMock(ComputerDAOImpl.class);
+  /** The computer dao. */
+  ComputerDaoImpl computerDao;
+  
+  /** The computers. */
+  List<Computer> computers;
 
-		try {
-			PowerMockito.whenNew(ComputerDAOImpl.class).withAnyArguments().thenReturn(computerDAO);
-		} catch (Exception e) {
-				e.printStackTrace();
-		}
-		
-	}	
-	
+  /**
+   * Inits the ComputerDaoImpl mock.
+   */
+  @Before
+  public void init() {
+    // Mock ComputerDAO
+    PowerMockito.mockStatic(ComputerDaoImpl.class);
+    computerDao = EasyMock.createMock(ComputerDaoImpl.class);
 
-	@Test(expected = ValidatorException.class) 
-	public void findByIdNegativeParamTest() {
-		int testedId = -2;
-		EasyMock.expect(computerDAO.findById(testedId)).andReturn(null);
-		ComputerService.getInstance().findById(testedId);				
-	}
-	
-	@Test(expected = ValidatorException.class) 
-	public void findByNameNullParamTest() {
-		String testedName = null;
-		EasyMock.expect(computerDAO.findByName(testedName)).andReturn(null);
-		ComputerService.getInstance().findByName(testedName);				
-	}
+    try {
+      PowerMockito.whenNew(ComputerDaoImpl.class).withAnyArguments().thenReturn(computerDao);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
-	@Test(expected = ValidatorException.class) 
-	public void findByNameEmptyStringParamTest() {
-		String testedName = "";
-		EasyMock.expect(computerDAO.findByName(testedName)).andReturn(null);
-		ComputerService.getInstance().findByName(testedName);				
-	}
-	
-	@Test(expected = ValidatorException.class) 
-	public void findRangeNegativeParamTest() {
-		int startingRow = -2;
-		int size = -3;
-		EasyMock.expect(computerDAO.findRange(startingRow,size)).andReturn(null);
-		ComputerService.getInstance().findRange(startingRow, size);				
-	}
-	
-	
-	@Test(expected = ValidatorException.class) 
-	public void deleteByIdNegativeParamTest() {
-		int testedId = -3;
-		//EasyMock.expect(computerDAO.deleteComputer(testedId))
-		//ComputerService.getInstance().deleteComputer(testedId);			
-	}
+  }
+
+  /**
+   * Find by id negative param test.
+   */
+  @Test(expected = ValidatorException.class)
+  public void findByIdNegativeParamTest() {
+    int testedId = -2;
+    EasyMock.expect(computerDao.findById(testedId)).andReturn(null);
+    ComputerService.getInstance().findById(testedId);
+  }
+
+  /**
+   * Find by name null param test.
+   */
+  @Test(expected = ValidatorException.class)
+  public void findByNameNullParamTest() {
+    String testedName = null;
+    EasyMock.expect(computerDao.findByName(testedName)).andReturn(null);
+    ComputerService.getInstance().findByName(testedName);
+  }
+
+  /**
+   * Find by name empty string param test.
+   */
+  @Test(expected = ValidatorException.class)
+  public void findByNameEmptyStringParamTest() {
+    String testedName = "";
+    EasyMock.expect(computerDao.findByName(testedName)).andReturn(null);
+    ComputerService.getInstance().findByName(testedName);
+  }
+
+  /**
+   * Find range negative param test.
+   */
+  @Test(expected = ValidatorException.class)
+  public void findRangeNegativeParamTest() {
+    int startingRow = -2;
+    int size = -3;
+    EasyMock.expect(computerDao.findRange(startingRow, size)).andReturn(null);
+    ComputerService.getInstance().findRange(startingRow, size);
+  }
+
+  /**
+   * Delete by id negative param test.
+   */
+  @Test(expected = ValidatorException.class)
+  public void deleteByIdNegativeParamTest() {
+
+  }
 }

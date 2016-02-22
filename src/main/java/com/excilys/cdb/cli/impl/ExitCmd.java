@@ -10,12 +10,12 @@ import com.excilys.cdb.cli.Command;
  */
 public class ExitCmd implements Command {
 
-	public ExitCmd() {
-	}
+  public ExitCmd() {
+  }
 
-	@Override
-	public void execute() {
-		System.out.println("Exiting Computer Database");
-		System.exit(0);
-	};
+  @Override
+  public void execute() {
+    System.out.println("Exiting Computer Database");
+    System.exit(0);
+  }
 }

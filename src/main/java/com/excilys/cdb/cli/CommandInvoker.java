@@ -10,27 +10,28 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class CommandInvoker {
-	// Logger
-	final static Logger logger = LoggerFactory.getLogger(CommandInvoker.class);
-	
-	// Command to invoke
-	Command command;
+  // Logger
+  static final Logger logger = LoggerFactory.getLogger(CommandInvoker.class);
 
-	/**
-	 * Set command that can be executed
-	 * 
-	 * @param command
-	 */
-	public void setCommand(Command command) {
-		logger.debug("Set command to invoke: " + command.getClass().getSimpleName());
-		this.command = command;
-	}
+  // Command to invoke
+  Command command;
 
-	/**
-	 * Execute the last command set
-	 */
-	public void invoke() {
-		logger.debug("Execute command: " + command.getClass().getSimpleName());
-		command.execute();
-	}
+  /**
+   * Set command that can be executed.
+   * 
+   * @param command
+   *          command to invoke
+   */
+  public void setCommand(Command command) {
+    logger.debug("Set command to invoke: " + command.getClass().getSimpleName());
+    this.command = command;
+  }
+
+  /**
+   * Execute the last command set.
+   */
+  public void invoke() {
+    logger.debug("Execute command: " + command.getClass().getSimpleName());
+    command.execute();
+  }
 }
