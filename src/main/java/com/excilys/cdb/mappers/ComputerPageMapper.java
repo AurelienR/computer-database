@@ -1,26 +1,35 @@
-package com.excilys.cdb.dtos;
+package com.excilys.cdb.mappers;
 
+import com.excilys.cdb.dtos.ComputerDto;
+import com.excilys.cdb.dtos.ComputerPageDto;
 import com.excilys.cdb.models.QueryPageParameter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
 /**
  * Manage to initialize a ComputerPageDTO instance.
  *
  * @author excilys
  */
-public class ComputerPageDtoCreator {
+public class ComputerPageMapper {
+
+  // Logger
+  static final Logger logger = LoggerFactory.getLogger(ComputerPageMapper.class);
 
   /**
    * Initialize a ComputerPageDTO based on queryparameter.
    * 
    * @param qp
    *          queryParameter related to the page passed
-   * @param computerDtos list of computer dto for the page
+   * @param computerDtos
+   *          list of computer dto for the page
    * @return related ComputerPageDto
    */
-  public static ComputerPageDto createPage(QueryPageParameter qp, List<ComputerDto> computerDtos) {
+  public static ComputerPageDto toComputerPageDto(QueryPageParameter qp,
+      List<ComputerDto> computerDtos) {
 
     // Set up index by default if invalid
     if (qp.getPageIndex() < 1) {
@@ -34,6 +43,9 @@ public class ComputerPageDtoCreator {
     // Calculate page count
     int count = getPageCount(qp.getPageSize(), qp.getMatchingRowCount());
     ComputerPageDto computerPageDto = new ComputerPageDto(qp, count, computerDtos);
+
+    logger.debug("\nMapper: map: [ qp:" + qp + ", computerDtos:" + computerDtos + "] \n TO:"
+        + computerPageDto);
 
     return computerPageDto;
   }
@@ -55,4 +67,5 @@ public class ComputerPageDtoCreator {
 
     return Math.floorDiv(totalRows, pageSize) + 1;
   }
+
 }

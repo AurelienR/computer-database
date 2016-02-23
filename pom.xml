@@ -6,7 +6,7 @@
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
 	<packaging>war</packaging>
-	<version>0.3.0-SNAPSHOT</version>
+	<version>0.4.0-SNAPSHOT</version>
 	<name>computerdatabase Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
@@ -257,11 +257,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>2.17</version>
-
-				<configuration>
-					<configLocation>${checkstyle.file.path}</configLocation>
-					<failOnViolation>false</failOnViolation>
-				</configuration>
 			</plugin>
 
 			<plugin>

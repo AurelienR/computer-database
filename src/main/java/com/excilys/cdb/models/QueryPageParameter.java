@@ -8,22 +8,11 @@ package com.excilys.cdb.models;
  */
 public class QueryPageParameter {
 
-  /** The page index. */
   private int pageIndex = 1;
-  
-  /** The page size. */
   private int pageSize = 30;
-  
-  /** The search. */
   private String search = "";
-  
-  /** The order by. */
   private OrderBy orderBy = OrderBy.id;
-  
-  /** The order. */
   private Order order = Order.ASC;
-  
-  /** The matching row count. */
   private int matchingRowCount = 0;
 
   /**
@@ -44,7 +33,8 @@ public class QueryPageParameter {
   /**
    * Sets the page index.
    *
-   * @param pageIndex the new page index
+   * @param pageIndex
+   *          the new page index
    */
   public void setPageIndex(int pageIndex) {
     this.pageIndex = pageIndex;
@@ -62,7 +52,8 @@ public class QueryPageParameter {
   /**
    * Sets the page size.
    *
-   * @param pageSize the new page size
+   * @param pageSize
+   *          the new page size
    */
   public void setPageSize(int pageSize) {
     this.pageSize = pageSize;
@@ -89,7 +80,8 @@ public class QueryPageParameter {
   /**
    * Sets the search.
    *
-   * @param search the new search
+   * @param search
+   *          the new search
    */
   public void setSearch(String search) {
     this.search = search;
@@ -107,7 +99,8 @@ public class QueryPageParameter {
   /**
    * Sets the order by.
    *
-   * @param orderBy the new order by
+   * @param orderBy
+   *          the new order by
    */
   public void setOrderBy(OrderBy orderBy) {
     this.orderBy = orderBy;
@@ -125,7 +118,8 @@ public class QueryPageParameter {
   /**
    * Sets the order.
    *
-   * @param order the new order
+   * @param order
+   *          the new order
    */
   public void setOrder(Order order) {
     this.order = order;
@@ -164,10 +158,19 @@ public class QueryPageParameter {
   /**
    * Sets the matching row count.
    *
-   * @param matchinRowCount          the matchinRowCount to set
+   * @param matchinRowCount
+   *          the matchinRowCount to set
    */
   public void setMatchingRowCount(int matchinRowCount) {
     this.matchingRowCount = matchinRowCount;
   }
+
+  @Override
+  public String toString() {
+    return "QueryPageParameter [pageIndex=" + pageIndex + ", pageSize=" + pageSize + ", search="
+        + search + ", orderBy=" + orderBy + ", order=" + order + ", matchingRowCount="
+        + matchingRowCount + "]";
+  }
+
 
 }

@@ -3,7 +3,6 @@ package com.excilys.cdb.daos;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.QueryPageParameter;
 
-import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -112,12 +111,10 @@ public interface ComputerDao {
   /**
    * Delete the computers by there company id.
    * 
-   * @param con
-   *          current connection used
    * @param companyId
    *          companyId to reset on computers
    * @throws DaoException
    *           issue on db
    */
-  void deleteByCompanyId(Connection con, int companyId) throws DaoException;
+  void deleteByCompanyId(int companyId) throws DaoException;
 }

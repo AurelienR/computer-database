@@ -18,6 +18,7 @@
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
 					<form id="addForm" action="./createComputer" method="POST">
+						<input type="hidden" id="id" name="id" value="0" />
 						<fieldset>
 							<div class="form-group  has-feedback">
 								<label for="computerName">Computer name</label> <input

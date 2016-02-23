@@ -3,9 +3,9 @@ package com.excilys.cdb.servlets;
 import com.excilys.cdb.dtos.CompanyDto;
 import com.excilys.cdb.dtos.ComputerDto;
 import com.excilys.cdb.dtos.ComputerPageDto;
-import com.excilys.cdb.dtos.ComputerPageDtoCreator;
+import com.excilys.cdb.mappers.ComputerPageMapper;
+import com.excilys.cdb.mappers.QueryPageParameterMapper;
 import com.excilys.cdb.models.QueryPageParameter;
-import com.excilys.cdb.models.QueryPageParameterCreator;
 import com.excilys.cdb.services.CompanyDtoService;
 import com.excilys.cdb.services.ComputerDtoService;
 
@@ -46,11 +46,6 @@ public class ComputerInfo extends HttpServlet {
 
     // Retrieve parameters
     String idStr = request.getParameter("id");
-    String pageStr = request.getParameter("page");
-    String pageSizeStr = request.getParameter("pageSize");
-    String orderByStr = request.getParameter("orderBy");
-    String orderStr = request.getParameter("order");
-    String searchStr = request.getParameter("search");
 
     if (idStr != null) {
       // URL GET "/computers?id=..."
@@ -70,12 +65,11 @@ public class ComputerInfo extends HttpServlet {
     } else {
       // URL GET "/computers?page=...&pageSize=..."
       // Get related query
-      QueryPageParameter qp = QueryPageParameterCreator.create(pageStr, pageSizeStr, searchStr,
-          orderByStr, orderStr);
+      QueryPageParameter qp = QueryPageParameterMapper.toQueryPageParameter(request);
 
       // Retrieve DTOs
       List<ComputerDto> computerDtos = ComputerDtoService.getInstance().findByQuery(qp);
-      ComputerPageDto pageDto = ComputerPageDtoCreator.createPage(qp, computerDtos);
+      ComputerPageDto pageDto = ComputerPageMapper.toComputerPageDto(qp, computerDtos);
 
       // Prepare request
       request.setAttribute("page", pageDto);

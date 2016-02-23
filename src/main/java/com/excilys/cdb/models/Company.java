@@ -36,14 +36,10 @@ public class Company {
   public void setName(String name) {
     this.name = name;
   }
-
+  
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(Company.class.getSimpleName()).append(" :").append("id: ")
-        .append(Integer.toString(getId())).append(" name:").append(getName());
-
-    return sb.toString();
+    return "Company [id=" + id + ", name=" + name + "]";
   }
 
   @Override

@@ -7,6 +7,9 @@ import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.utils.DateFormatManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -14,11 +17,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * The Class ComputerMapper.
  */
 public class ComputerMapper {
+
+  // Logger
+  static final Logger logger = LoggerFactory.getLogger(ComputerMapper.class);
 
   /**
    * Deserialize DB results to List of computer.
@@ -26,9 +33,10 @@ public class ComputerMapper {
    * @param results
    *          Result to process
    * @return List of computer
-   * @throws SQLException issue with db
+   * @throws SQLException
+   *           issue with db
    */
-  public static List<Computer> getComputersFromResults(ResultSet results) throws SQLException {
+  public static List<Computer> toComputerList(ResultSet results) throws SQLException {
 
     ArrayList<Computer> computerList = new ArrayList<Computer>();
 
@@ -61,8 +69,8 @@ public class ComputerMapper {
       }
 
       // Initialize related company
-      Company company = new Company(results.getInt("company.id"),
-          results.getString("company.name"));
+      Company company =
+          new Company(results.getInt("company.id"), results.getString("company.name"));
       // Initialize computer
       Computer computer = new Computer(computerId, computerName, company, discontinued, introduced);
 
@@ -91,7 +99,43 @@ public class ComputerMapper {
     String discStr = DateFormatManager.toHtmlDateString(computer.getDiscontinued());
     CompanyDto companyDto = CompanyMapper.toCompanyDto(computer.getCompany());
 
-    return new ComputerDto(id, computerName, introStr, discStr, companyDto);
+    ComputerDto computerDto = new ComputerDto(id, computerName, introStr, discStr, companyDto);
+    logger.debug("\nMapper: map: computer" + computer + "\n TO: ComputerDto: " + computerDto);
+
+    return computerDto;
+  }
+
+  /**
+   * Map to computerDto from request object.
+   *
+   * @param request
+   *          the request
+   * @return the computer dto
+   */
+  public static ComputerDto toComputerDto(HttpServletRequest request) {
+    // Retrieve Computer information
+    int id = Integer.parseInt(request.getParameter("id"));
+    String nameStr = request.getParameter("computerName");
+    String introducedStr = request.getParameter("introduced");
+    String discontinuedStr = request.getParameter("discontinued");
+
+    // Retrieve related Company
+    int companyId;
+    CompanyDto companyDto;
+    try {
+      companyId = Integer.parseInt(request.getParameter("companyId"));
+      companyDto = new CompanyDto(companyId, null);
+    } catch (NumberFormatException e) {
+      companyDto = null;
+    }
+
+    // Instanciate related ComputerDTO
+    ComputerDto computerDto =
+        new ComputerDto(id, nameStr, introducedStr, discontinuedStr, companyDto);
+
+    logger.debug("\nMapper: map: request:" + request + "\n TO: ComputerDto: " + computerDto);
+
+    return computerDto;
   }
 
   /**
@@ -107,13 +151,18 @@ public class ComputerMapper {
     }
     List<ComputerDto> computerDtos = new ArrayList<ComputerDto>();
     computers.parallelStream().forEachOrdered(c -> computerDtos.add(toComputerDto(c)));
+
+    logger.debug(
+        "\nMapper: Map: List<Computer>:" + computers + "\n TO: List<ComputerDto>:" + computerDtos);
+
     return computerDtos;
   }
 
   /**
    * Map a ComputerDTO to a Computer.
    *
-   * @param computerDto          ComputerDTO to map
+   * @param computerDto
+   *          ComputerDTO to map
    * @return related Computer
    */
   public static Computer toComputer(ComputerDto computerDto) {
@@ -125,6 +174,11 @@ public class ComputerMapper {
     LocalDateTime intro = DateFormatManager.parseHtmlDateString(computerDto.getIntroduced());
     LocalDateTime disc = DateFormatManager.parseHtmlDateString(computerDto.getDiscontinued());
     Company company = CompanyMapper.toCompany(computerDto.getCompany());
-    return new Computer(id, computerName, company, disc, intro);
+    Computer computer = new Computer(id, computerName, company, disc, intro);
+
+    logger.debug("\nMapper: map: computerDto: " + computerDto + "\n TO: computer: " + computer);
+
+    return computer;
   }
+
 }

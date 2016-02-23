@@ -1,7 +1,7 @@
 package com.excilys.cdb.servlets;
 
-import com.excilys.cdb.dtos.CompanyDto;
 import com.excilys.cdb.dtos.ComputerDto;
+import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.services.ComputerDtoService;
 
 import java.io.IOException;
@@ -40,25 +40,8 @@ public class ComputerEdition extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    // Retrieve Computer information
-    int id = Integer.parseInt(request.getParameter("id"));
-    String nameStr = request.getParameter("computerName");
-    String introducedStr = request.getParameter("introduced");
-    String discontinuedStr = request.getParameter("discontinued");
-
-    // Retrieve related Company
-    int companyId;
-    CompanyDto companyDto;
-    try {
-      companyId = Integer.parseInt(request.getParameter("companyId"));
-      companyDto = new CompanyDto(companyId, null);
-    } catch (NumberFormatException e) {
-      companyDto = null;
-    }
-
-    // Instanciate related ComputerDTO
-    ComputerDto computerDto = new ComputerDto(id, nameStr, introducedStr, discontinuedStr,
-        companyDto);
+    // Map
+    ComputerDto computerDto = ComputerMapper.toComputerDto(request);
 
     // Add computer to DB
     ComputerDtoService.getInstance().updateComputer(computerDto);

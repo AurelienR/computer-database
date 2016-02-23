@@ -4,6 +4,9 @@ import com.excilys.cdb.daos.impl.CompanyDaoImpl;
 import com.excilys.cdb.dtos.CompanyDto;
 import com.excilys.cdb.models.Company;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,13 +14,17 @@ import java.util.List;
 
 public class CompanyMapper {
 
+  // Logger
+  static final Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
+
   /**
    * Gets deserialized resultSet to list of companies.
    * 
    * @param results
    *          results set to process
    * @return list of related companies
-   * @throws SQLException issue on db
+   * @throws SQLException
+   *           issue on db
    */
   public static List<Company> getCompaniesFromResults(ResultSet results) throws SQLException {
 
@@ -43,8 +50,9 @@ public class CompanyMapper {
     if (company == null) {
       return null;
     }
-
-    return new CompanyDto(company.getId(), company.getName());
+    CompanyDto companyDto = new CompanyDto(company.getId(), company.getName());
+    logger.debug("\nMapper: map: company: " + company + "\n TO: companyDto: " + companyDto);
+    return companyDto;
   }
 
   /**
@@ -58,7 +66,12 @@ public class CompanyMapper {
     if (companyDto == null) {
       return null;
     }
-    return new Company(companyDto.getId(), companyDto.getName());
+
+    Company company = new Company(companyDto.getId(), companyDto.getName());
+
+    logger.debug("\nMapper: map: companyDto: " + companyDto + "\n TO: company: " + company);
+
+    return company;
   }
 
   /**
@@ -74,6 +87,10 @@ public class CompanyMapper {
     }
     List<CompanyDto> companyDtos = new ArrayList<CompanyDto>();
     companies.parallelStream().forEachOrdered(c -> companyDtos.add(toCompanyDto(c)));
+
+    logger
+        .debug("\nMapper: map: List<Company>:" + companies + "\n TO: companyDtos: " + companyDtos);
+
     return companyDtos;
   }
 }
