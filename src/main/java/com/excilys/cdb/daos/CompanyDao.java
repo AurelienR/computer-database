@@ -2,7 +2,6 @@ package com.excilys.cdb.daos;
 
 import com.excilys.cdb.models.Company;
 
-import java.sql.Connection;
 import java.util.List;
 
 // TODO: Auto-generated Javadoc
@@ -65,10 +64,9 @@ public interface CompanyDao {
   /**
    * Delete a company by its id.
    *
-   * @param con the con
    * @param id          id of the company to delete
    * @throws DaoException           issue with db
    */
-  void deleteCompany(Connection con, int id) throws DaoException;
+  void deleteCompany(int id) throws DaoException;
 
 }

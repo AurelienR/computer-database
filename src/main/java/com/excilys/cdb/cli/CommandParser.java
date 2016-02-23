@@ -22,40 +22,22 @@ import java.util.Scanner;
  */
 public class CommandParser {
 
-  /** The Constant logger. */
   // Logger
   static final Logger logger = LoggerFactory.getLogger(CommandParser.class);
 
-  /** The Constant LIST_COMPANIES_CMD. */
   // Constants
-  private static final String LIST_COMPANIES_CMD = "listcompanies";
-  
-  /** The Constant DELETE_COMPANY_CMD. */
+  private static final String LIST_COMPANIES_CMD = "listcompanies";  
   private static final String DELETE_COMPANY_CMD = "deletecompany";
-  
-  /** The Constant LIST_COMPUTERS_CMD. */
   private static final String LIST_COMPUTERS_CMD = "listcomputers";
-  
-  /** The Constant GET_COMPUTER_DETAILS_CMD. */
   private static final String GET_COMPUTER_DETAILS_CMD = "computerdetails";
-  
-  /** The Constant CREATE_COMPUTER_CMD. */
   private static final String CREATE_COMPUTER_CMD = "createcomputer";
-  
-  /** The Constant UPDATE_COMPUTER_CMD. */
   private static final String UPDATE_COMPUTER_CMD = "updatecomputer";
-  
-  /** The Constant DELETE_COMPUTER_CMD. */
   private static final String DELETE_COMPUTER_CMD = "deletecomputer";
-  
-  /** The Constant EXIT_CMD. */
   private static final String EXIT_CMD = "exit";
 
-  /** The cmd invoker. */
   // Attributes
   private CommandInvoker cmdInvoker;
   
-  /** The sc. */
   private Scanner sc;
 
   /**

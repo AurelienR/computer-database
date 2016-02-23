@@ -51,7 +51,7 @@ public class ComputerMapperTest {
   @Test
   public void toComputerDtoNullParameterTest() {
     try {
-      ComputerDto resultComputerDto = ComputerMapper.toComputerDto(null);
+      ComputerDto resultComputerDto = ComputerMapper.toComputerDto((Computer)null);
       assertNull(resultComputerDto);
     } catch (Throwable t) {
       fail("Exception thrown should not be thrown");

@@ -16,8 +16,10 @@ public class ConnectionCloser {
   /**
    * Close resultSet related to a DB Connection.
    *
-   * @param resultSet          resultSet to close
-   * @throws DaoException           issue with db
+   * @param resultSet
+   *          resultSet to close
+   * @throws DaoException
+   *           issue with db
    */
   public static void silentClose(ResultSet resultSet) throws DaoException {
     if (resultSet != null) {
@@ -33,8 +35,10 @@ public class ConnectionCloser {
   /**
    * Close statement related to a DB Connection.
    *
-   * @param statement          statement to close
-   * @throws DaoException           issue with db
+   * @param statement
+   *          statement to close
+   * @throws DaoException
+   *           issue with db
    */
   public static void silentClose(Statement statement) throws DaoException {
     if (statement != null) {
@@ -49,8 +53,10 @@ public class ConnectionCloser {
   /**
    * Close connection related to a DB Connection.
    *
-   * @param connection          connection to close
-   * @throws DaoException           issue with db
+   * @param connection
+   *          connection to close
+   * @throws DaoException
+   *           issue with db
    */
   public static void silentClose(Connection connection) throws DaoException {
     if (connection != null) {
@@ -65,9 +71,12 @@ public class ConnectionCloser {
   /**
    * Close multiple DB connection element.
    *
-   * @param statement          statement to close
-   * @param connexion          connection to close
-   * @throws DaoException           issue with db
+   * @param statement
+   *          statement to close
+   * @param connexion
+   *          connection to close
+   * @throws DaoException
+   *           issue with db
    */
   public static void silentCloses(Statement statement, Connection connexion) throws DaoException {
     silentClose(statement);
@@ -77,15 +86,31 @@ public class ConnectionCloser {
   /**
    * Close multiple DB connection element.
    *
-   * @param resultSet          resultSet to close
-   * @param statement          statement to close
-   * @param connexion          connection to close
-   * @throws DaoException           issue with db
+   * @param resultSet
+   *          resultSet to close
+   * @param statement
+   *          statement to close
+   * @param connexion
+   *          connection to close
+   * @throws DaoException
+   *           issue with db
    */
   public static void silentCloses(ResultSet resultSet, Statement statement, Connection connexion)
       throws DaoException {
     silentClose(resultSet);
     silentClose(statement);
     silentClose(connexion);
+  }
+
+  /**
+   * Close resultset and statement.
+   *
+   * @param resultSet the result set
+   * @param statement the statement
+   * @throws DaoException failure in closing resultSet and statement
+   */
+  public static void silentCloses(ResultSet resultSet, Statement statement) throws DaoException {
+    silentClose(resultSet);
+    silentClose(statement);
   }
 }

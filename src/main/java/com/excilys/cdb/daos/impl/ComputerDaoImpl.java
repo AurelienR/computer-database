@@ -2,11 +2,17 @@ package com.excilys.cdb.daos.impl;
 
 import com.excilys.cdb.daos.ComputerDao;
 import com.excilys.cdb.daos.ConnectionCloser;
-import com.excilys.cdb.daos.ConnectionFactory;
 import com.excilys.cdb.daos.DaoException;
+import com.excilys.cdb.daos.TransactionManager;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.QueryPageParameter;
+import com.excilys.cdb.validators.CompanyValidator;
+import com.excilys.cdb.validators.ComputerValidator;
+import com.excilys.cdb.validators.QueryPageParameterValidator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,6 +29,9 @@ import java.util.List;
  *
  */
 public class ComputerDaoImpl implements ComputerDao {
+
+  // Logger
+  static final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
   // DB column names
   public static final String INTRO_COLUMN = "introduced";
@@ -74,7 +83,10 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public List<Computer> findAll() throws DaoException {
 
+    logger.debug("Dao: Find all computers");
+    
     // Init local variables
+    TransactionManager tm = TransactionManager.getInstance();
     Connection con = null;
     ResultSet results = null;
     PreparedStatement ps = null;
@@ -82,29 +94,22 @@ public class ComputerDaoImpl implements ComputerDao {
 
     try {
       // Get opened connection
-      con = ConnectionFactory.getInstance().getConnection();
-      con.setAutoCommit(false);
-
+      con = tm.getConnection();
+      
       // Prepare query
       ps = con.prepareStatement(FIND_ALL_QUERY);
       results = ps.executeQuery();
 
       // Deserialize resultSet to a list of computer
-      computerList = ComputerMapper.getComputersFromResults(results);
-      con.commit();
-
+      computerList = ComputerMapper.toComputerList(results);
+      
     } catch (SQLException e) {
-      // Try to recover previous DB state
-      try {
-        con.rollback();
-      } catch (SQLException e1) {
-        e1.printStackTrace();
-        throw new DaoException("Failed to Rollback on findAll method", e1);
-      }
+      logger.debug("Failed to find all computers, SQLException");
       throw new DaoException("Failed on findAll method, SQLException", e);
     } finally {
       // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps, con);
+      ConnectionCloser.silentCloses(results, ps);
+      tm.close();
     }
 
     return computerList;
@@ -113,7 +118,13 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public List<Computer> findById(int id) throws DaoException {
 
+    logger.debug("Dao: find computer by its id: " + id);
+
+    // Check
+    ComputerValidator.checkValidId(id);
+    
     // Init local variables
+    TransactionManager tm = TransactionManager.getInstance();
     Connection con = null;
     ResultSet results = null;
     PreparedStatement ps = null;
@@ -121,8 +132,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
     try {
       // Get opened connection
-      con = ConnectionFactory.getInstance().getConnection();
-      con.setAutoCommit(false);
+      con = tm.getConnection();
 
       // Prepare query
       ps = con.prepareStatement(FIND_BYID_QUERY);
@@ -131,22 +141,15 @@ public class ComputerDaoImpl implements ComputerDao {
       results = ps.executeQuery();
 
       // Deserialize resultSet to a list of computer
-      computerList = ComputerMapper.getComputersFromResults(results);
-
-      con.commit();
+      computerList = ComputerMapper.toComputerList(results);
 
     } catch (SQLException e) {
-      // Try to recover previous DB state
-      try {
-        con.rollback();
-      } catch (SQLException e1) {
-        e1.printStackTrace();
-        throw new DaoException("Failed to Rollback on findById method", e1);
-      }
+      logger.debug("Failed to find computers by its id: " + id);
       throw new DaoException("Failed on findById method, SQLException", e);
     } finally {
       // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps, con);
+      ConnectionCloser.silentCloses(results, ps);
+      tm.close();
     }
 
     return computerList;
@@ -155,13 +158,14 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public List<Computer> findByName(String name) throws DaoException, IllegalArgumentException {
 
-    // Parameter validation
-    // Check name field
-    if (name == null || name.isEmpty()) {
-      throw new IllegalArgumentException("Name parameter must be not null or empty");
-    }
+    logger.debug("Dao: find computer by name:" + name);
+    
+    // Check
+    ComputerValidator.checkNameNotNull(name);
+    ComputerValidator.checkNameNotEmpty(name);
 
     // Init local variables
+    TransactionManager tm = TransactionManager.getInstance();
     Connection con = null;
     ResultSet results = null;
     PreparedStatement ps = null;
@@ -169,8 +173,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
     try {
       // Get opened connection
-      con = ConnectionFactory.getInstance().getConnection();
-      con.setAutoCommit(false);
+      con = tm.getConnection();
 
       // Prepare query
       ps = con.prepareStatement(FIND_BYNAME_QUERY);
@@ -179,22 +182,15 @@ public class ComputerDaoImpl implements ComputerDao {
       results = ps.executeQuery();
 
       // Deserialize resultSet to a list of computer
-      computerList = ComputerMapper.getComputersFromResults(results);
-
-      con.commit();
+      computerList = ComputerMapper.toComputerList(results);
 
     } catch (SQLException e) {
-      // Try to recover previous DB state
-      try {
-        con.rollback();
-      } catch (SQLException e1) {
-        e1.printStackTrace();
-        throw new DaoException("Failed to Rollback on findByName method", e1);
-      }
+      logger.debug("Failed to find computer by name, SQLException, name:" + name);
       throw new DaoException("Failed on findByName method, SQLException", e);
     } finally {
       // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps, con);
+      ConnectionCloser.silentCloses(results, ps);
+      tm.close();
     }
 
     return computerList;
@@ -202,13 +198,14 @@ public class ComputerDaoImpl implements ComputerDao {
 
   @Override
   public int insertComputer(Computer computer) throws DaoException, IllegalArgumentException {
-    // Parameter validation and DB consistency
-    // Check name Field
-    if (computer.getName() == null || computer.getName().isEmpty()) {
-      throw new IllegalArgumentException("Name parameter must be not null or empty");
-    }
+
+    logger.debug("Dao: insert a computer: " + computer);
+    
+    // Check
+    ComputerValidator.validate(computer);
 
     // Init local variables
+    TransactionManager tm = TransactionManager.getInstance();
     Connection con = null;
     PreparedStatement ps = null;
     ResultSet results = null;
@@ -216,8 +213,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
     try {
       // Get opened connection
-      con = ConnectionFactory.getInstance().getConnection();
-      con.setAutoCommit(false);
+      con = tm.getConnection();
 
       // Prepare query
       ps = con.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -246,20 +242,14 @@ public class ComputerDaoImpl implements ComputerDao {
       if (results.next()) {
         id = results.getInt(1);
       }
-      con.commit();
 
     } catch (SQLException e) {
-      // Try to recover previous DB state
-      try {
-        con.rollback();
-      } catch (SQLException e1) {
-        e1.printStackTrace();
-        throw new DaoException("Failed to Rollback on insert method", e1);
-      }
+      logger.debug("Failed to insert computer, SQLException, computer:" + computer);
       throw new DaoException("Failed on insert method, SQLException", e);
     } finally {
       // Close any connection related object
-      ConnectionCloser.silentCloses(ps, con);
+      ConnectionCloser.silentClose(ps);
+      tm.close();
     }
 
     return id;
@@ -268,14 +258,19 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public void updateComputer(Computer computer) throws DaoException, IllegalArgumentException {
 
+    logger.debug("Dao: update computer with computer: " + computer);
+    
+    // Check
+    ComputerValidator.validate(computer);
+
     // Init local variables
+    TransactionManager tm = TransactionManager.getInstance();
     Connection con = null;
     PreparedStatement ps = null;
 
     try {
       // Get opened connection
-      con = ConnectionFactory.getInstance().getConnection();
-      con.setAutoCommit(false);
+      con = tm.getConnection();
 
       // Prepare query
       ps = con.prepareStatement(UPDATE_QUERY);
@@ -300,34 +295,34 @@ public class ComputerDaoImpl implements ComputerDao {
       ps.setInt(5, computer.getId());
 
       ps.executeUpdate();
-      con.commit();
 
     } catch (SQLException e) {
-      // Try to recover previous DB state
-      try {
-        con.rollback();
-      } catch (SQLException e1) {
-        e1.printStackTrace();
-        throw new DaoException("Failed to Rollback on update method", e1);
-      }
-      throw new DaoException("Failed on update method, SQLException", e);
+      logger.debug("Failed to update computer with computer: " + computer);
+      throw new DaoException("Failed on update method, SQLException, computer:" + computer, e);
     } finally {
       // Close any connection related object
-      ConnectionCloser.silentCloses(ps, con);
+      ConnectionCloser.silentClose(ps);
+      tm.close();
     }
 
   }
 
   @Override
   public void deleteComputer(int id) {
+
+    logger.debug("Dao: delete computer by id:" + id);
+    
+    // Check
+    ComputerValidator.checkValidId(id);
+
     // Init local variables
+    TransactionManager tm = TransactionManager.getInstance();
     Connection con = null;
     PreparedStatement ps = null;
 
     try {
       // Get opened connection
-      con = ConnectionFactory.getInstance().getConnection();
-      con.setAutoCommit(false);
+      con = tm.getConnection();
 
       // Prepare query
       ps = con.prepareStatement(DELETE_QUERY);
@@ -335,20 +330,14 @@ public class ComputerDaoImpl implements ComputerDao {
       ps.setInt(1, id);
 
       ps.executeUpdate();
-      con.commit();
 
     } catch (SQLException e) {
-      // Try to recover previous DB state
-      try {
-        con.rollback();
-      } catch (SQLException e1) {
-        e1.printStackTrace();
-        throw new DaoException("Failed to Rollback on delete method", e1);
-      }
-      throw new DaoException("Failed on delete method, SQLException", e);
+      logger.debug("Failed on delete method, SQLException, id:" + id);
+      throw new DaoException("Failed on delete method, SQLException, id:" + id, e);
     } finally {
       // Close any connection related object
       ConnectionCloser.silentCloses(ps, con);
+      tm.close();
     }
 
   }
@@ -356,7 +345,14 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public List<Computer> findRange(int offset, int limit) throws DaoException {
 
+    logger.debug("Dao: find computer by range, offset:" + offset + " limit:" + limit);
+    
+    // Check
+    ComputerValidator.checkStartingRow(offset);
+    ComputerValidator.checkSize(limit);
+
     // Init local variables
+    TransactionManager tm = TransactionManager.getInstance();
     Connection con = null;
     ResultSet results = null;
     PreparedStatement ps = null;
@@ -364,8 +360,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
     try {
       // Get opened connection
-      con = ConnectionFactory.getInstance().getConnection();
-      con.setAutoCommit(false);
+      con = tm.getConnection();
 
       // Prepare query
       ps = con.prepareStatement(FIND_RANGE_QUERY);
@@ -374,21 +369,16 @@ public class ComputerDaoImpl implements ComputerDao {
       results = ps.executeQuery();
 
       // Deserialize resultSet to a list of computer
-      computerList = ComputerMapper.getComputersFromResults(results);
-      con.commit();
+      computerList = ComputerMapper.toComputerList(results);
 
     } catch (SQLException e) {
-      // Try to recover previous DB state
-      try {
-        con.rollback();
-      } catch (SQLException e1) {
-        e1.printStackTrace();
-        throw new DaoException("Failed to Rollback on findRange method", e1);
-      }
+      logger
+          .debug("Failed on find range method, SQLException, offset:" + offset + "limit:" + limit);
       throw new DaoException("Failed on findRange method, SQLException", e);
     } finally {
       // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps, con);
+      ConnectionCloser.silentCloses(results, ps);
+      tm.close();
     }
 
     return computerList;
@@ -396,7 +386,11 @@ public class ComputerDaoImpl implements ComputerDao {
 
   @Override
   public int count() throws DaoException {
+
+    logger.debug("Dao: get count of total computers");
+
     // Init local variables
+    TransactionManager tm = TransactionManager.getInstance();
     Connection con = null;
     ResultSet results = null;
     Statement ps = null;
@@ -404,8 +398,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
     try {
       // Get opened connection
-      con = ConnectionFactory.getInstance().getConnection();
-      con.setAutoCommit(true);
+      con = tm.getConnection();
 
       // Prepare query
       ps = con.createStatement();
@@ -416,10 +409,12 @@ public class ComputerDaoImpl implements ComputerDao {
       count = results.getInt(1);
 
     } catch (SQLException e) {
+      logger.debug("Failed on count method, SQLException");
       throw new DaoException("Failed on count method, SQLException", e);
     } finally {
       // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps, con);
+      ConnectionCloser.silentCloses(results, ps);
+      tm.close();
     }
 
     return count;
@@ -428,7 +423,13 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public List<Computer> findByQuery(QueryPageParameter qp) {
 
+    logger.debug("Dao: find computer by query" + qp);
+    
+    // Check
+    QueryPageParameterValidator.validate(qp);
+
     // Init local variables
+    TransactionManager tm = TransactionManager.getInstance();
     Connection con = null;
     ResultSet results = null;
     PreparedStatement ps = null;
@@ -436,8 +437,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
     try {
       // Get opened connection
-      con = ConnectionFactory.getInstance().getConnection();
-      con.setAutoCommit(false);
+      con = tm.getConnection();
 
       // Prepare query
       String query = String.format(FIND_BY_QUERY_PARAM_QUERY, qp.getOrderBy().toString(),
@@ -452,8 +452,7 @@ public class ComputerDaoImpl implements ComputerDao {
       results = ps.executeQuery();
 
       // Deserialize resultSet to a list of computer
-      computerList = ComputerMapper.getComputersFromResults(results);
-      con.commit();
+      computerList = ComputerMapper.toComputerList(results);
 
       // Close connection elements
       ConnectionCloser.silentClose(results);
@@ -467,28 +466,28 @@ public class ComputerDaoImpl implements ComputerDao {
       results.next();
       qp.setMatchingRowCount(results.getInt(1));
 
-      con.commit();
-
     } catch (SQLException e) {
-      // Try to recover previous DB state
-      try {
-        con.rollback();
-      } catch (SQLException e1) {
-        throw new DaoException("Failed to Rollback on findByQuery method", e1);
-      }
-      throw new DaoException("Failed on findByQuery method, SQLException", e);
+      logger.debug("Failed to find computers by query method" + qp);
+      throw new DaoException("Failed to find computers by query method" + qp, e);
     } finally {
-      // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps, con);
+      ConnectionCloser.silentCloses(results, ps);
+      tm.close();
     }
 
     return computerList;
   }
 
   @Override
-  public void deleteByCompanyId(Connection con, int companyId) throws DaoException {
+  public void deleteByCompanyId(int companyId) throws DaoException {
+
+    logger.debug("Dao: delete computers by company id: " + companyId);
+    
+    // Check
+    CompanyValidator.checkValidId(companyId);
 
     PreparedStatement ps = null;
+    TransactionManager tm = TransactionManager.getInstance();
+    Connection con = tm.getConnection();
 
     // Prepare query
     try {
@@ -498,9 +497,11 @@ public class ComputerDaoImpl implements ComputerDao {
       ps.executeUpdate();
 
     } catch (SQLException e) {
+      logger.debug("Failed to delete computers by companyId" + companyId);
       throw new DaoException("Cannot reset following company id: " + companyId, e);
     } finally {
       ConnectionCloser.silentClose(ps);
+      tm.close();
     }
   }
 }

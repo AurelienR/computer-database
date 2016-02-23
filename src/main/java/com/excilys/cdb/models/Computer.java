@@ -96,15 +96,11 @@ public class Computer {
     this.introduced = introduced;
   }
 
+
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(Computer.class.getSimpleName()).append(": ").append("\n id: ")
-        .append(Integer.toString(getId())).append("\n name: ").append(getName())
-        .append("\n introduced: ").append(getIntroduced()).append("\n discontinued: ")
-        .append(getDiscontinued()).append("\n\tCompany: ").append(getCompany().toString());
-
-    return sb.toString();
+    return "Computer [id=" + id + ", company=" + company + ", name=" + name + ", discontinued="
+        + discontinued + ", introduced=" + introduced + "]";
   }
 
   @Override
