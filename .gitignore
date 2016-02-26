@@ -73,3 +73,15 @@ local.properties
 
 # STS (Spring Tool Suite)
 .springBeans
+
+
+### Jenkins ###
+docker/dockers/jenkins/jenkins/jobs/computer-database-UT/builds/lastFailedBuild/*
+docker/dockers/jenkins/jenkins/jobs/computer-database-UT/builds/lastStableBuild/*
+docker/dockers/jenkins/jenkins/jobs/computer-database-UT/builds/lastSuccessfulBuild/*
+docker/dockers/jenkins/jenkins/jobs/computer-database-UT/builds/lastUnstableBuild/*
+docker/dockers/jenkins/jenkins/jobs/computer-database-UT/builds/lastUnsuccessfulBuild/*
+docker/dockers/jenkins/jenkins/jobs/computer-database-UT/builds/legacyIds
+docker/dockers/jenkins/jenkins/jobs/computer-database-UT/lastStable/*
+docker/dockers/jenkins/jenkins/jobs/computer-database-UT/lastSuccessful/*
+
