@@ -335,3 +335,20 @@ copy plugins/xunit.jpi to JENKINS_HOME
  /usr/share/jenkins/ref/plugins/github-oauth.jpi -> plugins/github-oauth.jpi
 /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
  /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy -> init.groovy.d/tcp-slave-agent-port.groovy
+--- Copying files at Fri Feb 26 09:58:49 UTC 2016
+/usr/share/jenkins/ref/plugins/xunit.jpi
+ /usr/share/jenkins/ref/plugins/xunit.jpi -> plugins/xunit.jpi
+/usr/share/jenkins/ref/plugins/git-client.jpi
+ /usr/share/jenkins/ref/plugins/git-client.jpi -> plugins/git-client.jpi
+/usr/share/jenkins/ref/plugins/git.jpi
+ /usr/share/jenkins/ref/plugins/git.jpi -> plugins/git.jpi
+/usr/share/jenkins/ref/plugins/scm-api.jpi
+ /usr/share/jenkins/ref/plugins/scm-api.jpi -> plugins/scm-api.jpi
+/usr/share/jenkins/ref/plugins/github-api.jpi
+ /usr/share/jenkins/ref/plugins/github-api.jpi -> plugins/github-api.jpi
+/usr/share/jenkins/ref/plugins/github.jpi
+ /usr/share/jenkins/ref/plugins/github.jpi -> plugins/github.jpi
+/usr/share/jenkins/ref/plugins/github-oauth.jpi
+ /usr/share/jenkins/ref/plugins/github-oauth.jpi -> plugins/github-oauth.jpi
+/usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
+ /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy -> init.groovy.d/tcp-slave-agent-port.groovy

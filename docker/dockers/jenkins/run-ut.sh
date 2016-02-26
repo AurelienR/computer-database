@@ -20,6 +20,7 @@ fi
 echo "Copy repo to $CONTAINER."
 docker cp . $CONTAINER:webapp
 
+
 # If not running, run it
 if [ "$RUNNING" == "false" ]; then
   echo "CRITICAL - $CONTAINER is not running."
