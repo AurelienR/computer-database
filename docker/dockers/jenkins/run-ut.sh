@@ -21,11 +21,9 @@ echo "Copy repo to $CONTAINER."
 docker cp . $CONTAINER:webapp
 
 
-# If not running, run it
-if [ "$RUNNING" == "false" ]; then
-  echo "CRITICAL - $CONTAINER is not running."
-  docker start -a docker-ut
-fi
+# Start docker
+docker start -a docker-ut
+
 
 STARTED=$(docker inspect --format="{{ .State.StartedAt }}" $CONTAINER)
 NETWORK=$(docker inspect --format="{{ .NetworkSettings.IPAddress }}" $CONTAINER)
