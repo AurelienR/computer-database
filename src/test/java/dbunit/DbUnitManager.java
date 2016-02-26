@@ -70,7 +70,7 @@ public class DbUnitManager {
    * @throws Exception           failed to run sql file
    */
   public void createSchema() throws Exception {
-    RunScript.execute(url, username, password, SCHEMA_SQL, StandardCharsets.UTF_8, false);
+    RunScript.execute(url, "root", "" ,SCHEMA_SQL, StandardCharsets.UTF_8, false);
   }
 
   /**
@@ -79,7 +79,7 @@ public class DbUnitManager {
    * @throws Exception           failed to run sql file
    */
   public void createPrivilegies() throws Exception {
-    RunScript.execute(url, username, password, password, StandardCharsets.UTF_8, false);
+    RunScript.execute(url, "root", "", PRIVILEGES_SQL,StandardCharsets.UTF_8, false);
   }
 
   /**
@@ -98,7 +98,7 @@ public class DbUnitManager {
    */
   public void setupDb() throws Exception {
     createSchema();
-    // createPrivilegies();
+    createPrivilegies();
     createEntries();
   }
 

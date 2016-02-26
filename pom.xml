@@ -271,25 +271,4 @@
 		</plugins>
 	</build>
 
-	<!-- Profiles -->
-	<profiles>
-		<profile>
-			<id>test</id>
-			<properties>
-				<db.driverClass>com.mysql.jdbc.Driver</db.driverClass>
-				<db.connectionURL>jdbc:mysql://localhost:3306/computer-database-db_TEST?zeroDateTimeBehavior=convertToNull</db.connectionURL>
-				<db.username>admincdb</db.username>
-				<db.password>qwerty1234</db.password>
-			</properties>
-		</profile>
-		<profile>
-			<id>development</id>
-			<properties>
-				<db.driverClass>com.mysql.jdbc.Driver</db.driverClass>
-				<db.connectionURL>jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull</db.connectionURL>
-				<db.username>admincdb</db.username>
-				<db.password>qwerty1234</db.password>
-			</properties>
-		</profile>
-	</profiles>
 </project>

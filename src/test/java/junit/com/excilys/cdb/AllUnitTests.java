@@ -25,10 +25,10 @@ public class AllUnitTests {
    */
   @BeforeClass
   public static void setUp() throws Exception {
-    //System.out.println("STARTING UNIT TESTS");
-    //System.out.println("Set up db");
-    //dbUnit = new DbUnitManager();
-    //dbUnit.setupDb();
+    System.out.println("STARTING UNIT TESTS");
+    System.out.println("Set up db");
+    dbUnit = new DbUnitManager();
+    dbUnit.setupDb();
 
     System.out.println("Starting tests");
   }

@@ -1,8 +1,8 @@
 #!/bin/bash
-set -x
 
 CONTAINER="docker-ut"
 DIRECTORY="logs"
+MYSQL="mysql-docker"
 
 docker pull aurelienr/jdk8-mvn:latest
 
@@ -13,17 +13,19 @@ RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/null
 if [ $? -eq 1 ]; then
   echo "UNKNOWN - $CONTAINER does not exist."
   echo "Create container: $CONTAINER."
-  docker create --name $CONTAINER aurelienr/jdk8-mvn:latest
+  docker create --name $CONTAINER --link mysql-container:mysql-docker aurelienr/jdk8-mvn:latest
 fi
 
 # Copy cloned repo to docker:/webapp
 echo "Copy repo to $CONTAINER."
 docker cp . $CONTAINER:webapp
 
+echo "Copy dao.properties for testing environment"
+cp -rf ./docker/dockers/mysql/dao.properties ./src/test/resources/properties/dao.properties
+cp -rf ./docker/dockers/mysql/dao.properties ./src/main/resources/properties/dao.properties
 
 # Start docker
 docker start -a docker-ut
-
 
 STARTED=$(docker inspect --format="{{ .State.StartedAt }}" $CONTAINER)
 NETWORK=$(docker inspect --format="{{ .NetworkSettings.IPAddress }}" $CONTAINER)
@@ -35,3 +37,4 @@ if [ ! -d "$DIRECTORY" ]; then
 fi
 
 docker cp $CONTAINER:webapp/target/surefire-reports ./logs
+docker cp $CONTAINER:webapp/target/failsafe-reports ./logs

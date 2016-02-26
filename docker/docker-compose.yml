@@ -12,6 +12,7 @@ services:
      - ./dockers/jenkins/jenkins:/var/jenkins_home
    depends_on:
      - dind
+     - mysql
 
  dind:
     container_name: dind
@@ -21,3 +22,9 @@ services:
       - 2375
     volumes:
       - ./dockers/jenkins/jenkins:/var/jenkins_home
+ 
+ mysql:
+    container_name: mysql-container
+    image: mysql:latest
+    expose:
+      - 3306
