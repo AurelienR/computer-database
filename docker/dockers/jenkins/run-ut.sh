@@ -20,6 +20,7 @@ fi
 echo "Copy repo to $CONTAINER."
 docker cp . $CONTAINER:webapp
 
+
 # If not running, run it
 if [ "$RUNNING" == "false" ]; then
   echo "CRITICAL - $CONTAINER is not running."
@@ -31,7 +32,11 @@ NETWORK=$(docker inspect --format="{{ .NetworkSettings.IPAddress }}" $CONTAINER)
 
 echo "OK - $CONTAINER is running. IP: $NETWORK, StartedAt: $STARTED"
 
+<<<<<<< HEAD
 if [ ! -d "$DIRECTORY" ]; then
+=======
+if [! -d "$DIRECTORY" ]; then
+>>>>>>> 26ea56358e1e40d006b71afb6c96b5dff2809ee9
   mkdir logs
 fi
 

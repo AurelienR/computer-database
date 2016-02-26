@@ -12,11 +12,11 @@ X-Accepted-OAuth-Scopes:
 X-GitHub-Media-Type: github.v3; format=json
 Content-Encoding: gzip
 Server: GitHub.com
-Date: Fri, 26 Feb 2016 09:10:53 GMT
+Date: Fri, 26 Feb 2016 10:00:06 GMT
 Status: 304 Not Modified
 X-RateLimit-Limit: 5000
-X-RateLimit-Remaining: 5000
-X-RateLimit-Reset: 1456481453
+X-RateLimit-Remaining: 4992
+X-RateLimit-Reset: 1456481458
 Cache-Control: private, max-age=60, s-maxage=60
 ETag: "02c5f68a45c5fef749141b8765cb3fe8"
 Access-Control-Allow-Credentials: true
@@ -28,11 +28,11 @@ X-Content-Type-Options: nosniff
 X-Frame-Options: deny
 X-XSS-Protection: 1; mode=block
 Vary: Accept-Encoding
-X-Served-By: 01d096e6cfe28f8aea352e988c332cd3
-X-GitHub-Request-Id: D5D70156:3592:D68A8B:56D0169C
+X-Served-By: 13d09b732ebe76f892093130dc088652
+X-GitHub-Request-Id: D5D70156:3590:EF34FC:56D02224
 OkHttp-Selected-Protocol: http/1.1
-OkHttp-Sent-Millis: 1456477853527
-OkHttp-Received-Millis: 1456477853794
+OkHttp-Sent-Millis: 1456480806225
+OkHttp-Received-Millis: 1456480806958
 
 TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
 2

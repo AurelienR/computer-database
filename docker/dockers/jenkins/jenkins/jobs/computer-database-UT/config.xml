@@ -51,7 +51,7 @@
       </statusMessage>
     </com.cloudbees.jenkins.GitHubSetCommitStatusBuilder>
     <hudson.tasks.Shell>
-      <command>./run-ut.sh</command>
+      <command>./docker/dockers/jenkins/run-ut.sh</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

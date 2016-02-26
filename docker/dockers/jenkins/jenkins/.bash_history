@@ -18,3 +18,17 @@ ls
 cd jenkins_home/
 ls
 exit
+ls
+cd var/jenkins_home/jobs/computer-database-UT/workspace/
+ls -la
+cd docker
+ls -la
+cd dockers/jenkins/
+ls
+clear
+clear
+ls -la
+run-ut.sh
+sh run-ut.sh 
+clear
+exit
