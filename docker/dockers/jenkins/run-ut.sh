@@ -59,3 +59,10 @@ fi
 echo "Copying logs"
 docker cp $CONTAINER:webapp/target/surefire-reports ./logs
 docker cp $CONTAINER:webapp/target/failsafe-reports ./logs
+
+
+
+
+# Stop all dockers
+docker stop $MYSQL
+docker stop $CONTAINER
