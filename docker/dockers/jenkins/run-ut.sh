@@ -27,7 +27,6 @@ MVN_RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/
 
 # Create container if does not exists
 if [ $? -eq 1 ]; then
-  e
   echo "CONTAINER - $CONTAINER does not exist."
   echo "CONTAINER - rm $CONTAINER."
   docker rm $CONTAINER
