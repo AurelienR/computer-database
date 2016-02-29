@@ -21,15 +21,20 @@ echo "LOG- Check $MYSQL container is running."
 MYSQL_RUNNING=$(docker inspect --format="{{ .State.Running }}" $MYSQL 2> /dev/null)
 
 # If Mysql container is not running
-if [ $? -eq 1  ] || [ "$MYSQL_RUNNING" == "false"  ] ; then
-  echo "LOG - $MYSQL container does not exist or is not running."
+if [ $? -eq 0  ] && [ "$MYSQL_RUNNING" == "false" ]  ; then
+  echo "LOG - $MYSQL container already exists"
+  echo "LOG - Starting $MYSQL container."
+  docker start -a $MYSQL
+else
+  echo "LOG - $MYSQL container does not exist"
   echo "LOG - Remove $MYSQL container."
   docker rm $MYSQL
   echo "LOG - Run $MYSQL container."
   docker run --name $MYSQL -e "MYSQL_ROOT_PASSWORD=admin" -d mysql:5.5
-  echo "LOG - Wait 10sec to $MYSQL container to run"
-  sleep 10
 fi
+
+echo "LOG - Wait 10sec to $MYSQL container to run"
+sleep 10
 
 echo "LOG- Docker ps check:"
 docker ps
@@ -42,12 +47,14 @@ echo "##########################################################################
 echo "LOG- Pull last image of aurelienr/jdk8-mvn:latest."
 docker pull aurelienr/jdk8-mvn:latest > pull.txt
 
+res=$(grep "Image is up to date" pull.txt)
+
 # Detect if mysql container is running
 echo "LOG- Check $CONTAINER container is running."
 MVN_RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/null)
 
 # Create container if does not exists
-if [ $? -eq 1 ] || [ "$MVN_RUNNING" == "false" ] ; then
+if [ ${#res} -eq 0 ] || [ $? -eq 1 ] ; then
   echo "LOG - $CONTAINER container does not exist."
   echo "LOG - Remove $CONTAINER container."
   docker rm $CONTAINER
@@ -88,12 +95,12 @@ echo ""
 echo "##################################################################################"
 echo "# Step 5 - Start JDK-MVN container                                               #"
 echo "##################################################################################"
+
 # Start mvn docker
-if [ "$MVN_RUNNING" == "false" ]; then
-  echo "LOG - $CONTAINER container is not running."
-  echo "LOG - start $CONTAINER."
-  docker start -a $CONTAINER
-fi
+echo "LOG - $CONTAINER container is not running."
+echo "LOG - start $CONTAINER."
+docker start -a $CONTAINER
+
 
 echo "LOG- JDK-MVN infos:"
 STARTED=$(docker inspect --format="{{ .State.StartedAt }}" $CONTAINER)
@@ -102,7 +109,6 @@ echo "OK - $CONTAINER is running. IP: $NETWORK, StartedAt: $STARTED"
 
 echo "LOG- Docker ps check:"
 docker ps
-echo "\n"
 
 echo ""
 echo "##################################################################################"
@@ -118,8 +124,8 @@ fi
 echo "Copying logs:"
 echo "Copying from webapp/target/surefire-reports ... "
 docker cp $CONTAINER:webapp/target/surefire-reports ./logs
-echo "Copying from webapp/target/surefire-reports ... "
-docker cp $CONTAINER:webapp/target/failsafe-reports ./logsfrom daemon: Cannot link to a non running container: /mysql-docker AS /dock
+echo "Copying from webapp/target/failsafe-reports ... "
+docker cp $CONTAINER:webapp/target/failsafe-reports ./logs
 
 echo ""
 echo "##################################################################################"
