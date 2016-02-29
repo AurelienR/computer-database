@@ -21,8 +21,10 @@ if [ $? -eq 1  ] || [ "$MYSQL_RUNNING" == "false"  ] ; then
   sleep 10
 fi
 echo "CONTAINER IS RUNNING:MYSQL_RUNNING = $MYSQL_RUNNING"
-# Detect if mvn container is running
 
+docker ps
+
+# Detect if mvn container is running
 MVN_RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/null)
 
 # Create container if does not exists
@@ -34,6 +36,8 @@ if [ $? -eq 1 ]; then
   docker create --name $CONTAINER --link $MYSQL aurelienr/jdk8-mvn:latest
 fi
 echo "CONTAINER - check $CONTAINER is running."
+docker ps
+
 # Copy cloned repo to docker:/webapp
 echo "Copy repo to $CONTAINER."
 docker cp . $CONTAINER:webapp
@@ -64,10 +68,7 @@ fi
 
 echo "Copying logs"
 docker cp $CONTAINER:webapp/target/surefire-reports ./logs
-docker cp $CONTAINER:webapp/target/failsafe-reports ./logs
-
-
-
+docker cp $CONTAINER:webapp/target/failsafe-reports ./logsfrom daemon: Cannot link to a non running container: /mysql-docker AS /dock
 
 # Stop all dockers
 docker stop $MYSQL
