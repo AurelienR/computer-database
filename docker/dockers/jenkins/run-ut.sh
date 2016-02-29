@@ -92,7 +92,7 @@ echo "motdepasse = qwerty1234" >> src/main/resources/properties/dao.properties
 echo "MinConnectionsPerPartition = 5" >> src/main/resources/properties/dao.properties
 echo "MaxConnectionsPerPartition = 10" >> src/main/resources/properties/dao.properties
 echo "PartitionCount = 2"  >> src/main/resources/properties/dao.properties
-cp src/main/resources/properties/dao.properties src/test/resources/dao.properties
+cp src/main/resources/properties/dao.properties src/test/resources/properties/dao.properties
 
 echo ""
 echo "##################################################################################"
