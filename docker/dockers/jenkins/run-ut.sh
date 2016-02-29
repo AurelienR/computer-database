@@ -13,7 +13,7 @@ MYSQL_RUNNING=$(docker inspect --format="{{ .State.Running }}" $MYSQL 2> /dev/nu
 if [ $? -eq 1 ]; then
   echo "UNKNOWN - $MYSQL does not exist."
   echo "Create container: $MYSQL."
-  docker run --name $MYSQL -e "MYSQL_ROOT_PASSWORD=\"\"" mysql:5.5
+  docker run --name $MYSQL -e "MYSQL_ROOT_PASSWORD=\"\"" -d  mysql:5.5
 fi
 
 # Detect if mvn container is running
