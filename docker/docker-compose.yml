@@ -22,11 +22,3 @@ services:
       - 2375
     volumes:
       - ./dockers/jenkins/jenkins:/var/jenkins_home
- 
- mysql:
-    container_name: mysql-container
-    image: mysql:5.5
-    expose:
-      - 3306
-    environment:
-      - MYSQL_ROOT_PASSWORD=""
