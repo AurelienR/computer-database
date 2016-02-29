@@ -11,8 +11,8 @@ echo "#                                                                         
 echo "##################################################################################"
 
 
-
-echo "\n##################################################################################"
+echo ""
+echo "##################################################################################"
 echo "# Step 1 - Run MYSQL docker                                                      #"
 echo "##################################################################################"
 
@@ -33,9 +33,9 @@ fi
 
 echo "LOG- Docker ps check:"
 docker ps
-echo "\n"
 
-echo "\n##################################################################################"
+echo ""
+echo "##################################################################################"
 echo "# Step 2 - Create JDK-MVN container                                              #"
 echo "##################################################################################"
 
@@ -57,8 +57,8 @@ fi
 
 echo "LOG- Docker ps check:"
 docker ps
-echo "\n"
 
+echo ""
 echo "\n##################################################################################"
 echo "# Step 3 - Copy cloned repo                                                      #"
 echo "##################################################################################"
@@ -66,7 +66,8 @@ echo "##########################################################################
 echo "LOG - Copy repo to webapp."
 docker cp . $CONTAINER:webapp
 
-echo "\n##################################################################################"
+echo ""
+echo "##################################################################################"
 echo "# Step 4 - Generate dao.properties                                               #"
 echo "##################################################################################"
 # Copy dao properties for JDBC Test connection
@@ -74,16 +75,17 @@ echo "LOG - Generating dao.properties for testing environment"
 MYSQL_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mysql)
 
 #We then use this ip to create the connection.properties file
-echo "url = jdbc:mysql://$MYSQL_IP:3306/computer-database-db?zeroDateTimeBehavior=convertToNull" > src/main/resources/dao.properties
-echo "driver = com.mysql.jdbc.Driver" >> src/main/resources/dao.properties
-echo "nomutilisateur = admincdb" >> src/main/resources/dao.properties
-echo "motdepasse = qwerty1234" >> src/main/resources/dao.properties
-echo "MinConnectionsPerPartition = 5" >> src/main/resources/dao.properties
-echo "MaxConnectionsPerPartition = 10" >> src/main/resources/dao.properties
-echo "PartitionCount = 2"  >> src/main/resources/dao.properties
-cp src/main/resources/dao.properties src/test/resources/dao.properties
+echo "url = jdbc:mysql://$MYSQL_IP:3306/computer-database-db?zeroDateTimeBehavior=convertToNull" > src/main/resources/properties/dao.properties
+echo "driver = com.mysql.jdbc.Driver" >> src/main/resources/properties/dao.properties
+echo "nomutilisateur = admincdb" >> src/main/resources/properties/dao.properties
+echo "motdepasse = qwerty1234" >> src/main/resources/properties/dao.properties
+echo "MinConnectionsPerPartition = 5" >> src/main/resources/properties/dao.properties
+echo "MaxConnectionsPerPartition = 10" >> src/main/resources/properties/dao.properties
+echo "PartitionCount = 2"  >> src/main/resources/properties/dao.properties
+cp src/main/resources/properties/dao.properties src/test/resources/dao.properties
 
-echo "\n##################################################################################"
+echo ""
+echo "##################################################################################"
 echo "# Step 5 - Start JDK-MVN container                                               #"
 echo "##################################################################################"
 # Start mvn docker
@@ -102,7 +104,8 @@ echo "LOG- Docker ps check:"
 docker ps
 echo "\n"
 
-echo "\n##################################################################################"
+echo ""
+echo "##################################################################################"
 echo "# Step 6 - Copy logs                                                             #"
 echo "##################################################################################"
 
@@ -118,7 +121,8 @@ docker cp $CONTAINER:webapp/target/surefire-reports ./logs
 echo "Copying from webapp/target/surefire-reports ... "
 docker cp $CONTAINER:webapp/target/failsafe-reports ./logsfrom daemon: Cannot link to a non running container: /mysql-docker AS /dock
 
-echo "\n##################################################################################"
+echo ""
+echo "##################################################################################"
 echo "# Step 7 - Stop containers                                                       #"
 echo "##################################################################################"
 # Stop all dockers
