@@ -28,7 +28,7 @@ MVN_RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/
 if [ $? -eq 1 ]; then
   echo "CONTAINER - $CONTAINER does not exist."
   echo "CONTAINER - Create container: $CONTAINER."
-  docker create --rm --name $CONTAINER --link mysql-container:$MYSQL aurelienr/jdk8-mvn:latest
+  docker create --name $CONTAINER --link mysql-container:$MYSQL aurelienr/jdk8-mvn:latest
 fi
 
 # Copy cloned repo to docker:/webapp
