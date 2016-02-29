@@ -13,7 +13,7 @@ RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/null
 if [ $? -eq 1 ]; then
   echo "UNKNOWN - $CONTAINER does not exist."
   echo "Create container: $CONTAINER."
-  docker create --name $CONTAINER --link mysql-container:mysql-docker aurelienr/jdk8-mvn:latest
+  docker create --name $CONTAINER --link mysql-container:mysql-docker -e "MYSQL_ROOT_PASSWORD=\"\""  aurelienr/jdk8-mvn:latest
 fi
 
 # Copy cloned repo to docker:/webapp
