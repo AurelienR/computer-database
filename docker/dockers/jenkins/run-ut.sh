@@ -4,71 +4,123 @@ CONTAINER="docker-ut"
 DIRECTORY="logs"
 MYSQL="mysql-docker"
 
-# Pull last custom mvn image
-docker pull aurelienr/jdk8-mvn:latest
+echo "##################################################################################"
+echo "#                                                                                #"
+echo "#                     Run Unit Test - run-ut.sh                                  #"
+echo "#                                                                                #"
+echo "##################################################################################"
 
-echo "CONTAINER - check $MYSQL is running."
+
+
+echo "\n##################################################################################"
+echo "# Step 1 - Run MYSQL docker                                                      #"
+echo "##################################################################################"
+
 # Detect if mysql container is running
+echo "LOG- Check $MYSQL container is running."
 MYSQL_RUNNING=$(docker inspect --format="{{ .State.Running }}" $MYSQL 2> /dev/null)
 
-# Create container if does not exists
+# If Mysql container is not running
 if [ $? -eq 1  ] || [ "$MYSQL_RUNNING" == "false"  ] ; then
-  echo "CONTAINER - $MYSQL does not exist."
-  echo "CONTAINER - rm $MYSQL."
+  echo "LOG - $MYSQL container does not exist or is not running."
+  echo "LOG - Remove $MYSQL container."
   docker rm $MYSQL
-  echo "CONTAINER - run $MYSQL."
+  echo "LOG - Run $MYSQL container."
   docker run --name $MYSQL -e "MYSQL_ROOT_PASSWORD=admin" -d mysql:5.5
+  echo "LOG - Wait 10sec to $MYSQL container to run"
   sleep 10
 fi
 
+echo "LOG- Docker ps check:"
 docker ps
+echo "\n"
 
-# Detect if mvn container is running
+echo "\n##################################################################################"
+echo "# Step 2 - Create JDK-MVN container                                              #"
+echo "##################################################################################"
+
+echo "LOG- Pull last image of aurelienr/jdk8-mvn:latest."
+docker pull aurelienr/jdk8-mvn:latest
+
+# Detect if mysql container is running
+echo "LOG- Check $CONTAINER container is running."
 MVN_RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/null)
 
 # Create container if does not exists
 if [ $? -eq 1 ] || [ "$MVN_RUNNING" == "false"  ] ; then
-  echo "CONTAINER - $CONTAINER does not exist."
-  echo "CONTAINER - rm $CONTAINER."
+  echo "LOG - $CONTAINER container does not exist."
+  echo "LOG - Remove $CONTAINER container."
   docker rm $CONTAINER
-  echo "CONTAINER - Create container: $CONTAINER."
+  echo "LOG - Create container: $CONTAINER."
   docker create --name $CONTAINER --link $MYSQL aurelienr/jdk8-mvn:latest
 fi
 
+echo "LOG- Docker ps check:"
 docker ps
+echo "\n"
 
+echo "\n##################################################################################"
+echo "# Step 3 - Copy cloned repo                                                      #"
+echo "##################################################################################"
 # Copy cloned repo to docker:/webapp
-echo "Copy repo to $CONTAINER."
+echo "LOG - Copy repo to webapp."
 docker cp . $CONTAINER:webapp
 
+echo "\n##################################################################################"
+echo "# Step 4 - Generate dao.properties                                               #"
+echo "##################################################################################"
 # Copy dao properties for JDBC Test connection
-echo "Copy dao.properties for testing environment"
-cp -rf ./docker/dockers/mysql/dao.properties ./src/test/resources/properties/dao.properties
-cp -rf ./docker/dockers/mysql/dao.properties ./src/main/resources/properties/dao.properties
+echo "LOG - Generating dao.properties for testing environment"
+MYSQL_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mysql)
 
-echo "CONTAINER IS RUNNING:MVN_RUNNING = $MVN_RUNNING"
+#We then use this ip to create the connection.properties file
+echo "url = jdbc:mysql://$MYSQL_IP:3306/computer-database-db?zeroDateTimeBehavior=convertToNull" > src/main/resources/dao.properties
+echo "driver = com.mysql.jdbc.Driver" >> src/main/resources/dao.properties
+echo "nomutilisateur = admincdb" >> src/main/resources/dao.properties
+echo "motdepasse = qwerty1234" >> src/main/resources/dao.properties
+echo "MinConnectionsPerPartition = 5" >> src/main/resources/dao.properties
+echo "MaxConnectionsPerPartition = 10" >> src/main/resources/dao.properties
+echo "PartitionCount = 2"  >> src/main/resources/dao.properties
+cp src/main/resources/dao.properties src/test/resources/dao.properties
 
+echo "\n##################################################################################"
+echo "# Step 5 - Start JDK-MVN container                                               #"
+echo "##################################################################################"
 # Start mvn docker
 if [ "$MVN_RUNNING" == "false" ]; then
-  echo "CONTAINER - $CONTAINER is not running."
-  echo "CONTAINER - start $CONTAINER."
+  echo "LOG - $CONTAINER container is not running."
+  echo "LOG - start $CONTAINER."
   docker start -a $CONTAINER
 fi
 
+echo "LOG- JDK-MVN infos:"
 STARTED=$(docker inspect --format="{{ .State.StartedAt }}" $CONTAINER)
 NETWORK=$(docker inspect --format="{{ .NetworkSettings.IPAddress }}" $CONTAINER)
-
 echo "OK - $CONTAINER is running. IP: $NETWORK, StartedAt: $STARTED"
+
+echo "LOG- Docker ps check:"
+docker ps
+echo "\n"
+
+echo "\n##################################################################################"
+echo "# Step 6 - Copy logs                                                             #"
+echo "##################################################################################"
 
 # Copy logs
 if [ ! -d "$DIRECTORY" ]; then
+  echo "LOG- Create log directory"
   mkdir logs
 fi
 
-echo "Copying logs"
+echo "Copying logs:"
+echo "Copying from webapp/target/surefire-reports ... "
 docker cp $CONTAINER:webapp/target/surefire-reports ./logs
+echo "Copying from webapp/target/surefire-reports ... "
 docker cp $CONTAINER:webapp/target/failsafe-reports ./logsfrom daemon: Cannot link to a non running container: /mysql-docker AS /dock
 
+echo "\n##################################################################################"
+echo "# Step 7 - Stop containers                                                       #"
+echo "##################################################################################"
 # Stop all dockers
 docker stop $MYSQL
 docker stop $CONTAINER
