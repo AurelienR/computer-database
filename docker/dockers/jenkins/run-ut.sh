@@ -19,7 +19,7 @@ if [ $? -eq 1  ] || [ "$MYSQL_RUNNING" == "false"  ] ; then
   echo "CONTAINER - rm $MYSQL."
   docker rm $MYSQL
   echo "CONTAINER - run $MYSQL."
-  docker run --name $MYSQL -e "MYSQL_ROOT_PASSWORD=admin" mysql:5.5
+  docker run --name $MYSQL -e "MYSQL_ROOT_PASSWORD=admin" -d mysql:5.5
   sleep 10
 fi
 
