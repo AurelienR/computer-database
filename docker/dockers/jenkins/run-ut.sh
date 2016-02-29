@@ -40,14 +40,14 @@ echo "# Step 2 - Create JDK-MVN container                                       
 echo "##################################################################################"
 
 echo "LOG- Pull last image of aurelienr/jdk8-mvn:latest."
-docker pull aurelienr/jdk8-mvn:latest
+docker pull aurelienr/jdk8-mvn:latest > pull.txt
 
 # Detect if mysql container is running
 echo "LOG- Check $CONTAINER container is running."
 MVN_RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/null)
 
 # Create container if does not exists
-if [ $? -eq 1 ] || [ "$MVN_RUNNING" == "false"  ] ; then
+if [ $? -eq 1 ] || [ "$MVN_RUNNING" == "false" ] ; then
   echo "LOG - $CONTAINER container does not exist."
   echo "LOG - Remove $CONTAINER container."
   docker rm $CONTAINER
@@ -59,7 +59,7 @@ echo "LOG- Docker ps check:"
 docker ps
 
 echo ""
-echo "\n##################################################################################"
+echo "##################################################################################"
 echo "# Step 3 - Copy cloned repo                                                      #"
 echo "##################################################################################"
 # Copy cloned repo to docker:/webapp
@@ -72,7 +72,7 @@ echo "# Step 4 - Generate dao.properties                                        
 echo "##################################################################################"
 # Copy dao properties for JDBC Test connection
 echo "LOG - Generating dao.properties for testing environment"
-MYSQL_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mysql)
+MYSQL_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $MYSQL)
 
 #We then use this ip to create the connection.properties file
 echo "url = jdbc:mysql://$MYSQL_IP:3306/computer-database-db?zeroDateTimeBehavior=convertToNull" > src/main/resources/properties/dao.properties
