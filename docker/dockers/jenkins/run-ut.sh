@@ -11,12 +11,13 @@ echo "CONTAINER - check $MYSQL is running."
 # Detect if mysql container is running
 MYSQL_RUNNING=$(docker inspect --format="{{ .State.Running }}" $MYSQL 2> /dev/null)
 
-echo "MYSQL_RUNNING = $MYSQL_RUNNING"
+echo "CONTAINER IS RUNNING:MYSQL_RUNNING = $MYSQL_RUNNING"
 
 # Create container if does not exists
-if [ $? -eq 1  ] || [ "$MYSQL_RUNNING"="false"  ] ; then
+if [ $? -eq 1  ] || [ "$MYSQL_RUNNING" == "false"  ] ; then
   echo "CONTAINER - $MYSQL does not exist."
   echo "CONTAINER - create $MYSQL."
+  docker rm $MYSQL
   docker run -d --name $MYSQL -e "MYSQL_ROOT_PASSWORD=\"\"" mysql:5.5
 fi
 
@@ -40,7 +41,7 @@ echo "Copy dao.properties for testing environment"
 cp -rf ./docker/dockers/mysql/dao.properties ./src/test/resources/properties/dao.properties
 cp -rf ./docker/dockers/mysql/dao.properties ./src/main/resources/properties/dao.properties
 
-echo "MVN_RUNNING = $MVN_RUNNING"
+echo "CONTAINER IS RUNNING:MVN_RUNNING = $MVN_RUNNING"
 
 # Start mvn docker
 if [ "$MVN_RUNNING" == "false" ]; then
