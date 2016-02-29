@@ -16,9 +16,10 @@ echo "CONTAINER IS RUNNING:MYSQL_RUNNING = $MYSQL_RUNNING"
 # Create container if does not exists
 if [ $? -eq 1  ] || [ "$MYSQL_RUNNING" == "false"  ] ; then
   echo "CONTAINER - $MYSQL does not exist."
-  echo "CONTAINER - create $MYSQL."
+  echo "CONTAINER - rm $MYSQL."
   docker rm $MYSQL
-  docker run -d --name $MYSQL -e "MYSQL_ROOT_PASSWORD=\"\"" mysql:5.5
+  echo "CONTAINER - run $MYSQL."
+  docker run --name $MYSQL -e "MYSQL_ROOT_PASSWORD=\"\"" -d mysql:5.5
 fi
 
 # Detect if mvn container is running
@@ -28,6 +29,8 @@ MVN_RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/
 # Create container if does not exists
 if [ $? -eq 1 ]; then
   echo "CONTAINER - $CONTAINER does not exist."
+  echo "CONTAINER - rm $CONTAINER."
+  docker rm $CONTAINER
   echo "CONTAINER - Create container: $CONTAINER."
   docker create --name $CONTAINER --link $MYSQL:mysql-container aurelienr/jdk8-mvn:latest
 fi
