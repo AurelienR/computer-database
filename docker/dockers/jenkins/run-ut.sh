@@ -19,7 +19,7 @@ if [ $? -eq 1  ] || [ "$MYSQL_RUNNING" == "false"  ] ; then
   echo "CONTAINER - rm $MYSQL."
   docker rm $MYSQL
   echo "CONTAINER - run $MYSQL."
-  docker run --name $MYSQL -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" mysql:5.5
+  docker run --name $MYSQL -e "MYSQL_ROOT_PASSWORD=admin" mysql:5.5
   sleep 10
 fi
 
@@ -33,7 +33,7 @@ if [ $? -eq 1 ]; then
   echo "CONTAINER - rm $CONTAINER."
   docker rm $CONTAINER
   echo "CONTAINER - Create container: $CONTAINER."
-  docker create --name $CONTAINER --link $MYSQL:mysql-container aurelienr/jdk8-mvn:latest
+  docker create --name $CONTAINER --link $MYSQL aurelienr/jdk8-mvn:latest
 fi
 
 # Copy cloned repo to docker:/webapp
