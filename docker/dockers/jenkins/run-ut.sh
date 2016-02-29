@@ -24,7 +24,7 @@ MYSQL_RUNNING=$(docker inspect --format="{{ .State.Running }}" $MYSQL 2> /dev/nu
 if [ $? -eq 0  ] && [ "$MYSQL_RUNNING" == "false" ]  ; then
   echo "LOG - $MYSQL container already exists"
   echo "LOG - Starting $MYSQL container."
-  docker start -a $MYSQL
+  docker start -d -a $MYSQL
 else
   echo "LOG - $MYSQL container does not exist"
   echo "LOG - Remove $MYSQL container."
