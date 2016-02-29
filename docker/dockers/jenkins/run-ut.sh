@@ -4,6 +4,8 @@ CONTAINER="docker-ut"
 DIRECTORY="logs"
 MYSQL="mysql-docker"
 
+#Clean current workspace
+
 # Pull last custom mvn image
 docker pull aurelienr/jdk8-mvn:latest
 
@@ -12,7 +14,7 @@ echo "CONTAINER - check $MYSQL is running."
 MYSQL_RUNNING=$(docker inspect --format="{{ .State.Running }}" $MYSQL 2> /dev/null)
 
 # Create container if does not exists
-if [ $? -eq 1  ] || [ $MYSQL_RUNNING -eq "false"] ; then
+if [[ $? -eq 1  ] || [ $MYSQL_RUNNING -eq "false"]] ; then
   echo "CONTAINER - $MYSQL does not exist."
   echo "CONTAINER - create $MYSQL."
   docker run -d --name $MYSQL -e "MYSQL_ROOT_PASSWORD=\"\"" mysql:5.5
@@ -25,7 +27,7 @@ MVN_RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/
 # Create container if does not exists
 if [ $? -eq 1 ]; then
   echo "CONTAINER - $CONTAINER does not exist."
-  echo "CONTAINER -Create container: $CONTAINER."
+  echo "CONTAINER - Create container: $CONTAINER."
   docker create --name $CONTAINER --link mysql-container:$MYSQL aurelienr/jdk8-mvn:latest
 fi
 
