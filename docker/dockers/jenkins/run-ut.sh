@@ -11,8 +11,6 @@ echo "CONTAINER - check $MYSQL is running."
 # Detect if mysql container is running
 MYSQL_RUNNING=$(docker inspect --format="{{ .State.Running }}" $MYSQL 2> /dev/null)
 
-echo "CONTAINER IS RUNNING:MYSQL_RUNNING = $MYSQL_RUNNING"
-
 # Create container if does not exists
 if [ $? -eq 1  ] || [ "$MYSQL_RUNNING" == "false"  ] ; then
   echo "CONTAINER - $MYSQL does not exist."
@@ -22,20 +20,21 @@ if [ $? -eq 1  ] || [ "$MYSQL_RUNNING" == "false"  ] ; then
   docker run --name $MYSQL -e "MYSQL_ROOT_PASSWORD=admin" -d mysql:5.5
   sleep 10
 fi
-
+echo "CONTAINER IS RUNNING:MYSQL_RUNNING = $MYSQL_RUNNING"
 # Detect if mvn container is running
-echo "CONTAINER - check $CONTAINER is running."
+
 MVN_RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/null)
 
 # Create container if does not exists
 if [ $? -eq 1 ]; then
+  e
   echo "CONTAINER - $CONTAINER does not exist."
   echo "CONTAINER - rm $CONTAINER."
   docker rm $CONTAINER
   echo "CONTAINER - Create container: $CONTAINER."
   docker create --name $CONTAINER --link $MYSQL aurelienr/jdk8-mvn:latest
 fi
-
+echo "CONTAINER - check $CONTAINER is running."
 # Copy cloned repo to docker:/webapp
 echo "Copy repo to $CONTAINER."
 docker cp . $CONTAINER:webapp
