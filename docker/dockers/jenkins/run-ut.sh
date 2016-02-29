@@ -20,6 +20,7 @@ if [ $? -eq 1  ] || [ "$MYSQL_RUNNING" == "false"  ] ; then
   docker rm $MYSQL
   echo "CONTAINER - run $MYSQL."
   docker run --name $MYSQL -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" -d mysql:5.5
+  sleep 10
 fi
 
 # Detect if mvn container is running
