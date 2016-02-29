@@ -27,13 +27,14 @@ docker ps
 MVN_RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/null)
 
 # Create container if does not exists
-if [ $? -eq 1 ]; then
+if [ $? -eq 1 ] || [ "$MVN_RUNNING" == "false"  ] ; then
   echo "CONTAINER - $CONTAINER does not exist."
   echo "CONTAINER - rm $CONTAINER."
   docker rm $CONTAINER
   echo "CONTAINER - Create container: $CONTAINER."
   docker create --name $CONTAINER --link $MYSQL aurelienr/jdk8-mvn:latest
 fi
+
 docker ps
 
 # Copy cloned repo to docker:/webapp
