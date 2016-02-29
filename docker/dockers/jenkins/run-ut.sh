@@ -12,15 +12,11 @@ echo "CONTAINER - check $MYSQL is running."
 MYSQL_RUNNING=$(docker inspect --format="{{ .State.Running }}" $MYSQL 2> /dev/null)
 
 # Create container if does not exists
-if [ $? -eq 1 ]; then
+if [ $? -eq 1  ] || [ $MYSQL_RUNNING -eq "false"] ; then
   echo "CONTAINER - $MYSQL does not exist."
   echo "CONTAINER - create $MYSQL."
-  docker create --name $MYSQL -e "MYSQL_ROOT_PASSWORD=\"\"" -d  mysql:5.5
+  docker run -d --name $MYSQL -e "MYSQL_ROOT_PASSWORD=\"\"" mysql:5.5
 fi
-
-# Start mysql docker
-echo "CONTAINER - start $MYSQL."
-docker start -a $MYSQL
 
 # Detect if mvn container is running
 echo "CONTAINER - check $CONTAINER is running."
@@ -43,8 +39,11 @@ cp -rf ./docker/dockers/mysql/dao.properties ./src/test/resources/properties/dao
 cp -rf ./docker/dockers/mysql/dao.properties ./src/main/resources/properties/dao.properties
 
 # Start mvn docker
-echo "CONTAINER - start $CONTAINER."
-docker start -a $CONTAINER
+if [ $MVN_RUNNING -eq "false" ]; then
+  echo "CONTAINER - $CONTAINER is not running."
+  echo "CONTAINER - start $CONTAINER."
+  docker start -a $CONTAINER
+fi
 
 STARTED=$(docker inspect --format="{{ .State.StartedAt }}" $CONTAINER)
 NETWORK=$(docker inspect --format="{{ .NetworkSettings.IPAddress }}" $CONTAINER)
@@ -59,3 +58,10 @@ fi
 echo "Copying logs"
 docker cp $CONTAINER:webapp/target/surefire-reports ./logs
 docker cp $CONTAINER:webapp/target/failsafe-reports ./logs
+
+
+
+
+# Stop all dockers
+docker stop $MYSQL
+docker stop $CONTAINER
