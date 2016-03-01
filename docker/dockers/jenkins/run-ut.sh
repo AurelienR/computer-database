@@ -85,7 +85,7 @@ echo "LOG - Generating dao.properties for testing environment"
 MYSQL_CONTAINER_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $MYSQL_CONTAINER)
 
 #We then use this ip to create the connection.properties file
-echo "url = jdbc:mysql://$MYSQL_CONTAINER_IP:3306/computer-database-db?zeroDateTimeBehavior=convertToNull" > src/main/resources/properties/dao.properties
+echo "url = jdbc:mysql://$MYSQL_CONTAINER_IP:3306/computer-database-db_TEST?zeroDateTimeBehavior=convertToNull" > src/main/resources/properties/dao.properties
 echo "driver = com.mysql.jdbc.Driver" >> src/main/resources/properties/dao.properties
 echo "nomutilisateur = admincdb" >> src/main/resources/properties/dao.properties
 echo "motdepasse = qwerty1234" >> src/main/resources/properties/dao.properties
