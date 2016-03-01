@@ -26,9 +26,7 @@ public class DbUnitManager {
 
 
   private String url;
-  private String username;
-  private String password;
-  
+
 
   /**
    * Instantiates a new db unit manager.
@@ -60,8 +58,6 @@ public class DbUnitManager {
     // Extract file property fields
     properties.load(fileProperties);
     this.url = properties.getProperty(URL_PROPERTY);
-    this.username = properties.getProperty(USERNAME_PROPERTY);
-    this.password = properties.getProperty(PASSWORD_PROPERTY);
   }
 
   /**

@@ -48,15 +48,10 @@ public class TransactionManager {
 
     logger.debug("Getting connection from connection factory");
 
-    try {
-      if (context.get() == null) {
-        Connection con = ConnectionFactory.getInstance().getConnection();
-        context.set(con);
-        logger.debug("Set Connection in thread local");
-      }
-    } catch (SQLException e) {
-      logger.error("Failed in getting connection from connection factory");
-      throw new TransactionManagerException("Cannot get connection from ConnectionFactory", e);
+    if (context.get() == null) {
+      Connection con = ConnectionFactory.getInstance().getConnection();
+      context.set(con);
+      logger.debug("Set Connection in thread local");
     }
     return context.get();
   }
