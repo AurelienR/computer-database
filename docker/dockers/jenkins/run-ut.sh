@@ -32,7 +32,7 @@ else
   echo "LOG - Remove $MYSQL_CONTAINER container."
   docker rm $MYSQL_CONTAINER
   echo "LOG - Run $MYSQL_CONTAINER container."
-  docker run --name $MYSQL_CONTAINER -e "MYSQL_ROOT_PASSWORD=admin" -d $MYSQL_IMAGE
+  docker run --name $MYSQL_CONTAINER -p 3306:3306 -e "MYSQL_ROOT_PASSWORD=admin" -d $MYSQL_IMAGE
 fi
 
 echo "LOG - Wait 10sec to $MYSQL_CONTAINER container to run"
