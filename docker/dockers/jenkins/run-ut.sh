@@ -87,8 +87,8 @@ MYSQL_CONTAINER_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' 
 #We then use this ip to create the connection.properties file
 echo "url = jdbc:mysql://$MYSQL_CONTAINER_IP:3306/computer-database-db_TEST?zeroDateTimeBehavior=convertToNull" > src/main/resources/properties/dao.properties
 echo "driver = com.mysql.jdbc.Driver" >> src/main/resources/properties/dao.properties
-echo "nomutilisateur = admincdb" >> src/main/resources/properties/dao.properties
-echo "motdepasse = qwerty1234" >> src/main/resources/properties/dao.properties
+echo "nomutilisateur = root" >> src/main/resources/properties/dao.properties
+echo "motdepasse = admin" >> src/main/resources/properties/dao.properties
 echo "MinConnectionsPerPartition = 5" >> src/main/resources/properties/dao.properties
 echo "MaxConnectionsPerPartition = 10" >> src/main/resources/properties/dao.properties
 echo "PartitionCount = 2"  >> src/main/resources/properties/dao.properties
