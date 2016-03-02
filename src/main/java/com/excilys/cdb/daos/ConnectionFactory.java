@@ -1,7 +1,8 @@
 package com.excilys.cdb.daos;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,13 +14,19 @@ import javax.sql.DataSource;
  *
  * @author Aurelien.R
  */
-@Component
+@Service
 public class ConnectionFactory {
 
   @Autowired
+  @Qualifier("dataSource")
   private DataSource dataSource;
   private static ConnectionFactory instance;
 
+  /**
+   * Gets the single instance of ConnectionFactory.
+   *
+   * @return single instance of ConnectionFactory
+   */
   public static ConnectionFactory getInstance() {
     if (instance == null) {
       instance = new ConnectionFactory();

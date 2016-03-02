@@ -13,6 +13,9 @@ import com.excilys.cdb.validators.QueryPageParameterValidator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,14 +25,25 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 /**
  * Manage computer data operation with the Database
  * 
  * @author Aurélien.R
  *
  */
+@Repository
 public class ComputerDaoImpl implements ComputerDao {
 
+  @Autowired
+  @Qualifier("dataSource")
+  private DataSource dataSource;
+  
+  public void setDataSource(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
+  
   // Logger
   static final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
@@ -437,8 +451,9 @@ public class ComputerDaoImpl implements ComputerDao {
 
     try {
       // Get opened connection
-      con = tm.getConnection();
-
+      //con = tm.getConnection();
+      con = dataSource.getConnection();
+      
       // Prepare query
       String query = String.format(FIND_BY_QUERY_PARAM_QUERY, qp.getOrderBy().toString(),
           qp.getOrder().toString());
@@ -471,7 +486,13 @@ public class ComputerDaoImpl implements ComputerDao {
       throw new DaoException("Failed to find computers by query method" + qp, e);
     } finally {
       ConnectionCloser.silentCloses(results, ps);
-      tm.close();
+      //tm.close();
+      try {
+        con.close();
+      } catch (SQLException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
     }
 
     return computerList;

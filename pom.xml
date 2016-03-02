@@ -6,46 +6,57 @@
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
 	<packaging>war</packaging>
-	<version>0.5.0-SNAPSHOT</version>
+	<version>0.4.0-SNAPSHOT</version>
 	<name>computerdatabase Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
-	<!-- Define properties -->
+	<!-- **************** REPOSITORIES **************** -->
+	<repositories>
+		<repository>
+			<id>version99</id>
+			<url>http://version99.qos.ch/</url>
+		</repository>
+	</repositories>
+
+	<!-- **************** PROPERTIES **************** -->
 	<properties>
-		<!-- Versions -->
+		<!-- Java/JavaEE -->
 		<java.version>1.8</java.version>
+		<javax.servlet.version>3.0.1</javax.servlet.version>
+		<javax.servlet-jsp.version>2.1</javax.servlet-jsp.version>
+		<jstl.version>1.2</jstl.version>
+		<javax.el.version>3.0.0</javax.el.version>
+		<!-- Spring -->
+		<spring-context>4.2.5.RELEASE</spring-context>
+		<spring-core>4.2.5.RELEASE</spring-core>
+		<spring-beans>4.2.5.RELEASE</spring-beans>
+		<spring-web>4.2.5.RELEASE</spring-web>
+		<spring-jdbc>2.0.6</spring-jdbc>
+		<!-- Tests -->
 		<junit.version>4.12</junit.version>
 		<h2db.version>1.4.191</h2db.version>
 		<dbunit.version>2.4.9</dbunit.version>
 		<selenium.version>2.52.0</selenium.version>
-		<mysql-connector.version>5.1.38</mysql-connector.version>
-		<slf4j.version>1.7.14</slf4j.version>
 		<mockito.version>1.10.19</mockito.version>
 		<powermockito.version>1.6.2</powermockito.version>
 		<powermockito-junit4.version>1.6.4</powermockito-junit4.version>
-		<logback.version>1.1.3</logback.version>
-		<javax.servlet.version>3.0.1</javax.servlet.version>
-		<javax.servlet-jsp.version>2.1</javax.servlet-jsp.version>
-		<javax.validation.version>1.0.0.GA</javax.validation.version>
-		<jstl.version>1.2</jstl.version>
-		<javax.el.version>3.0.0</javax.el.version>
-		<hibernate-validator.version>4.1.0.Final</hibernate-validator.version>
-		<boneCP.version>0.8.0.RELEASE</boneCP.version>
 		<easymock.version>3.4</easymock.version>
-		<spring.framework.version>2.5.6</spring.framework.version>
-		<spring.context.version>4.2.5.RELEASE</spring.context.version>
+		<!-- Database -->
+		<mysql-connector.version>5.1.38</mysql-connector.version>
+		<boneCP.version>0.8.0.RELEASE</boneCP.version>
+		<!-- Validation -->
+		<javax.validation.version>1.0.0.GA</javax.validation.version>
+		<hibernate-validator.version>4.1.0.Final</hibernate-validator.version>
+		<!-- Log -->
+		<logback.version>1.1.3</logback.version>
+		<jcloverslf4j>1.7.0</jcloverslf4j>
+		<commons-logging-version>99-empty</commons-logging-version>
+		<slf4j.version>1.7.14</slf4j.version>
 	</properties>
 
-	<!-- Dependencies -->
+	<!-- **************** DEPENDENCIES **************** -->
 	<dependencies>
-
-		<!-- Dev dependencies -->
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
-			<scope>runtime</scope>
-		</dependency>
+		<!-- Java/JavaEE -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -59,12 +70,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>${javax.validation.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
@@ -76,40 +81,33 @@
 			<version>${javax.el.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator-annotation-processor</artifactId>
-			<version>${hibernate-validator.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql-connector.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.jolbox</groupId>
-			<artifactId>bonecp</artifactId>
-			<version>${boneCP.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<!-- Spring framework -->
+		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
-			<version>${spring.framework.version}</version>
-			<scope>compile</scope>
+			<artifactId>spring-core</artifactId>
+			<version>${spring-core}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${spring.context.version}</version>
-			<scope>compile</scope>
+			<version>${spring-context}</version>
 		</dependency>
-
-
-		<!-- Test dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring-beans}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring-web}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring-jdbc}</version>
+		</dependency>
+		<!-- Tests -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -163,10 +161,59 @@
 			<artifactId>easymock</artifactId>
 			<version>${easymock.version}</version>
 		</dependency>
-
+		<!-- Database -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql-connector.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp</artifactId>
+			<version>${boneCP.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- Validation -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${javax.validation.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator-annotation-processor</artifactId>
+			<version>${hibernate-validator.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- Logs -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${jcloverslf4j}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>${commons-logging-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+			<scope>runtime</scope>
+		</dependency>
 
 	</dependencies>
-
+	
+	<!-- **************** BUILD **************** -->
 	<build>
 
 		<finalName>computer-database</finalName>
