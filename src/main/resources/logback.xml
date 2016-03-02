@@ -30,8 +30,13 @@
         <appender-ref ref="STDOUT-SPRING" />
     </logger>
   
-<root level="ALL">
- <appender-ref ref="STDOUT-CDB" />
-</root>
+     <logger name="com.excilys.cdb" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT-CDB" />
+    </logger>
+    
+    <root level="ALL">
+     <appender-ref ref="STDOUT-CDB" />
+    </root>
+
   
 </configuration>
