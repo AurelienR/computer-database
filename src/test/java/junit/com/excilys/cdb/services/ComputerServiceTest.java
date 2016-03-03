@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ComputerServiceTest.
  */
@@ -79,17 +78,6 @@ public class ComputerServiceTest {
     String testedName = "";
     EasyMock.expect(computerDao.findByName(testedName)).andReturn(null);
     computerService.findByName(testedName);
-  }
-
-  /**
-   * Find range negative param test.
-   */
-  @Test(expected = ValidatorException.class)
-  public void findRangeNegativeParamTest() {
-    int startingRow = -2;
-    int size = -3;
-    EasyMock.expect(computerDao.findRange(startingRow, size)).andReturn(null);
-    computerService.findRange(startingRow, size);
   }
 
   /**

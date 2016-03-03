@@ -29,8 +29,7 @@ public class CompanyMapper {
     ArrayList<Company> companyList = new ArrayList<Company>();
 
     while (results.next()) {
-      companyList.add(new Company(results.getInt(CompanyDaoImpl.ID_COLUMN),
-          results.getString(CompanyDaoImpl.NAME_COLUMN)));
+      companyList.add(CompanyRowMapper.mapSingleRow(results));
     }
 
     return companyList;

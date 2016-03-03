@@ -1,32 +1,28 @@
 package com.excilys.cdb.daos.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
 import com.excilys.cdb.daos.ComputerDao;
-import com.excilys.cdb.daos.ConnectionCloser;
-import com.excilys.cdb.daos.DaoException;
-import com.excilys.cdb.daos.TransactionManager;
-import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.mappers.ComputerRowMapper;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.validators.CompanyValidator;
 import com.excilys.cdb.validators.ComputerValidator;
 import com.excilys.cdb.validators.QueryPageParameterValidator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.List;
-
-import javax.sql.DataSource;
 
 /**
  * Manage computer data operation with the Database
@@ -37,402 +33,228 @@ import javax.sql.DataSource;
 @Repository
 public class ComputerDaoImpl implements ComputerDao {
 
-  private DataSource dataSource;
-  private JdbcTemplate jdbcTemplate;
-  private ComputerRowMapper computerRowMapper = new ComputerRowMapper();
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    private ComputerRowMapper computerRowMapper = new ComputerRowMapper();
+    
+    // Logger
+    static final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
-  @Autowired
-  private void setDataSource(DataSource dataSource) {
-    this.dataSource = dataSource;
-    this.jdbcTemplate = new JdbcTemplate(dataSource);
-  }
+    // DB column names
+    public static final String INTRO_COLUMN = "introduced";
+    public static final String DISC_COLUMN = "discontinued";
 
-  // Logger
-  static final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
+    // SQL Queries
+    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM computer"
+	    + "LEFT JOIN company ON computer.company_id = company.id "
+	    + " WHERE (computer.name LIKE ? OR company.name LIKE ? )";
+    private static final String FIND_ALL_QUERY = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id";
+    private static final String FIND_BY_QUERY_PARAM_QUERY = "SELECT * FROM computer "
+	    + "LEFT JOIN company ON computer.company_id = company.id "
+	    + " WHERE (computer.name LIKE ? OR company.name LIKE ? ) ORDER BY %s %s LIMIT ? OFFSET ?";
+    private static final String FIND_BYID_QUERY = "SELECT * FROM computer "
+	    + "LEFT JOIN company ON computer.company_id = company.id WHERE computer.id=?";
+    private static final String FIND_BYNAME_QUERY = "SELECT * FROM computer "
+	    + "LEFT JOIN company ON computer.company_id = company.id WHERE computer.name=?";
+    private static final String INSERT_QUERY = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
+    private static final String UPDATE_QUERY = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
+    private static final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
+    private static final String DELETE_BYCOMPANY_QUERY = "DELETE FROM computer WHERE company_id=?";
 
-  // DB column names
-  public static final String INTRO_COLUMN = "introduced";
-  public static final String DISC_COLUMN = "discontinued";
-
-  // SQL Queries
-  private static final String COUNT_QUERY = "SELECT COUNT(*) FROM computer";
-  private static final String FIND_ALL_QUERY =
-      "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id";
-  private static final String FIND_RANGE_QUERY =
-      "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id "
-          + "ORDER BY computer.id LIMIT ? OFFSET ?";
-  private static final String FIND_BY_QUERY_PARAM_QUERY =
-      "SELECT SQL_CALC_FOUND_ROWS * FROM computer "
-          + "LEFT JOIN company ON computer.company_id = company.id "
-          + " WHERE (computer.name LIKE ? OR company.name LIKE ? ) ORDER BY %s %s LIMIT ? OFFSET ?";
-  private static final String COUNT_MATCHING_ROWS_QUERY = "SELECT FOUND_ROWS()";
-  private static final String FIND_BYID_QUERY = "SELECT * FROM computer "
-      + "LEFT JOIN company ON computer.company_id = company.id WHERE computer.id=?";
-  private static final String FIND_BYNAME_QUERY = "SELECT * FROM computer "
-      + "LEFT JOIN company ON computer.company_id = company.id WHERE computer.name=?";
-  private static final String INSERT_QUERY =
-      "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
-  private static final String UPDATE_QUERY =
-      "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
-  private static final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
-  private static final String DELETE_BYCOMPANY_QUERY = "DELETE FROM computer WHERE company_id=?";
-
-  // Constructors
-  private ComputerDaoImpl() {
-  }
-
-  // Methods
-  @Override
-  public List<Computer> findAll() throws DaoException {
-
-    logger.debug("Dao: Find all computers");
-    List<Computer> computerList = null;
-
-    // Retrieve and map datas
-    computerList = jdbcTemplate.query(FIND_ALL_QUERY, computerRowMapper);
-
-    return computerList;
-  }
-
-  @Override
-  public List<Computer> findById(int id) throws DaoException {
-
-    logger.debug("Dao: find computer by its id: " + id);
-
-    // Check
-    ComputerValidator.checkValidId(id);
-
-    List<Computer> computerList = null;
-
-    // Retrieve and map datas
-    computerList = jdbcTemplate.query(FIND_BYID_QUERY, computerRowMapper, id);
-
-    return computerList;
-  }
-
-  @Override
-  public List<Computer> findByName(String name) throws DaoException, IllegalArgumentException {
-
-    logger.debug("Dao: find computer by name:" + name);
-
-    // Check
-    ComputerValidator.checkNameNotNull(name);
-    ComputerValidator.checkNameNotEmpty(name);
-
-    List<Computer> computerList = null;
-
-    // Retrieve and map datas
-    computerList = jdbcTemplate.query(FIND_BYNAME_QUERY, computerRowMapper, name);
-
-    return computerList;
-  }
-
-  @Override
-  public int insertComputer(Computer computer) throws DaoException, IllegalArgumentException {
-
-    logger.debug("Dao: insert a computer: " + computer);
-
-    // Check
-    ComputerValidator.validate(computer);
-
-    try {
-      // Get opened connection
-      con = tm.getConnection();
-
-      // Prepare query
-      ps = con.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
-      // Replace query fields
-      ps.setString(1, computer.getName());
-
-      if (computer.getIntroduced() == null) {
-        ps.setTimestamp(2, null);
-      } else {
-        ps.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
-      }
-      if (computer.getDiscontinued() == null) {
-        ps.setTimestamp(3, null);
-      } else {
-        ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
-      }
-
-      if (computer.getCompany() == null) {
-        ps.setNull(4, java.sql.Types.BIGINT);
-      } else {
-        ps.setInt(4, computer.getCompany().getId());
-      }
-
-      ps.executeUpdate();
-      results = ps.getGeneratedKeys();
-      if (results.next()) {
-        id = results.getInt(1);
-      }
-
-    } catch (SQLException e) {
-      logger.debug("Failed to insert computer, SQLException, computer:" + computer);
-      throw new DaoException("Failed on insert method, SQLException", e);
-    } finally {
-      // Close any connection related object
-      ConnectionCloser.silentClose(ps);
-      tm.close();
+    // Constructors
+    private ComputerDaoImpl() {
     }
 
-    return id;
-  }
+    // Methods
+    @Override
+    public List<Computer> findAll() {
 
-  @Override
-  public void updateComputer(Computer computer) throws DaoException, IllegalArgumentException {
+	logger.debug("Dao: Find all computers");
+	List<Computer> computerList = null;
 
-    logger.debug("Dao: update computer with computer: " + computer);
+	// Retrieve and map all computers
+	computerList = jdbcTemplate.query(FIND_ALL_QUERY, computerRowMapper);
 
-    // Check
-    ComputerValidator.validate(computer);
-
-    // Init local variables
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    PreparedStatement ps = null;
-
-    try {
-      // Get opened connection
-      con = tm.getConnection();
-
-      // Prepare query
-      ps = con.prepareStatement(UPDATE_QUERY);
-      // Replace query fields
-      ps.setString(1, computer.getName());
-      if (computer.getIntroduced() == null) {
-        ps.setTimestamp(2, null);
-      } else {
-        ps.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
-      }
-      if (computer.getDiscontinued() == null) {
-        ps.setTimestamp(3, null);
-      } else {
-        ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
-      }
-      if (computer.getCompany() == null) {
-        ps.setNull(4, java.sql.Types.BIGINT);
-      } else {
-        ps.setInt(4, computer.getCompany().getId());
-      }
-
-      ps.setInt(5, computer.getId());
-
-      ps.executeUpdate();
-
-    } catch (SQLException e) {
-      logger.debug("Failed to update computer with computer: " + computer);
-      throw new DaoException("Failed on update method, SQLException, computer:" + computer, e);
-    } finally {
-      // Close any connection related object
-      ConnectionCloser.silentClose(ps);
-      tm.close();
+	return computerList;
     }
 
-  }
+    @Override
+    public List<Computer> findById(int id) {
 
-  @Override
-  public void deleteComputer(int id) {
+	logger.debug("Dao: find computer by its id: " + id);
 
-    logger.debug("Dao: delete computer by id:" + id);
+	// Check
+	ComputerValidator.checkValidId(id);
 
-    // Check
-    ComputerValidator.checkValidId(id);
+	List<Computer> computerList = null;
 
-    // Init local variables
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    PreparedStatement ps = null;
+	// Retrieve and map matching
+	computerList = jdbcTemplate.query(FIND_BYID_QUERY, computerRowMapper, id);
 
-    try {
-      // Get opened connection
-      con = tm.getConnection();
-
-      // Prepare query
-      ps = con.prepareStatement(DELETE_QUERY);
-      // Replace query fields
-      ps.setInt(1, id);
-
-      ps.executeUpdate();
-
-    } catch (SQLException e) {
-      logger.debug("Failed on delete method, SQLException, id:" + id);
-      throw new DaoException("Failed on delete method, SQLException, id:" + id, e);
-    } finally {
-      // Close any connection related object
-      ConnectionCloser.silentCloses(ps, con);
-      tm.close();
+	return computerList;
     }
 
-  }
+    @Override
+    public List<Computer> findByName(String name) {
 
-  @Override
-  public List<Computer> findRange(int offset, int limit) throws DaoException {
+	logger.debug("Dao: find computer by name:" + name);
 
-    logger.debug("Dao: find computer by range, offset:" + offset + " limit:" + limit);
+	// Check
+	ComputerValidator.checkNameNotNull(name);
+	ComputerValidator.checkNameNotEmpty(name);
 
-    // Check
-    ComputerValidator.checkStartingRow(offset);
-    ComputerValidator.checkSize(limit);
+	List<Computer> computerList = null;
 
-    // Init local variables
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    ResultSet results = null;
-    PreparedStatement ps = null;
-    List<Computer> computerList = null;
+	// Retrieve and map matching computers
+	computerList = jdbcTemplate.query(FIND_BYNAME_QUERY, computerRowMapper, name);
 
-    try {
-      // Get opened connection
-      con = tm.getConnection();
-
-      // Prepare query
-      ps = con.prepareStatement(FIND_RANGE_QUERY);
-      ps.setInt(1, limit);
-      ps.setInt(2, offset);
-      results = ps.executeQuery();
-
-      // Deserialize resultSet to a list of computer
-      computerList = ComputerMapper.toComputerList(results);
-
-    } catch (SQLException e) {
-      logger
-          .debug("Failed on find range method, SQLException, offset:" + offset + "limit:" + limit);
-      throw new DaoException("Failed on findRange method, SQLException", e);
-    } finally {
-      // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps);
-      tm.close();
+	return computerList;
     }
 
-    return computerList;
-  }
+    @Override
+    public int insertComputer(Computer computer) {
 
-  @Override
-  public int count() throws DaoException {
+	logger.debug("Dao: insert a computer: " + computer);
 
-    logger.debug("Dao: get count of total computers");
+	// Check
+	ComputerValidator.validate(computer);
+	
+	KeyHolder holder = new GeneratedKeyHolder();
 
-    // Init local variables
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    ResultSet results = null;
-    Statement ps = null;
-    int count = -1;
+	// Insert computer with custom prepared statement
+	jdbcTemplate.update(new PreparedStatementCreator() {
 
-    try {
-      // Get opened connection
-      con = tm.getConnection();
+	    @Override
+	    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
 
-      // Prepare query
-      ps = con.createStatement();
-      results = ps.executeQuery(COUNT_QUERY);
+		// Replace query fields
+		ps.setString(1, computer.getName());
 
-      // Get count
-      results.next();
-      count = results.getInt(1);
+		if (computer.getIntroduced() == null) {
+		    ps.setTimestamp(2, null);
+		} else {
+		    ps.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
+		}
+		if (computer.getDiscontinued() == null) {
+		    ps.setTimestamp(3, null);
+		} else {
+		    ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
+		}
 
-    } catch (SQLException e) {
-      logger.debug("Failed on count method, SQLException");
-      throw new DaoException("Failed on count method, SQLException", e);
-    } finally {
-      // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps);
-      tm.close();
+		if (computer.getCompany() == null) {
+		    ps.setNull(4, java.sql.Types.BIGINT);
+		} else {
+		    ps.setInt(4, computer.getCompany().getId());
+		}
+
+		return ps;
+	    }
+	}, holder);
+
+	// Get id of the inserted computer
+	int id = (int) holder.getKey().longValue();
+
+	return id;
     }
 
-    return count;
-  }
+    @Override
+    public void updateComputer(Computer computer) {
 
-  @Override
-  public List<Computer> findByQuery(QueryPageParameter qp) {
+	logger.debug("Dao: update computer with computer: " + computer);
 
-    logger.debug("Dao: find computer by query" + qp);
+	// Check
+	ComputerValidator.validate(computer);
 
-    // Check
-    QueryPageParameterValidator.validate(qp);
+	// Update computer with custom prepared statement
+	jdbcTemplate.update(new PreparedStatementCreator() {
+	    @Override
+	    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
+		// Replace query fields
+		ps.setString(1, computer.getName());
+		if (computer.getIntroduced() == null) {
+		    ps.setTimestamp(2, null);
+		} else {
+		    ps.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
+		}
+		if (computer.getDiscontinued() == null) {
+		    ps.setTimestamp(3, null);
+		} else {
+		    ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
+		}
+		if (computer.getCompany() == null) {
+		    ps.setNull(4, java.sql.Types.BIGINT);
+		} else {
+		    ps.setInt(4, computer.getCompany().getId());
+		}
 
-    // Init local variables
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    ResultSet results = null;
-    PreparedStatement ps = null;
-    List<Computer> computerList = null;
+		ps.setInt(5, computer.getId());
 
-    try {
-      // Get opened connection
-      // con = tm.getConnection();
-      con = dataSource.getConnection();
-
-      // Prepare query
-      String query = String.format(FIND_BY_QUERY_PARAM_QUERY, qp.getOrderBy().toString(),
-          qp.getOrder().toString());
-      ps = con.prepareStatement(query);
-
-      // Set fields
-      ps.setString(1, qp.getQuerySearch());
-      ps.setString(2, qp.getQuerySearch());
-      ps.setInt(3, qp.getLimit());
-      ps.setInt(4, qp.getOffset());
-      results = ps.executeQuery();
-
-      // Deserialize resultSet to a list of computer
-      computerList = ComputerMapper.toComputerList(results);
-
-      // Close connection elements
-      ConnectionCloser.silentClose(results);
-      ConnectionCloser.silentClose(ps);
-
-      // Get matching rows
-      ps = con.prepareStatement(COUNT_MATCHING_ROWS_QUERY);
-      results = ps.executeQuery();
-
-      // Set matching rows count in query parameter
-      results.next();
-      qp.setMatchingRowCount(results.getInt(1));
-
-    } catch (SQLException e) {
-      logger.debug("Failed to find computers by query method" + qp);
-      throw new DaoException("Failed to find computers by query method" + qp, e);
-    } finally {
-      ConnectionCloser.silentCloses(results, ps);
-      // tm.close();
-      try {
-        con.close();
-      } catch (SQLException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
+		return ps;
+	    }
+	});
     }
 
-    return computerList;
-  }
+    @Override
+    public void deleteComputer(int id) {
 
-  @Override
-  public void deleteByCompanyId(int companyId) throws DaoException {
+	logger.debug("Dao: delete computer by id:" + id);
 
-    logger.debug("Dao: delete computers by company id: " + companyId);
+	// Check
+	ComputerValidator.checkValidId(id);
 
-    // Check
-    CompanyValidator.checkValidId(companyId);
-
-    PreparedStatement ps = null;
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = tm.getConnection();
-
-    // Prepare query
-    try {
-      ps = con.prepareStatement(DELETE_BYCOMPANY_QUERY);
-      ps.setInt(1, companyId);
-
-      ps.executeUpdate();
-
-    } catch (SQLException e) {
-      logger.debug("Failed to delete computers by companyId" + companyId);
-      throw new DaoException("Cannot reset following company id: " + companyId, e);
-    } finally {
-      ConnectionCloser.silentClose(ps);
-      tm.close();
+	// Delete computers with matching id
+	jdbcTemplate.update(DELETE_QUERY, id);
     }
-  }
+
+
+    @Override
+    public int count(QueryPageParameter qp) {
+
+	logger.debug("Dao: get count of total computers");
+
+	// Count matching computers
+	int count = jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class,qp.getQuerySearch(),qp.getQuerySearch());
+
+	return count;
+    }
+
+    @Override
+    public List<Computer> findByQuery(QueryPageParameter qp) {
+
+	logger.debug("Dao: find computer by query" + qp);
+
+	// Check
+	QueryPageParameterValidator.validate(qp);
+
+	// Init local variables
+	List<Computer> computerList = null;
+
+	// Prepare query
+	String query = String.format(FIND_BY_QUERY_PARAM_QUERY, qp.getOrderBy().toString(), qp.getOrder().toString());
+
+
+	// Retrieve matching computers
+	computerList = jdbcTemplate.query(FIND_BY_QUERY_PARAM_QUERY,
+		computerRowMapper,
+		qp.getQuerySearch(),
+		qp.getQuerySearch(),
+		qp.getLimit(),
+		qp.getOffset());
+
+	return computerList;
+    }
+
+    @Override
+    public void deleteByCompanyId(int companyId) {
+
+	logger.debug("Dao: delete computers by company id: " + companyId);
+
+	// Check
+	CompanyValidator.checkValidId(companyId);
+
+	// Delete computers
+	jdbcTemplate.update(DELETE_BYCOMPANY_QUERY, companyId);
+    }
 }

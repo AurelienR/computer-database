@@ -55,12 +55,17 @@ public class ComputerDtoService {
   }
 
   /**
-   * Count.
+   * Count of total searched computer.
    *
-   * @return the int
+   * @return the related count
    */
-  public int count() {
-    return computerService.count();
+  public int count(QueryPageParameter qp) {
+      
+    // Check
+    QueryPageParameterValidator.checkSearch(qp.getSearch());
+      
+    // Get count
+    return computerService.count(qp);
   }
 
   /**

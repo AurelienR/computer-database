@@ -60,39 +60,21 @@ public class ComputerService {
   }
 
   /**
-   * Find computer withing a range in DB.
-   * 
-   * @param startRow
-   *          starting row of the range
-   * @param size
-   *          size of the range
-   * @return related List of computers
-   */
-  public List<Computer> findRange(int startRow, int size) {
-
-    logger.debug(
-        "Service: find computers withing the range, startrow: " + startRow + ", size: " + size);
-
-    // Validate parameters
-    ComputerValidator.checkStartingRow(startRow);
-    ComputerValidator.checkSize(size);
-
-    // Retrieve computers
-    return computerDao.findRange(startRow, size);
-  }
-
-  /**
    * Count all computers in db.
    * 
    * @return total number of computers in DB
    * @throws DaoException
    *           issue with db
    */
-  public int count() {
+  public int count(QueryPageParameter qp) {
 
     logger.debug("Service: count all computers");
 
-    return computerDao.count();
+    // Check
+    QueryPageParameterValidator.checkSearch(qp.getSearch());
+    
+    // Get count
+    return computerDao.count(qp);
   }
 
   /**

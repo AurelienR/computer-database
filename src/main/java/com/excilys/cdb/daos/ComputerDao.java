@@ -27,11 +27,12 @@ public interface ComputerDao {
   /**
    * Count computer stored in DB.
    * 
+   * @param qp queryparameter related to the search to get the count from
    * @return number of computer
    * @throws DaoException
    *           issue on db
    */
-  int count();
+  int count(QueryPageParameter qp);
 
   /**
    * Find all computer stored in DB.
@@ -42,18 +43,6 @@ public interface ComputerDao {
    */
   List<Computer> findAll();
 
-  /**
-   * Retrieve a range of computers.
-   * 
-   * @param startRow
-   *          starting row of the range
-   * @param size
-   *          size of the range
-   * @return related list of computers
-   * @throws DaoException
-   *           issue on db
-   */
-  List<Computer> findRange(int startRow, int size);
 
   /**
    * Find a computer stored in DB by its id.

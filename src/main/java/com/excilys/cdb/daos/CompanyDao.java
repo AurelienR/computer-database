@@ -20,19 +20,6 @@ public interface CompanyDao {
   List<Company> findAll();
 
   /**
-   * Retrieve a range of company from db.
-   * 
-   * @param startRow
-   *          starting row of the range
-   * @param size
-   *          size of the range
-   * @return related List of company
-   * @throws DaoException
-   *           issue with db
-   */
-  public List<Company> findRange(int startRow, int size);
-
-  /**
    * Find a company stored in DB by its id.
    * 
    * @param id

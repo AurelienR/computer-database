@@ -1,285 +1,137 @@
 package com.excilys.cdb.daos.impl;
 
-import com.excilys.cdb.daos.CompanyDao;
-import com.excilys.cdb.daos.ConnectionCloser;
-import com.excilys.cdb.daos.DaoException;
-import com.excilys.cdb.daos.TransactionManager;
-import com.excilys.cdb.mappers.CompanyMapper;
-import com.excilys.cdb.models.Company;
-import com.excilys.cdb.validators.CompanyValidator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
+import com.excilys.cdb.daos.CompanyDao;
+import com.excilys.cdb.mappers.CompanyRowMapper;
+import com.excilys.cdb.models.Company;
+import com.excilys.cdb.validators.CompanyValidator;
 
 @Repository
 public class CompanyDaoImpl implements CompanyDao {
 
-  @Autowired
-  private DataSource dataSource;
-  
-  // Logger
-  static final Logger logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-  // DB column name
-  public static final String NAME_COLUMN = "name";
-  public static final String ID_COLUMN = "id";
+    // Mapper
+    private final static CompanyRowMapper companyRowMapper = new CompanyRowMapper();
 
-  // SQL Queries
-  private static final String FIND_ALL_QUERY = "SELECT * FROM company";
-  private static final String FIND_RANGE_QUERY =
-      "SELECT * FROM company ORDER BY id DESC LIMIT ? OFFSET ?";
-  private static final String FIND_BYID_QUERY = "SELECT * FROM company WHERE id=?";
-  private static final String FIND_BYNAME_QUERY = "SELECT * FROM company WHERE name=?";
-  private static final String INSERT_QUERY = "INSERT INTO company (name) VALUES (?)";
-  private static final String DELETE_QUERY = "DELETE FROM company WHERE id=?";
+    // Logger
+    static final Logger logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
 
-  // Constructors
-  private CompanyDaoImpl() {
-  }
+    // DB column name
+    public static final String NAME_COLUMN = "name";
+    public static final String ID_COLUMN = "id";
 
-  // Methods
-  @Override
-  public List<Company> findAll() throws DaoException {
+    // SQL Queries
+    private static final String FIND_ALL_QUERY = "SELECT * FROM company";
+    private static final String FIND_BYID_QUERY = "SELECT * FROM company WHERE id=?";
+    private static final String FIND_BYNAME_QUERY = "SELECT * FROM company WHERE name=?";
+    private static final String INSERT_QUERY = "INSERT INTO company (name) VALUES (?)";
+    private static final String DELETE_QUERY = "DELETE FROM company WHERE id=?";
 
-    logger.debug("Dao: Find all companies");
-
-    // Local variable declaration
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    ResultSet results = null;
-    PreparedStatement ps = null;
-    List<Company> companyList = null;
-
-    try {
-      
-      // Get connection
-      con = tm.getConnection();
-
-      // Query
-      ps = con.prepareStatement(FIND_ALL_QUERY);
-      results = ps.executeQuery();
-
-      // Map
-      companyList = CompanyMapper.getCompaniesFromResults(results);
-
-    } catch (SQLException e) {
-      logger.debug("Failed to find all companies, SQLException");
-      throw new DaoException("Failed on findAll method, SQLException", e);
-    } finally {
-      ConnectionCloser.silentCloses(results, ps);
-      tm.close();
+    // Constructors
+    private CompanyDaoImpl() {
     }
 
-    return companyList;
-  }
+    // Methods
+    @Override
+    public List<Company> findAll() {
+	logger.debug("Dao: Find all companies");
 
-  @Override
-  public List<Company> findById(int id) throws DaoException {
+	// Local variable declaration
+	List<Company> companyList = null;
 
-    logger.debug("Dao: Find company by its id:" + id);
+	// Retrieve and map all companies
+	companyList = jdbcTemplate.query(FIND_ALL_QUERY, companyRowMapper);
 
-    // Check
-    CompanyValidator.checkValidId(id);
-
-    // Init local variables
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    ResultSet results = null;
-    PreparedStatement ps = null;
-    List<Company> companyList = null;
-
-    try {
-      // Get opened connection
-      con = tm.getConnection();
-
-      // Prepare query
-      ps = con.prepareStatement(FIND_BYID_QUERY);
-      // Replace query fields
-      ps.setString(1, Integer.toString(id));
-      results = ps.executeQuery();
-
-      // Deserialize resultSet to a list of company
-      companyList = CompanyMapper.getCompaniesFromResults(results);
-
-    } catch (SQLException e) {
-      logger.debug("Failed to find a company by its id, SQLException, id" + id);
-      throw new DaoException("Failed on findById method, SQLException", e);
-    } finally {
-      // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps);
-      tm.close();
+	return companyList;
     }
 
-    return companyList;
-  }
+    @Override
+    public List<Company> findById(int id) {
 
-  @Override
-  public List<Company> findByName(String name) throws DaoException {
+	logger.debug("Dao: Find company by its id:" + id);
 
-    logger.debug("Dao: Find company by its name : " + name);
+	// Check
+	CompanyValidator.checkValidId(id);
 
-    // Check
-    CompanyValidator.checkNameNotNull(name);
-    CompanyValidator.checkNameNotEmpty(name);
-    
-    // Init local variables
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    ResultSet results = null;
-    PreparedStatement ps = null;
-    List<Company> companyList = null;
+	// Init local variables
+	List<Company> companyList;
 
-    try {
-      // Get opened connection
-      con = tm.getConnection();
+	// Retrieve and map all matching companies by id
+	companyList = jdbcTemplate.query(FIND_BYID_QUERY, companyRowMapper, id);
 
-      // Prepare query
-      ps = con.prepareStatement(FIND_BYNAME_QUERY);
-      // Replace query fields
-      ps.setString(1, name);
-      results = ps.executeQuery();
-
-      // Close any connection related object
-      companyList = CompanyMapper.getCompaniesFromResults(results);
-
-    } catch (SQLException e) {
-      logger.debug("Failed to find a company by its name, SQLException, name: " + name);
-      throw new DaoException("Failed on findByName method, SQLException", e);
-    } finally {
-      // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps);
-      tm.close();
+	return companyList;
     }
 
-    return companyList;
-  }
+    @Override
+    public List<Company> findByName(String name) {
 
-  @Override
-  public int insertCompany(Company company) throws DaoException, IllegalArgumentException {
+	logger.debug("Dao: Find company by its name : " + name);
 
-    logger.debug("Dao: insert company: " + company);
+	// Check
+	CompanyValidator.checkNameNotNull(name);
+	CompanyValidator.checkNameNotEmpty(name);
 
-    // Check
-    CompanyValidator.validate(company);
-    
-    // Get opened connection
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    PreparedStatement ps = null;
-    ResultSet results = null;
-    int id = -1;
+	// Init local variables
+	List<Company> companyList = null;
 
-    try {
-      // Get opened connection
-      con = tm.getConnection();
+	// Retrieve and map all matching companies
+	companyList = jdbcTemplate.query(FIND_BYNAME_QUERY, companyRowMapper, name);
 
-      // Prepare query
-      ps = con.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
-      // Replace query fields
-      ps.setString(1, company.getName());
-
-      ps.executeUpdate();
-      results = ps.getGeneratedKeys();
-      if (results.next()) {
-        id = results.getInt(1);
-      }
-
-    } catch (SQLException e) {
-      logger.debug("Failed to insert company in db, SLQException, company:" + company);
-      throw new DaoException("Failed on insertCompany method, SQLException", e);
-    } finally {
-      // Close any connection related object
-      ConnectionCloser.silentClose(ps);
-      tm.close();
+	return companyList;
     }
 
-    return id;
-  }
+    @Override
+    public int insertCompany(Company company) {
 
-  @Override
-  public List<Company> findRange(int startRow, int size) throws DaoException {
+	logger.debug("Dao: insert company: " + company);
 
-    logger.debug("Dao: Find range of companies, startingRow:" + startRow + ", size:" + size);
+	// Check
+	CompanyValidator.validate(company);
 
-    // Check
-    CompanyValidator.checkStartingRow(startRow);
-    CompanyValidator.checkSize(size);
-    
-    // Initialize local variables
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    ResultSet results = null;
-    PreparedStatement ps = null;
-    List<Company> companyList = null;
+	KeyHolder holder = new GeneratedKeyHolder();
 
-    try {
-      // Get connection
-      con = tm.getConnection();
+	// Insert computer with custom prepared statement
+	jdbcTemplate.update(new PreparedStatementCreator() {
 
-      // Query
-      ps = con.prepareStatement(FIND_RANGE_QUERY);
-      ps.setInt(1, size);
-      ps.setInt(2, startRow);
-      results = ps.executeQuery();
+	    @Override
+	    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
+		ps.setString(1, company.getName());
+		return ps;
+	    }
+	}, holder);
 
-      // Map
-      companyList = CompanyMapper.getCompaniesFromResults(results);
+	int id = (int) holder.getKey().longValue();
 
-    } catch (SQLException e) {
-      logger.debug("Failed to find a range of computers,SQLException,startingRow:" + startRow
-          + ", size:" + size);
-      throw new DaoException("Failed on findRange method, SQLException", e);
-    } finally {
-      ConnectionCloser.silentCloses(results, ps);
-      tm.close();
+	return id;
     }
 
-    return companyList;
-  }
+    @Override
+    public void deleteCompany(int id) {
 
-  @Override
-  public void deleteCompany(int id) throws DaoException {
+	logger.debug("Dao: delete company by id:" + id);
 
-    logger.debug("Dao: delete company by id:" + id);
+	// Check
+	CompanyValidator.checkValidId(id);
 
-    // Check
-    CompanyValidator.checkValidId(id);
-    
-    // Local variable declaration
-    PreparedStatement ps = null;
-    TransactionManager tm = TransactionManager.getInstance();
-
-    try {
-      // Retrieve connection
-      Connection con = tm.getConnection();
-      
-      // Prepare query
-      ps = con.prepareStatement(DELETE_QUERY);
-
-      // Replace query fields
-      ps.setInt(1, id);
-
-      // Execute query
-      ps.executeUpdate();
-
-    } catch (SQLException e) {
-      logger.debug("Failed to delete company by id : " + id);
-      throw new DaoException("Failed to delete company by id : " + id, e);
-    } finally {
-      ConnectionCloser.silentClose(ps);
-      tm.close();
+	// Delete company by its id
+	jdbcTemplate.update(DELETE_QUERY, id);
     }
-  }
 
 }

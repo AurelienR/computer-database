@@ -8,6 +8,7 @@ import com.excilys.cdb.mappers.QueryPageParameterMapper;
 import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.services.CompanyDtoService;
 import com.excilys.cdb.services.ComputerDtoService;
+import com.excilys.cdb.services.ComputerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -79,6 +80,7 @@ public class ComputerInfo extends HttpServlet {
 
       // Forward to jsp
       request.getRequestDispatcher(EDIT_COMPUTER_URI).forward(request, response);
+      
     } else {
       // URL GET "/computers?page=...&pageSize=..."
       // Get related query
@@ -86,6 +88,9 @@ public class ComputerInfo extends HttpServlet {
 
       // Retrieve DTOs
       List<ComputerDto> computerDtos = computerDtoService.findByQuery(qp);
+      
+      // Get total matching computers
+      qp.setMatchingRowCount(computerDtoService.count(qp));
       ComputerPageDto pageDto = ComputerPageMapper.toComputerPageDto(qp, computerDtos);
 
       // Prepare request
