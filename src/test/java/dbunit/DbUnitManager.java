@@ -18,8 +18,6 @@ public class DbUnitManager {
 
   private static final String PROPERTY_FILE = "properties/dao.properties";
   private static final String URL_PROPERTY = "url";
-  private static final String USERNAME_PROPERTY = "nomutilisateur";
-  private static final String PASSWORD_PROPERTY = "motdepasse";
   public static final String SCHEMA_SQL = "src/test/resources/config/1-SCHEMA.sql";
   public static final String PRIVILEGES_SQL = "src/test/resources/config/2-PRIVILEGES.sql";
   public static final String ENTRIES_SQL = "src/test/resources/config/3-ENTRIES.sql";

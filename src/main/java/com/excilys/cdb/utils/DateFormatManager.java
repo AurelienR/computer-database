@@ -7,7 +7,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-// TODO: Auto-generated Javadoc
 /**
  * Manage to parse, validate format string.
  *

@@ -1,10 +1,12 @@
 package com.excilys.cdb.services;
 
-import com.excilys.cdb.daos.impl.CompanyDaoImpl;
 import com.excilys.cdb.dtos.CompanyDto;
 import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.validators.CompanyDtoValidator;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -14,11 +16,13 @@ import java.util.List;
  *
  * @author Aurelien.R
  */
+@Service
 public class CompanyDtoService {
   
   /** The instance. */
-  // Singleton
-  private static CompanyDtoService instance;
+  // Services
+  @Autowired
+  private CompanyService companyService;
 
   /**
    * Instantiates a new company dto service.
@@ -29,18 +33,6 @@ public class CompanyDtoService {
 
   // Methods
   /**
-   * Access to singleton.
-   *
-   * @return return unique instance
-   */
-  public static CompanyDtoService getInstance() {
-    if (instance == null) {
-      instance = new CompanyDtoService();
-    }
-    return instance;
-  }
-
-  /**
    * Find all companies in DB.
    *
    * @return list of all CompanyDTOs objects
@@ -48,7 +40,7 @@ public class CompanyDtoService {
   public List<CompanyDto> findAll() {
 
     // Retrieve companyDTOs
-    List<Company> companies = CompanyService.getInstance().findAll();
+    List<Company> companies = companyService.findAll();
     return CompanyMapper.toCompanyDtoList(companies);
   }
 
@@ -64,7 +56,7 @@ public class CompanyDtoService {
     CompanyDtoValidator.checkValidId(id);
 
     // Retrieve Companies
-    List<Company> companies = CompanyDaoImpl.getInstance().findById(id);
+    List<Company> companies = companyService.findById(id);
 
     // Map
     return CompanyMapper.toCompanyDtoList(companies);
@@ -83,7 +75,7 @@ public class CompanyDtoService {
     CompanyDtoValidator.checkNameNotEmpty(name);
 
     // Retrieve Companies
-    List<Company> companies = CompanyDaoImpl.getInstance().findByName(name);
+    List<Company> companies = companyService.findByName(name);
 
     // Map
     return CompanyMapper.toCompanyDtoList(companies);
@@ -104,7 +96,7 @@ public class CompanyDtoService {
     Company company = CompanyMapper.toCompany(companyDto);
 
     // Create company
-    return CompanyService.getInstance().createCompany(company);
+    return companyService.createCompany(company);
   }
 
 }

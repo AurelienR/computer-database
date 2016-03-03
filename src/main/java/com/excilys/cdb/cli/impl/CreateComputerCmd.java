@@ -7,10 +7,11 @@ import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.ComputerService;
-import com.excilys.cdb.services.ServiceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -27,6 +28,13 @@ public class CreateComputerCmd implements Command {
   // Logger
   static final Logger logger = LoggerFactory.getLogger(CreateComputerCmd.class);
 
+  // Parser
+  @Autowired
+  private InputCommandParser inputCmdParser;
+  // Service
+  @Autowired
+  private ComputerService computerService;
+  
   private final String dateFormat = "dd/MM/yyyy";
   private Scanner sc;
 
@@ -43,38 +51,36 @@ public class CreateComputerCmd implements Command {
 
       // Get name input
       System.out.println("Name:");
-      String computerName = InputCommandParser.getRequiredNameInput(sc);
+      String computerName = inputCmdParser.getRequiredNameInput(sc);
       logger.debug("computer.name: " + computerName);
       computer.setName(computerName);
 
       // Get introduced date input
       System.out.println("Introduced date (" + dateFormat + "): ");
       sc.nextLine();
-      LocalDateTime introDate = InputCommandParser.getDateInput(sc, dateFormat);
+      LocalDateTime introDate = inputCmdParser.getDateInput(sc, dateFormat);
       logger.debug("computer.introduced: " + introDate.toString());
       computer.setIntroduced(introDate);
 
       // Get discontinued date input
       System.out.println("Discontinued date (" + dateFormat + "): ");
-      LocalDateTime discDate = InputCommandParser.getDateInput(sc, dateFormat);
+      LocalDateTime discDate = inputCmdParser.getDateInput(sc, dateFormat);
       logger.debug("computer.discontinued: " + discDate.toString());
       computer.setDiscontinued(discDate);
 
       // Get company input
       System.out.println("CompanyName ( must match existring one): ");
-      Company company = InputCommandParser.getRequiredValidCompanyByName(sc).get(0);
+      Company company = inputCmdParser.getRequiredValidCompanyByName(sc).get(0);
       logger.debug("computer.company: " + company.toString());
       computer.setCompany(company);
 
       // Create computer
       logger.debug("Try to create computer: " + computer);
-      ComputerService.getInstance().createComputer(computer);
+      computerService.createComputer(computer);
 
     } catch (ParseException e) {
       throw new CliException("Parsing exception", e);
     } catch (IllegalArgumentException e) {
-      throw new CliException("Illegal argument", e);
-    } catch (ServiceException e) {
       throw new CliException("Illegal argument", e);
     } catch (DaoException e) {
       throw new CliException("DAO exception", e);

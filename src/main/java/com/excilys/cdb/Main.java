@@ -7,7 +7,8 @@ public class Main {
   /**
    * The main method.
    *
-   * @param args the arguments passed to the program
+   * @param args
+   *          the arguments passed to the program
    */
   public static void main(String[] args) {
 

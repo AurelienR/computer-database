@@ -5,7 +5,9 @@ import com.excilys.cdb.cli.Command;
 import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.services.CompanyService;
-import com.excilys.cdb.services.ServiceException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * CLI to display all companies
@@ -13,7 +15,12 @@ import com.excilys.cdb.services.ServiceException;
  * @author Aurelien.R
  *
  */
+@Component
 public class DisplayAllCompanyCmd implements Command {
+
+  // Service
+  @Autowired
+  private CompanyService companyService;
 
   public DisplayAllCompanyCmd() {
   }
@@ -22,11 +29,9 @@ public class DisplayAllCompanyCmd implements Command {
   public void execute() {
     try {
       System.out.println("Display all companies...");
-      for (Company c : CompanyService.getInstance().findAll()) {
+      for (Company c : companyService.findAll()) {
         System.out.println(c);
       }
-    } catch (ServiceException e) {
-      throw new CliException("Illegal argument", e);
     } catch (DaoException e) {
       throw new CliException("DAO exception", e);
     }

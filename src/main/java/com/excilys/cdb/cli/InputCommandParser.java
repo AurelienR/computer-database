@@ -5,6 +5,9 @@ import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.CompanyService;
 import com.excilys.cdb.services.ComputerService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -13,14 +16,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * Static methods to manage secure input and cli for client.
  *
  * @author Aurelien.R
  */
+@Service
 public class InputCommandParser {
 
+  // Services
+  @Autowired
+  private CompanyService companyService;
+  @Autowired
+  private ComputerService computerService;
+  
   // Methods
   /**
    * Invite user to type a name, not required field.
@@ -28,7 +38,7 @@ public class InputCommandParser {
    * @param sc          system input scanner
    * @return valid name from client input
    */
-  public static String getNameInput(Scanner sc) {
+  public String getNameInput(Scanner sc) {
     String name = sc.next();
     return name;
   }
@@ -39,7 +49,7 @@ public class InputCommandParser {
    * @param sc          system input scanner
    * @return valid name from client input
    */
-  public static String getRequiredNameInput(Scanner sc) {
+  public String getRequiredNameInput(Scanner sc) {
     String name;
     while ((name = sc.next()) == null || name.isEmpty()) {
       System.out.println("Invalid input, field required ,retry Name:");
@@ -55,7 +65,7 @@ public class InputCommandParser {
    * @return related LocalDateTime instance
    * @throws ParseException           failed to parse date string
    */
-  public static LocalDateTime getDateInput(Scanner sc, String dateFormat) throws ParseException {
+  public LocalDateTime getDateInput(Scanner sc, String dateFormat) throws ParseException {
     String dateStr;
     while (!(dateStr = sc.nextLine()).isEmpty() && !isValidDate(dateStr, dateFormat)) {
       System.out.println("Invalid input, retry Date:");
@@ -75,17 +85,17 @@ public class InputCommandParser {
    * @param sc          system in scanner
    * @return related list of company
    */
-  public static List<Company> getValidCompanyByName(Scanner sc) {
+  public List<Company> getValidCompanyByName(Scanner sc) {
     String companyName;
     while (!(companyName = sc.nextLine()).isEmpty()
-        && CompanyService.getInstance().findByName(companyName).isEmpty()) {
+        && companyService.findByName(companyName).isEmpty()) {
       System.out.println("No Company Name matching, retry Company Name:");
     }
     if (companyName.isEmpty()) {
       return null;
     }
 
-    return CompanyService.getInstance().findByName(companyName);
+    return companyService.findByName(companyName);
   }
 
   /**
@@ -95,13 +105,13 @@ public class InputCommandParser {
    * @param sc          system in scanner
    * @return related list of company
    */
-  public static List<Company> getRequiredValidCompanyByName(Scanner sc) {
+  public List<Company> getRequiredValidCompanyByName(Scanner sc) {
     String companyName;
     while ((companyName = sc.nextLine()) == null || companyName.isEmpty()
-        || CompanyService.getInstance().findByName(companyName).isEmpty()) {
+        || companyService.findByName(companyName).isEmpty()) {
       System.out.println("No Company Name matching, required field ,retry Company Name:");
     }
-    return CompanyService.getInstance().findByName(companyName);
+    return companyService.findByName(companyName);
   }
 
   /**
@@ -111,13 +121,13 @@ public class InputCommandParser {
    * @param sc          system in scanner
    * @return related list of computers
    */
-  public static List<Computer> getValidComputerByName(Scanner sc) {
+  public List<Computer> getValidComputerByName(Scanner sc) {
     String computerName;
     while (!(computerName = sc.nextLine()).isEmpty()
-        && ComputerService.getInstance().findByName(computerName).isEmpty()) {
+        && computerService.findByName(computerName).isEmpty()) {
       System.out.println("No Computer Name matching, retry Computer Name:");
     }
-    return ComputerService.getInstance().findByName(computerName);
+    return computerService.findByName(computerName);
   }
 
   /**
@@ -127,13 +137,13 @@ public class InputCommandParser {
    * @param sc          system in scanner
    * @return related list of computers
    */
-  public static List<Computer> getRequiredValidComputerByName(Scanner sc) {
+  public List<Computer> getRequiredValidComputerByName(Scanner sc) {
     String computerName;
     while ((computerName = sc.nextLine()) == null || computerName.isEmpty()
-        || ComputerService.getInstance().findByName(computerName).isEmpty()) {
+        || computerService.findByName(computerName).isEmpty()) {
       System.out.println("No Computer Name matching, required field, retry Computer Name:");
     }
-    return ComputerService.getInstance().findByName(computerName);
+    return computerService.findByName(computerName);
   }
 
   /**
@@ -143,7 +153,7 @@ public class InputCommandParser {
    * @param dateFormatStr          string format expected
    * @return true if dateStr is matching dateFormatStr format, else return false
    */
-  private static boolean isValidDate(String dateStr, String dateFormatStr) {
+  private boolean isValidDate(String dateStr, String dateFormatStr) {
     SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatStr);
     dateFormat.setLenient(false);
     try {

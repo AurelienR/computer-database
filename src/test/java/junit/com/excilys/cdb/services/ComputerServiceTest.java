@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -23,6 +24,9 @@ import java.util.List;
 @PrepareForTest(ComputerDaoImpl.class)
 public class ComputerServiceTest {
 
+  @Autowired
+  ComputerService computerService;
+  
   /** The computer dao. */
   ComputerDaoImpl computerDao;
   
@@ -53,7 +57,7 @@ public class ComputerServiceTest {
   public void findByIdNegativeParamTest() {
     int testedId = -2;
     EasyMock.expect(computerDao.findById(testedId)).andReturn(null);
-    ComputerService.getInstance().findById(testedId);
+    computerService.findById(testedId);
   }
 
   /**
@@ -63,7 +67,8 @@ public class ComputerServiceTest {
   public void findByNameNullParamTest() {
     String testedName = null;
     EasyMock.expect(computerDao.findByName(testedName)).andReturn(null);
-    ComputerService.getInstance().findByName(testedName);
+    computerService.findByName(testedName);
+    
   }
 
   /**
@@ -73,7 +78,7 @@ public class ComputerServiceTest {
   public void findByNameEmptyStringParamTest() {
     String testedName = "";
     EasyMock.expect(computerDao.findByName(testedName)).andReturn(null);
-    ComputerService.getInstance().findByName(testedName);
+    computerService.findByName(testedName);
   }
 
   /**
@@ -84,7 +89,7 @@ public class ComputerServiceTest {
     int startingRow = -2;
     int size = -3;
     EasyMock.expect(computerDao.findRange(startingRow, size)).andReturn(null);
-    ComputerService.getInstance().findRange(startingRow, size);
+    computerService.findRange(startingRow, size);
   }
 
   /**
@@ -93,7 +98,7 @@ public class ComputerServiceTest {
   @Test(expected = ValidatorException.class)
   public void deleteByIdNegativeParamTest() {
     int testedId = -2;
-    ComputerService.getInstance().deleteComputer(testedId);
+    computerService.deleteComputer(testedId);
     EasyMock.expectLastCall().once();
   }
 }

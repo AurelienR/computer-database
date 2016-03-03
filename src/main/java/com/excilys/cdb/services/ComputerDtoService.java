@@ -1,12 +1,14 @@
 package com.excilys.cdb.services;
 
-import com.excilys.cdb.daos.impl.ComputerDaoImpl;
 import com.excilys.cdb.dtos.ComputerDto;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.validators.ComputerDtoValidator;
 import com.excilys.cdb.validators.QueryPageParameterValidator;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -18,12 +20,14 @@ import javax.validation.ValidationException;
  *
  * @author Aurelien.R
  */
+@Service
 public class ComputerDtoService {
 
-  /** The instance. */
-  // Singleton
-  private static ComputerDtoService instance;
-
+  // Services
+  @Autowired
+  private ComputerService computerService;
+  
+  
   /**
    * Instantiates a new computer dto service.
    */
@@ -32,18 +36,6 @@ public class ComputerDtoService {
   }
 
   // Methods
-  /**
-   * Singleton method access.
-   *
-   * @return unique instance of ComputerDTOService
-   */
-  public static ComputerDtoService getInstance() {
-    if (instance == null) {
-      instance = new ComputerDtoService();
-    }
-    return instance;
-  }
-
   /**
    * Find computers based on QueryPageParameter criterias.
    *
@@ -56,7 +48,7 @@ public class ComputerDtoService {
     QueryPageParameterValidator.validate(qp);
 
     // Retrieve computer
-    List<Computer> computers = ComputerService.getInstance().findByQuery(qp);
+    List<Computer> computers = computerService.findByQuery(qp);
 
     // Map
     return ComputerMapper.toComputerDtoList(computers);
@@ -68,7 +60,7 @@ public class ComputerDtoService {
    * @return the int
    */
   public int count() {
-    return ComputerService.getInstance().count();
+    return computerService.count();
   }
 
   /**
@@ -79,7 +71,7 @@ public class ComputerDtoService {
   public List<ComputerDto> findAll() {
 
     // Retrieve computers
-    List<Computer> computers = ComputerService.getInstance().findAll();
+    List<Computer> computers = computerService.findAll();
 
     // Map
     return ComputerMapper.toComputerDtoList(computers);
@@ -92,13 +84,13 @@ public class ComputerDtoService {
    * @return the list of related ComputerDto
    * @throws ValidationException issue with date
    */
-  public List<ComputerDto> findById(int id) throws ValidationException {
+  public List<ComputerDto> findById(int id) {
 
     // Validate id
     ComputerDtoValidator.checkValidId(id);
 
     // Retrieve Computers
-    List<Computer> computers = ComputerService.getInstance().findById(id);
+    List<Computer> computers = computerService.findById(id);
 
     // Map
     return ComputerMapper.toComputerDtoList(computers);
@@ -112,14 +104,14 @@ public class ComputerDtoService {
    * @return the list
    * @throws ValidationException the validation exception
    */
-  public List<ComputerDto> findByName(String name) throws ValidationException {
+  public List<ComputerDto> findByName(String name) {
 
     // Validate name
     ComputerDtoValidator.checkNameNotNull(name);
     ComputerDtoValidator.checkNameNotEmpty(name);
 
     // Retrieve computers
-    List<Computer> computers = ComputerService.getInstance().findByName(name);
+    List<Computer> computers = computerService.findByName(name);
 
     // Map
     return ComputerMapper.toComputerDtoList(computers);
@@ -132,7 +124,7 @@ public class ComputerDtoService {
    * @return the int
    * @throws ValidationException the validation exception
    */
-  public int createComputer(ComputerDto computerDto) throws ValidationException {
+  public int createComputer(ComputerDto computerDto) {
 
     // Validate computerDTO
     ComputerDtoValidator.validate(computerDto);
@@ -141,7 +133,7 @@ public class ComputerDtoService {
     Computer computer = ComputerMapper.toComputer(computerDto);
 
     // Create computer
-    return ComputerService.getInstance().createComputer(computer);
+    return computerService.createComputer(computer);
   }
 
   /**
@@ -150,7 +142,7 @@ public class ComputerDtoService {
    * @param computerDto the computer dto
    * @throws ValidationException the validation exception
    */
-  public void updateComputer(ComputerDto computerDto) throws ValidationException {
+  public void updateComputer(ComputerDto computerDto) {
 
     // validate computerDTO
     ComputerDtoValidator.validate(computerDto);
@@ -159,7 +151,7 @@ public class ComputerDtoService {
     Computer computer = ComputerMapper.toComputer(computerDto);
 
     // Update computer
-    ComputerDaoImpl.getInstance().updateComputer(computer);
+    computerService.updateComputer(computer);
   }
 
   /**
@@ -168,13 +160,13 @@ public class ComputerDtoService {
    * @param id the id
    * @throws ValidationException the validation exception
    */
-  public void deleteComputer(int id) throws ValidationException {
+  public void deleteComputer(int id) {
 
     // Validate id
     ComputerDtoValidator.checkValidId(id);
 
     // DeleteComputer
-    ComputerDaoImpl.getInstance().deleteComputer(id);
+    computerService.deleteComputer(id);
   }
 
 }

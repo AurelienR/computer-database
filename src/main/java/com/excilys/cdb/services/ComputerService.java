@@ -1,5 +1,6 @@
 package com.excilys.cdb.services;
 
+import com.excilys.cdb.daos.ComputerDao;
 import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.daos.impl.ComputerDaoImpl;
 import com.excilys.cdb.models.Computer;
@@ -10,6 +11,8 @@ import com.excilys.cdb.validators.ValidatorException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -19,31 +22,21 @@ import java.util.List;
  * @author Aurelien.R
  *
  */
+@Service
 public class ComputerService {
 
   // Logger
   static final Logger logger = LoggerFactory.getLogger(ComputerService.class);
 
-  // Singleton
-  private static ComputerService instance;
-
+  // Dao
+  @Autowired
+  ComputerDao computerDao;
+  
   // Constructors
   private ComputerService() {
   }
 
   // Methods
-  /**
-   * Singleton method access.
-   * 
-   * @return unique instance of ComputerService
-   */
-  public static ComputerService getInstance() {
-    if (instance == null) {
-      instance = new ComputerService();
-    }
-    return instance;
-  }
-
   /**
    * Find Computers by query parameters criterias.
    * 
@@ -55,7 +48,7 @@ public class ComputerService {
    * @throws ValidatorException
    *           issues with data
    */
-  public List<Computer> findByQuery(QueryPageParameter qp) throws DaoException, ValidatorException {
+  public List<Computer> findByQuery(QueryPageParameter qp) {
 
     logger.debug("Service: find commputer by queryPageParameter, qp:" + qp);
 
@@ -63,7 +56,7 @@ public class ComputerService {
     QueryPageParameterValidator.validate(qp);
 
     // Return computers
-    return ComputerDaoImpl.getInstance().findByQuery(qp);
+    return computerDao.findByQuery(qp);
   }
 
   /**
@@ -85,7 +78,7 @@ public class ComputerService {
     ComputerValidator.checkSize(size);
 
     // Retrieve computers
-    return ComputerDaoImpl.getInstance().findRange(startRow, size);
+    return computerDao.findRange(startRow, size);
   }
 
   /**
@@ -95,11 +88,11 @@ public class ComputerService {
    * @throws DaoException
    *           issue with db
    */
-  public int count() throws DaoException {
+  public int count() {
 
     logger.debug("Service: count all computers");
 
-    return ComputerDaoImpl.getInstance().count();
+    return computerDao.count();
   }
 
   /**
@@ -109,11 +102,11 @@ public class ComputerService {
    * @throws DaoException
    *           issues with db
    */
-  public List<Computer> findAll() throws DaoException {
+  public List<Computer> findAll() {
 
     logger.debug("Service: find all computers");
 
-    return ComputerDaoImpl.getInstance().findAll();
+    return computerDao.findAll();
   }
 
   /**
@@ -127,7 +120,7 @@ public class ComputerService {
    * @throws ValidatorException
    *           issues with data
    */
-  public List<Computer> findById(int id) throws DaoException, ValidatorException {
+  public List<Computer> findById(int id) {
 
     logger.debug("Service: find computer by id: " + id);
 
@@ -135,7 +128,7 @@ public class ComputerService {
     ComputerValidator.checkValidId(id);
 
     // Retrieve computers
-    return ComputerDaoImpl.getInstance().findById(id);
+    return computerDao.findById(id);
   }
 
   /**
@@ -149,7 +142,7 @@ public class ComputerService {
    * @throws ValidatorException
    *           issues with data
    */
-  public List<Computer> findByName(String name) throws DaoException, ValidatorException {
+  public List<Computer> findByName(String name) {
 
     logger.debug("Service: find computer by name:" + name);
 
@@ -158,7 +151,7 @@ public class ComputerService {
     ComputerValidator.checkNameNotEmpty(name);
 
     // Retrieve computers
-    return ComputerDaoImpl.getInstance().findByName(name);
+    return computerDao.findByName(name);
   }
 
   /**
@@ -172,7 +165,7 @@ public class ComputerService {
    * @throws ValidatorException
    *           issues with data
    */
-  public int createComputer(Computer computer) throws DaoException, ValidatorException {
+  public int createComputer(Computer computer) {
 
     logger.debug("Service: create computer:" + computer);
 
@@ -180,7 +173,7 @@ public class ComputerService {
     ComputerValidator.validate(computer);
 
     // Create computers
-    return ComputerDaoImpl.getInstance().insertComputer(computer);
+    return computerDao.insertComputer(computer);
   }
 
   /**
@@ -193,7 +186,7 @@ public class ComputerService {
    * @throws ValidatorException
    *           issues with data
    */
-  public void updateComputer(Computer computer) throws DaoException, ValidatorException {
+  public void updateComputer(Computer computer) {
 
     logger.debug("Service: update computer:" + computer);
 
@@ -201,7 +194,7 @@ public class ComputerService {
     ComputerValidator.validate(computer);
 
     // Update computer
-    ComputerDaoImpl.getInstance().updateComputer(computer);
+    computerDao.updateComputer(computer);
   }
 
   /**
@@ -214,7 +207,7 @@ public class ComputerService {
    * @throws ValidatorException
    *           issues with data
    */
-  public void deleteComputer(int id) throws DaoException, ValidatorException {
+  public void deleteComputer(int id) {
 
     logger.debug("Service: delete computer by id:" + id);
 
@@ -222,6 +215,6 @@ public class ComputerService {
     ComputerValidator.checkValidId(id);
 
     // Delete computer
-    ComputerDaoImpl.getInstance().deleteComputer(id);
+    computerDao.deleteComputer(id);
   }
 }

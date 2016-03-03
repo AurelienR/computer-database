@@ -5,7 +5,9 @@ import com.excilys.cdb.cli.Command;
 import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.ComputerService;
-import com.excilys.cdb.services.ServiceException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * CLI to display all computers
@@ -15,6 +17,10 @@ import com.excilys.cdb.services.ServiceException;
  */
 public class DisplayAllComputerCmd implements Command {
 
+  // Service 
+  @Autowired
+  private ComputerService computerService;
+  
   public DisplayAllComputerCmd() {
   }
 
@@ -23,11 +29,9 @@ public class DisplayAllComputerCmd implements Command {
 
     try {
       System.out.println("Display all computers...");
-      for (Computer c : ComputerService.getInstance().findAll()) {
+      for (Computer c : computerService.findAll()) {
         System.out.println(c);
       }
-    } catch (ServiceException e) {
-      throw new CliException("Illegal argument", e);
     } catch (DaoException e) {
       throw new CliException("DAO exception", e);
     }

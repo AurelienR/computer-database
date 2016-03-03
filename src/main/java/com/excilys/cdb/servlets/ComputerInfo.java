@@ -9,6 +9,9 @@ import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.services.CompanyDtoService;
 import com.excilys.cdb.services.ComputerDtoService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -28,6 +31,12 @@ public class ComputerInfo extends HttpServlet {
 
   public static final String LIST_COMPUTERS_URI = "/views/dashboard.jsp";
   private static final String EDIT_COMPUTER_URI = "/views/editComputer.jsp";
+  
+  // Services
+  @Autowired
+  ComputerDtoService computerDtoService;
+  @Autowired
+  CompanyDtoService companyDtoService;
 
   /**
    * Instantiates a new computer info.
@@ -37,6 +46,14 @@ public class ComputerInfo extends HttpServlet {
   public ComputerInfo() {
     super();
   }
+  
+  @Override
+  public void init() throws ServletException {
+    super.init();
+    // Inject to spring context
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+  }
+
 
   /**
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response).
@@ -53,8 +70,8 @@ public class ComputerInfo extends HttpServlet {
       int id = Integer.parseInt(idStr);
 
       // Retrieve company et computers
-      ComputerDto computerDto = ComputerDtoService.getInstance().findById(id).get(0);
-      List<CompanyDto> companyDtos = CompanyDtoService.getInstance().findAll();
+      ComputerDto computerDto = computerDtoService.findById(id).get(0);
+      List<CompanyDto> companyDtos = companyDtoService.findAll();
 
       // Prepare request
       request.setAttribute("companies", companyDtos);
@@ -68,7 +85,7 @@ public class ComputerInfo extends HttpServlet {
       QueryPageParameter qp = QueryPageParameterMapper.toQueryPageParameter(request);
 
       // Retrieve DTOs
-      List<ComputerDto> computerDtos = ComputerDtoService.getInstance().findByQuery(qp);
+      List<ComputerDto> computerDtos = computerDtoService.findByQuery(qp);
       ComputerPageDto pageDto = ComputerPageMapper.toComputerPageDto(qp, computerDtos);
 
       // Prepare request

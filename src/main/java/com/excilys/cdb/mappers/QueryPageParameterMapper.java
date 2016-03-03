@@ -64,8 +64,8 @@ public class QueryPageParameterMapper {
       qp.setOrder(Order.valueOf(orderStr));
     }
 
-    logger.debug("\nMapper: Map: [index:" + pageStr + " , size:" + pageSizeStr + ", search:"
-        + searchStr + ", orderby:" + orderByStr + " , order:" + orderStr + "]" + "\n TO:" + qp);
+    logger.debug("\n\t\tMapper: Map: [index:" + pageStr + " , size:" + pageSizeStr + ", search:"
+        + searchStr + ", orderby:" + orderByStr + " , order:" + orderStr + "]" + "\n\t\t TO:" + qp);
 
     return qp;
   }

@@ -2,10 +2,12 @@ package com.excilys.cdb.daos;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Component
 public class TransactionManager {
 
   // Logger

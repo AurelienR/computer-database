@@ -8,7 +8,6 @@
 	<packaging>war</packaging>
 	<version>0.4.0-SNAPSHOT</version>
 	<name>computerdatabase Maven Webapp</name>
-	<url>http://maven.apache.org</url>
 
 	<!-- **************** REPOSITORIES **************** -->
 	<repositories>
@@ -31,7 +30,7 @@
 		<spring-core>4.2.5.RELEASE</spring-core>
 		<spring-beans>4.2.5.RELEASE</spring-beans>
 		<spring-web>4.2.5.RELEASE</spring-web>
-		<spring-jdbc>2.0.6</spring-jdbc>
+		<spring-jdbc>4.2.5.RELEASE</spring-jdbc>
 		<!-- Tests -->
 		<junit.version>4.12</junit.version>
 		<h2db.version>1.4.191</h2db.version>

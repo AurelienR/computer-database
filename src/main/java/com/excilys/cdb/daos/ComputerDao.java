@@ -22,7 +22,7 @@ public interface ComputerDao {
    * @throws DaoException
    *           issue on db
    */
-  List<Computer> findByQuery(QueryPageParameter queryParameter) throws DaoException;
+  List<Computer> findByQuery(QueryPageParameter queryParameter);
 
   /**
    * Count computer stored in DB.
@@ -31,7 +31,7 @@ public interface ComputerDao {
    * @throws DaoException
    *           issue on db
    */
-  int count() throws DaoException;
+  int count();
 
   /**
    * Find all computer stored in DB.
@@ -40,7 +40,7 @@ public interface ComputerDao {
    * @throws DaoException
    *           issue on db
    */
-  List<Computer> findAll() throws DaoException;
+  List<Computer> findAll();
 
   /**
    * Retrieve a range of computers.
@@ -53,7 +53,7 @@ public interface ComputerDao {
    * @throws DaoException
    *           issue on db
    */
-  List<Computer> findRange(int startRow, int size) throws DaoException;
+  List<Computer> findRange(int startRow, int size);
 
   /**
    * Find a computer stored in DB by its id.
@@ -64,7 +64,7 @@ public interface ComputerDao {
    * @throws DaoException
    *           issue on db
    */
-  List<Computer> findById(int id) throws DaoException;
+  List<Computer> findById(int id);
 
   /**
    * Find all computer stored in DB by its name.
@@ -75,7 +75,7 @@ public interface ComputerDao {
    * @throws DaoException
    *           issue on db
    */
-  List<Computer> findByName(String name) throws DaoException;
+  List<Computer> findByName(String name);
 
   /**
    * Store passed computer in the DB.

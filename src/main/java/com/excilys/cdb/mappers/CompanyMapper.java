@@ -20,11 +20,9 @@ public class CompanyMapper {
   /**
    * Gets deserialized resultSet to list of companies.
    * 
-   * @param results
-   *          results set to process
+   * @param results results set to process
    * @return list of related companies
-   * @throws SQLException
-   *           issue on db
+   * @throws SQLException issue on db
    */
   public static List<Company> getCompaniesFromResults(ResultSet results) throws SQLException {
 
@@ -41,8 +39,7 @@ public class CompanyMapper {
   /**
    * Map a Company to a CompanyDTO.
    * 
-   * @param company
-   *          Company to map
+   * @param company Company to map
    * @return related CompanyDTO
    */
   public static CompanyDto toCompanyDto(Company company) {
@@ -51,15 +48,14 @@ public class CompanyMapper {
       return null;
     }
     CompanyDto companyDto = new CompanyDto(company.getId(), company.getName());
-    logger.debug("\nMapper: map: company: " + company + "\n TO: companyDto: " + companyDto);
+    logger.debug("\n\t\tMapper: map: company: " + company + "\n\t\t TO: companyDto: " + companyDto);
     return companyDto;
   }
 
   /**
    * Map a CompanyDTO to a Company.
    * 
-   * @param companyDto
-   *          Company to map
+   * @param companyDto Company to map
    * @return related CompanyDTO
    */
   public static Company toCompany(CompanyDto companyDto) {
@@ -69,7 +65,7 @@ public class CompanyMapper {
 
     Company company = new Company(companyDto.getId(), companyDto.getName());
 
-    logger.debug("\nMapper: map: companyDto: " + companyDto + "\n TO: company: " + company);
+    logger.debug("\n\t\tMapper: map: companyDto: " + companyDto + "\n\t\t TO: company: " + company);
 
     return company;
   }
@@ -77,8 +73,7 @@ public class CompanyMapper {
   /**
    * Map a list of Company to a list of CompanyDTO.
    * 
-   * @param companies
-   *          List of Company to map
+   * @param companies List of Company to map
    * @return related List of CompanyDTO
    */
   public static List<CompanyDto> toCompanyDtoList(List<Company> companies) {
@@ -88,8 +83,8 @@ public class CompanyMapper {
     List<CompanyDto> companyDtos = new ArrayList<CompanyDto>();
     companies.parallelStream().forEachOrdered(c -> companyDtos.add(toCompanyDto(c)));
 
-    logger
-        .debug("\nMapper: map: List<Company>:" + companies + "\n TO: companyDtos: " + companyDtos);
+    logger.debug(
+        "\n\t\tMapper: map: List<Company>:" + companies + "\n\t\t TO: companyDtos: " + companyDtos);
 
     return companyDtos;
   }

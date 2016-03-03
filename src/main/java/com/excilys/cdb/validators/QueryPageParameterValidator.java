@@ -4,7 +4,6 @@ import com.excilys.cdb.models.Order;
 import com.excilys.cdb.models.OrderBy;
 import com.excilys.cdb.models.QueryPageParameter;
 
-// TODO: Auto-generated Javadoc
 /**
  * Check QueryPageParameter state.
  *

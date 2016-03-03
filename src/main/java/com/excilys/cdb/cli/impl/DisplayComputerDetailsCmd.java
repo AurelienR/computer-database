@@ -5,7 +5,9 @@ import com.excilys.cdb.cli.Command;
 import com.excilys.cdb.cli.InputCommandParser;
 import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.services.ServiceException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Scanner;
@@ -18,6 +20,10 @@ import java.util.Scanner;
  */
 public class DisplayComputerDetailsCmd implements Command {
 
+  // Parser
+  @Autowired
+  private InputCommandParser inputCmdParser;
+  
   private Scanner sc;
 
   public DisplayComputerDetailsCmd(Scanner sc) {
@@ -31,14 +37,12 @@ public class DisplayComputerDetailsCmd implements Command {
       // Get computer name input
       System.out.println("Name (of existing computer):");
       sc.nextLine();
-      List<Computer> computers = InputCommandParser.getValidComputerByName(sc);
+      List<Computer> computers = inputCmdParser.getValidComputerByName(sc);
       for (Computer c : computers) {
         System.out.println(c);
       }
 
     } catch (IllegalArgumentException e) {
-      throw new CliException("Illegal argument", e);
-    } catch (ServiceException e) {
       throw new CliException("Illegal argument", e);
     } catch (DaoException e) {
       throw new CliException("DAO exception", e);

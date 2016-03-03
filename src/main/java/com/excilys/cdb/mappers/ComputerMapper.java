@@ -30,11 +30,9 @@ public class ComputerMapper {
   /**
    * Deserialize DB results to List of computer.
    * 
-   * @param results
-   *          Result to process
+   * @param results Result to process
    * @return List of computer
-   * @throws SQLException
-   *           issue with db
+   * @throws SQLException issue with db
    */
   public static List<Computer> toComputerList(ResultSet results) throws SQLException {
 
@@ -43,36 +41,7 @@ public class ComputerMapper {
     // Fetch DB results
     while (results.next()) {
 
-      // Set computer fields
-
-      // Id
-      int computerId = results.getInt("computer.id");
-      // Name
-      String computerName = results.getString("computer.name");
-
-      // Introduced
-      Timestamp introTimestamp = results.getTimestamp(ComputerDaoImpl.INTRO_COLUMN);
-      LocalDateTime introduced;
-      if (introTimestamp == null) {
-        introduced = null;
-      } else {
-        introduced = introTimestamp.toLocalDateTime();
-      }
-
-      // Discontinued
-      Timestamp descTimestamp = results.getTimestamp(ComputerDaoImpl.DISC_COLUMN);
-      LocalDateTime discontinued;
-      if (descTimestamp == null) {
-        discontinued = null;
-      } else {
-        discontinued = descTimestamp.toLocalDateTime();
-      }
-
-      // Initialize related company
-      Company company =
-          new Company(results.getInt("company.id"), results.getString("company.name"));
-      // Initialize computer
-      Computer computer = new Computer(computerId, computerName, company, discontinued, introduced);
+      Computer computer = ComputerRowMapper.mapSingleRow(results);
 
       computerList.add(computer);
     }
@@ -83,8 +52,7 @@ public class ComputerMapper {
   /**
    * Map a Computer to a ComputerDTO.
    * 
-   * @param computer
-   *          Computer to map
+   * @param computer Computer to map
    * @return related ComputerDTO
    */
   public static ComputerDto toComputerDto(Computer computer) {
@@ -100,7 +68,8 @@ public class ComputerMapper {
     CompanyDto companyDto = CompanyMapper.toCompanyDto(computer.getCompany());
 
     ComputerDto computerDto = new ComputerDto(id, computerName, introStr, discStr, companyDto);
-    logger.debug("\nMapper: map: computer" + computer + "\n TO: ComputerDto: " + computerDto);
+    logger
+        .debug("\n\t\tMapper: map: computer" + computer + "\n\t\t TO: ComputerDto: " + computerDto);
 
     return computerDto;
   }
@@ -108,8 +77,7 @@ public class ComputerMapper {
   /**
    * Map to computerDto from request object.
    *
-   * @param request
-   *          the request
+   * @param request the request
    * @return the computer dto
    */
   public static ComputerDto toComputerDto(HttpServletRequest request) {
@@ -133,7 +101,8 @@ public class ComputerMapper {
     ComputerDto computerDto =
         new ComputerDto(id, nameStr, introducedStr, discontinuedStr, companyDto);
 
-    logger.debug("\nMapper: map: request:" + request + "\n TO: ComputerDto: " + computerDto);
+    logger
+        .debug("\n\t\tMapper: map: request:" + request + "\n\t\t TO: ComputerDto: " + computerDto);
 
     return computerDto;
   }
@@ -141,8 +110,7 @@ public class ComputerMapper {
   /**
    * Map a list of Computer to ComputerDTOs.
    * 
-   * @param computers
-   *          list of Computer
+   * @param computers list of Computer
    * @return list of ComputerDTOs
    */
   public static List<ComputerDto> toComputerDtoList(List<Computer> computers) {
@@ -152,8 +120,8 @@ public class ComputerMapper {
     List<ComputerDto> computerDtos = new ArrayList<ComputerDto>();
     computers.parallelStream().forEachOrdered(c -> computerDtos.add(toComputerDto(c)));
 
-    logger.debug(
-        "\nMapper: Map: List<Computer>:" + computers + "\n TO: List<ComputerDto>:" + computerDtos);
+    logger.debug("\n\t\tMapper: Map: List<Computer>:" + computers + "\n\t\t TO: List<ComputerDto>:"
+        + computerDtos);
 
     return computerDtos;
   }
@@ -161,8 +129,7 @@ public class ComputerMapper {
   /**
    * Map a ComputerDTO to a Computer.
    *
-   * @param computerDto
-   *          ComputerDTO to map
+   * @param computerDto ComputerDTO to map
    * @return related Computer
    */
   public static Computer toComputer(ComputerDto computerDto) {
@@ -176,7 +143,8 @@ public class ComputerMapper {
     Company company = CompanyMapper.toCompany(computerDto.getCompany());
     Computer computer = new Computer(id, computerName, company, disc, intro);
 
-    logger.debug("\nMapper: map: computerDto: " + computerDto + "\n TO: computer: " + computer);
+    logger.debug(
+        "\n\t\tMapper: map: computerDto: " + computerDto + "\n\t\t TO: computer: " + computer);
 
     return computer;
   }

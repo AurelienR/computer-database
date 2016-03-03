@@ -9,7 +9,7 @@
 	<!-- Spring context loader -->
 	 <context-param>
 	  <param-name>contextConfigLocation</param-name>
-	  <param-value>classpath:/spring/spring-datasource .xml</param-value>
+	  <param-value>classpath:/spring/cdb-context.xml</param-value>
 	 </context-param>
 	
 	 <listener>

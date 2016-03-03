@@ -10,6 +10,8 @@ import com.excilys.cdb.validators.CompanyValidator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,8 +20,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+@Repository
 public class CompanyDaoImpl implements CompanyDao {
 
+  @Autowired
+  private DataSource dataSource;
+  
   // Logger
   static final Logger logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
 
@@ -36,26 +44,11 @@ public class CompanyDaoImpl implements CompanyDao {
   private static final String INSERT_QUERY = "INSERT INTO company (name) VALUES (?)";
   private static final String DELETE_QUERY = "DELETE FROM company WHERE id=?";
 
-  // Singleton
-  private static CompanyDao instance;
-
   // Constructors
   private CompanyDaoImpl() {
   }
 
   // Methods
-  /**
-   * CompanyDAO singleton.
-   * 
-   * @return unique instance access
-   */
-  public static CompanyDao getInstance() {
-    if (instance == null) {
-      instance = new CompanyDaoImpl();
-    }
-    return instance;
-  }
-
   @Override
   public List<Company> findAll() throws DaoException {
 
@@ -69,6 +62,7 @@ public class CompanyDaoImpl implements CompanyDao {
     List<Company> companyList = null;
 
     try {
+      
       // Get connection
       con = tm.getConnection();
 

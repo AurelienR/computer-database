@@ -1,9 +1,5 @@
 package com.excilys.cdb.daos;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -14,11 +10,10 @@ import javax.sql.DataSource;
  *
  * @author Aurelien.R
  */
-@Service
+
 public class ConnectionFactory {
 
-  @Autowired
-  @Qualifier("dataSource")
+
   private DataSource dataSource;
   private static ConnectionFactory instance;
 

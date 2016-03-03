@@ -17,7 +17,7 @@ public interface CompanyDao {
    * @throws DaoException
    *           issue with db
    */
-  List<Company> findAll() throws DaoException;
+  List<Company> findAll();
 
   /**
    * Retrieve a range of company from db.
@@ -30,7 +30,7 @@ public interface CompanyDao {
    * @throws DaoException
    *           issue with db
    */
-  public List<Company> findRange(int startRow, int size) throws DaoException;
+  public List<Company> findRange(int startRow, int size);
 
   /**
    * Find a company stored in DB by its id.
@@ -41,7 +41,7 @@ public interface CompanyDao {
    * @throws DaoException
    *           issue with db
    */
-  List<Company> findById(int id) throws DaoException;
+  List<Company> findById(int id);
 
   /**
    * Find all company stored in DB by its name.
@@ -50,7 +50,7 @@ public interface CompanyDao {
    * @return companies related to the name
    * @throws DaoException           issue with db
    */
-  List<Company> findByName(String name) throws DaoException;
+  List<Company> findByName(String name);
 
   /**
    * Store passed company in the DB.
@@ -59,7 +59,7 @@ public interface CompanyDao {
    * @return return id of the company inserted
    * @throws DaoException           issue with db
    */
-  int insertCompany(Company company) throws DaoException;
+  int insertCompany(Company company);
 
   /**
    * Delete a company by its id.
@@ -67,6 +67,6 @@ public interface CompanyDao {
    * @param id          id of the company to delete
    * @throws DaoException           issue with db
    */
-  void deleteCompany(int id) throws DaoException;
+  void deleteCompany(int id);
 
 }

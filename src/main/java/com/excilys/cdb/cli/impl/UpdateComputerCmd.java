@@ -7,10 +7,11 @@ import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.ComputerService;
-import com.excilys.cdb.services.ServiceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -28,6 +29,13 @@ public class UpdateComputerCmd implements Command {
   // Logger
   static final Logger logger = LoggerFactory.getLogger(UpdateComputerCmd.class);
 
+  // Parser
+  @Autowired
+  private InputCommandParser inputCmdParser;
+  // Service
+  @Autowired
+  private ComputerService computerService;
+  
   private final String dateFormat = "dd/MM/yyyy";
   private Scanner sc;
 
@@ -44,12 +52,12 @@ public class UpdateComputerCmd implements Command {
       // Get name input [required]
       System.out.println("Name of the computer to update:");
       sc.nextLine();
-      Computer newComputer = InputCommandParser.getRequiredValidComputerByName(sc).get(0);
+      Computer newComputer = inputCmdParser.getRequiredValidComputerByName(sc).get(0);
       logger.debug("Computer retrieved: " + newComputer);
 
       // Get new name input
       System.out.println("New Name:");
-      String newName = InputCommandParser.getNameInput(sc);
+      String newName = inputCmdParser.getNameInput(sc);
       if (!newName.isEmpty()) {
         logger.debug("computer.name: " + newName);
         newComputer.setName(newName);
@@ -58,14 +66,14 @@ public class UpdateComputerCmd implements Command {
       // Get
       System.out.println("Introduced (" + dateFormat + "): ");
       sc.nextLine();
-      LocalDateTime introDate = InputCommandParser.getDateInput(sc, dateFormat);
+      LocalDateTime introDate = inputCmdParser.getDateInput(sc, dateFormat);
       if (introDate != null) {
         logger.debug("computer.introduced: " + introDate);
         newComputer.setIntroduced(introDate);
       }
 
       System.out.println("Discontinued (" + dateFormat + "): ");
-      LocalDateTime discDate = InputCommandParser.getDateInput(sc, dateFormat);
+      LocalDateTime discDate = inputCmdParser.getDateInput(sc, dateFormat);
       if (introDate != null) {
         logger.debug("computer.discontinued: " + discDate);
         newComputer.setIntroduced(discDate);
@@ -73,7 +81,7 @@ public class UpdateComputerCmd implements Command {
 
       System.out.println("CompanyName ( must match existring one): ");
       List<Company> companies;
-      if ((companies = InputCommandParser.getValidCompanyByName(sc)) != null
+      if ((companies = inputCmdParser.getValidCompanyByName(sc)) != null
           && !companies.isEmpty()) {
         Company company = companies.get(0);
         logger.debug("computer.company: " + company);
@@ -81,13 +89,11 @@ public class UpdateComputerCmd implements Command {
       }
 
       logger.debug("Try to update computer:" + newComputer);
-      ComputerService.getInstance().updateComputer(newComputer);
+      computerService.updateComputer(newComputer);
 
     } catch (ParseException e) {
       throw new CliException("Parsing exception", e);
     } catch (IllegalArgumentException e) {
-      throw new CliException("Illegal argument", e);
-    } catch (ServiceException e) {
       throw new CliException("Illegal argument", e);
     } catch (DaoException e) {
       throw new CliException("DAO exception", e);

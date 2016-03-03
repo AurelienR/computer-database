@@ -24,6 +24,7 @@ public class ComputerPageDto {
    * @param computers
    *          the computers
    */
+  
   public ComputerPageDto(QueryPageParameter qp, int pageCount, List<ComputerDto> computers) {
     this.current = qp.getPageIndex();
     this.pageSize = qp.getPageSize();

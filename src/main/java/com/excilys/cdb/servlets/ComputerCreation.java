@@ -4,6 +4,9 @@ import com.excilys.cdb.dtos.ComputerDto;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.services.ComputerDtoService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -20,11 +23,23 @@ import javax.servlet.http.HttpServletResponse;
 public class ComputerCreation extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
+  // Services
+  @Autowired
+  private ComputerDtoService computerDtoService;
+
+  
   /**
    * @see HttpServlet#HttpServlet().
    */
   public ComputerCreation() {
     super();
+  }
+
+  @Override
+  public void init() throws ServletException {
+    super.init();
+    // Inject to spring context
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
   }
 
   /**
@@ -45,7 +60,7 @@ public class ComputerCreation extends HttpServlet {
     ComputerDto computerDto = ComputerMapper.toComputerDto(request);
 
     // Add computer to DB
-    ComputerDtoService.getInstance().createComputer(computerDto);
+    computerDtoService.createComputer(computerDto);
 
     // Forward toDashboard
     response.sendRedirect("./computers");

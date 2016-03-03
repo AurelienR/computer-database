@@ -1,15 +1,17 @@
 package com.excilys.cdb.services;
 
+import com.excilys.cdb.daos.CompanyDao;
+import com.excilys.cdb.daos.ComputerDao;
 import com.excilys.cdb.daos.DaoException;
-import com.excilys.cdb.daos.TransactionManager;
-import com.excilys.cdb.daos.impl.CompanyDaoImpl;
-import com.excilys.cdb.daos.impl.ComputerDaoImpl;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.validators.CompanyValidator;
 import com.excilys.cdb.validators.ValidatorException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,31 +21,23 @@ import java.util.List;
  * @author Aurelien.R
  *
  */
+@Service
 public class CompanyService {
 
   // Logger
   static final Logger logger = LoggerFactory.getLogger(CompanyService.class);
 
-  // Singleton
-  private static CompanyService instance;
+  // Dao
+  @Autowired
+  private CompanyDao companyDao;
+  @Autowired
+  private ComputerDao computerDao; 
 
   // Constructors
   private CompanyService() {
   }
 
   // Methods
-  /**
-   * Singleton access method.
-   * 
-   * @return unique instance of CompanyService
-   */
-  public static CompanyService getInstance() {
-    if (instance == null) {
-      instance = new CompanyService();
-    }
-    return instance;
-  }
-
   /**
    * All companies stored in DB.
    * 
@@ -53,11 +47,11 @@ public class CompanyService {
    * @throws ValidatorException
    *           validation of data
    */
-  public List<Company> findAll() throws DaoException, ValidatorException {
+  public List<Company> findAll() {
     
     logger.debug("Service: find all companies");
     
-    return CompanyDaoImpl.getInstance().findAll();
+    return companyDao.findAll();
   }
 
   /**
@@ -71,7 +65,7 @@ public class CompanyService {
    * @throws ValidatorException
    *           issue with validation of Data
    */
-  public List<Company> findById(int id) throws DaoException, ValidatorException {
+  public List<Company> findById(int id) {
     
     logger.debug("Service find company by id: " + id);
     
@@ -79,7 +73,7 @@ public class CompanyService {
     CompanyValidator.checkValidId(id);
 
     // Retrieve companies
-    return CompanyDaoImpl.getInstance().findById(id);
+    return companyDao.findById(id);
   }
 
   /**
@@ -93,7 +87,7 @@ public class CompanyService {
    * @throws ValidatorException
    *           issue with data
    */
-  public List<Company> findByName(String name) throws DaoException, ValidatorException {
+  public List<Company> findByName(String name) {
 
     logger.debug("Service: find company by name: " + name);
 
@@ -102,7 +96,7 @@ public class CompanyService {
     CompanyValidator.checkNameNotEmpty(name);
 
     // Retrieve companies
-    return CompanyDaoImpl.getInstance().findByName(name);
+    return companyDao.findByName(name);
   }
 
   /**
@@ -116,7 +110,7 @@ public class CompanyService {
    * @throws ValidatorException
    *           issues with data
    */
-  public int createCompany(Company company) throws DaoException, ValidatorException {
+  public int createCompany(Company company) {
 
     logger.debug("Service: create company:" + company);
 
@@ -124,7 +118,7 @@ public class CompanyService {
     CompanyValidator.validate(company);
 
     // Insert Company
-    return CompanyDaoImpl.getInstance().insertCompany(company);
+    return companyDao.insertCompany(company);
   }
 
   /**
@@ -137,7 +131,8 @@ public class CompanyService {
    * @throws ValidatorException
    *           issues with data
    */
-  public void deleteCompany(int id) throws DaoException, ValidatorException {
+  @Transactional
+  public void deleteCompany(int id) {
 
     logger.debug("Service: Delete Company");
 
@@ -146,23 +141,10 @@ public class CompanyService {
 
     // Transaction
     logger.debug("Initialize transaction");
-    TransactionManager tm = TransactionManager.getInstance();
+    logger.debug("Delete computers by company id");
+    computerDao.deleteByCompanyId(id);
+    logger.debug("Delete company");
+    companyDao.deleteCompany(id);
 
-    try {
-
-      tm.startTransaction();
-
-      logger.debug("Delete computers by company id");
-      ComputerDaoImpl.getInstance().deleteByCompanyId(id);
-      logger.debug("Delete company");
-      CompanyDaoImpl.getInstance().deleteCompany(id);
-
-      tm.commit();
-
-    } catch (Exception e) {
-      tm.rollback();
-    } finally {
-      tm.endTransaction();
-    }
   }
 }

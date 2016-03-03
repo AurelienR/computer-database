@@ -3,6 +3,9 @@ package com.excilys.cdb.servlets;
 import com.excilys.cdb.dtos.CompanyDto;
 import com.excilys.cdb.services.CompanyDtoService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -12,13 +15,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-// TODO: Auto-generated Javadoc
 /**
  * Servlet implementation class NewComputerServlet
  * Servlet in charge of prepare new computer view.
  */
 @WebServlet("/newComputer")
 public class NewComputerView extends HttpServlet {
+  
+  // Services
+  @Autowired
+  CompanyDtoService companyDtoService;
   
   /** The Constant serialVersionUID. */
   private static final long serialVersionUID = 1L;
@@ -34,6 +40,13 @@ public class NewComputerView extends HttpServlet {
   public NewComputerView() {
     super();
   }
+  
+  @Override
+  public void init() throws ServletException {
+    super.init();
+    // Inject to spring context
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+  }
 
   /**
    * Do get.
@@ -48,7 +61,7 @@ public class NewComputerView extends HttpServlet {
       throws ServletException, IOException {
 
     // Retrieve companyDTOs list
-    List<CompanyDto> companyDtos = CompanyDtoService.getInstance().findAll();
+    List<CompanyDto> companyDtos = companyDtoService.findAll();
 
     // Prepare request
     request.setAttribute("companies", companyDtos);

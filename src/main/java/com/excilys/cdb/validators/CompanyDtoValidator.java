@@ -2,7 +2,6 @@ package com.excilys.cdb.validators;
 
 import com.excilys.cdb.dtos.CompanyDto;
 
-// TODO: Auto-generated Javadoc
 /**
  * Validate CompanyDTO state.
  *

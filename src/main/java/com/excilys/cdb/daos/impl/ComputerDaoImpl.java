@@ -5,6 +5,7 @@ import com.excilys.cdb.daos.ConnectionCloser;
 import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.daos.TransactionManager;
 import com.excilys.cdb.mappers.ComputerMapper;
+import com.excilys.cdb.mappers.ComputerRowMapper;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.validators.CompanyValidator;
@@ -14,7 +15,7 @@ import com.excilys.cdb.validators.QueryPageParameterValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -36,14 +37,16 @@ import javax.sql.DataSource;
 @Repository
 public class ComputerDaoImpl implements ComputerDao {
 
-  @Autowired
-  @Qualifier("dataSource")
   private DataSource dataSource;
-  
-  public void setDataSource(DataSource dataSource) {
+  private JdbcTemplate jdbcTemplate;
+  private ComputerRowMapper computerRowMapper = new ComputerRowMapper();
+
+  @Autowired
+  private void setDataSource(DataSource dataSource) {
     this.dataSource = dataSource;
+    this.jdbcTemplate = new JdbcTemplate(dataSource);
   }
-  
+
   // Logger
   static final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
@@ -74,57 +77,19 @@ public class ComputerDaoImpl implements ComputerDao {
   private static final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
   private static final String DELETE_BYCOMPANY_QUERY = "DELETE FROM computer WHERE company_id=?";
 
-  // Singleton
-  private static ComputerDao instance;
-
   // Constructors
   private ComputerDaoImpl() {
   }
 
   // Methods
-  /**
-   * ComputerDAO singleton.
-   * 
-   * @return unique instance access
-   */
-  public static ComputerDao getInstance() {
-    if (instance == null) {
-      instance = new ComputerDaoImpl();
-    }
-    return instance;
-  }
-
   @Override
   public List<Computer> findAll() throws DaoException {
 
     logger.debug("Dao: Find all computers");
-    
-    // Init local variables
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    ResultSet results = null;
-    PreparedStatement ps = null;
     List<Computer> computerList = null;
 
-    try {
-      // Get opened connection
-      con = tm.getConnection();
-      
-      // Prepare query
-      ps = con.prepareStatement(FIND_ALL_QUERY);
-      results = ps.executeQuery();
-
-      // Deserialize resultSet to a list of computer
-      computerList = ComputerMapper.toComputerList(results);
-      
-    } catch (SQLException e) {
-      logger.debug("Failed to find all computers, SQLException");
-      throw new DaoException("Failed on findAll method, SQLException", e);
-    } finally {
-      // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps);
-      tm.close();
-    }
+    // Retrieve and map datas
+    computerList = jdbcTemplate.query(FIND_ALL_QUERY, computerRowMapper);
 
     return computerList;
   }
@@ -136,35 +101,11 @@ public class ComputerDaoImpl implements ComputerDao {
 
     // Check
     ComputerValidator.checkValidId(id);
-    
-    // Init local variables
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    ResultSet results = null;
-    PreparedStatement ps = null;
+
     List<Computer> computerList = null;
 
-    try {
-      // Get opened connection
-      con = tm.getConnection();
-
-      // Prepare query
-      ps = con.prepareStatement(FIND_BYID_QUERY);
-      // Replace query fields
-      ps.setInt(1, id);
-      results = ps.executeQuery();
-
-      // Deserialize resultSet to a list of computer
-      computerList = ComputerMapper.toComputerList(results);
-
-    } catch (SQLException e) {
-      logger.debug("Failed to find computers by its id: " + id);
-      throw new DaoException("Failed on findById method, SQLException", e);
-    } finally {
-      // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps);
-      tm.close();
-    }
+    // Retrieve and map datas
+    computerList = jdbcTemplate.query(FIND_BYID_QUERY, computerRowMapper, id);
 
     return computerList;
   }
@@ -173,39 +114,15 @@ public class ComputerDaoImpl implements ComputerDao {
   public List<Computer> findByName(String name) throws DaoException, IllegalArgumentException {
 
     logger.debug("Dao: find computer by name:" + name);
-    
+
     // Check
     ComputerValidator.checkNameNotNull(name);
     ComputerValidator.checkNameNotEmpty(name);
 
-    // Init local variables
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    ResultSet results = null;
-    PreparedStatement ps = null;
     List<Computer> computerList = null;
 
-    try {
-      // Get opened connection
-      con = tm.getConnection();
-
-      // Prepare query
-      ps = con.prepareStatement(FIND_BYNAME_QUERY);
-      // Replace query fields
-      ps.setString(1, name);
-      results = ps.executeQuery();
-
-      // Deserialize resultSet to a list of computer
-      computerList = ComputerMapper.toComputerList(results);
-
-    } catch (SQLException e) {
-      logger.debug("Failed to find computer by name, SQLException, name:" + name);
-      throw new DaoException("Failed on findByName method, SQLException", e);
-    } finally {
-      // Close any connection related object
-      ConnectionCloser.silentCloses(results, ps);
-      tm.close();
-    }
+    // Retrieve and map datas
+    computerList = jdbcTemplate.query(FIND_BYNAME_QUERY, computerRowMapper, name);
 
     return computerList;
   }
@@ -214,16 +131,9 @@ public class ComputerDaoImpl implements ComputerDao {
   public int insertComputer(Computer computer) throws DaoException, IllegalArgumentException {
 
     logger.debug("Dao: insert a computer: " + computer);
-    
+
     // Check
     ComputerValidator.validate(computer);
-
-    // Init local variables
-    TransactionManager tm = TransactionManager.getInstance();
-    Connection con = null;
-    PreparedStatement ps = null;
-    ResultSet results = null;
-    int id = -1;
 
     try {
       // Get opened connection
@@ -273,7 +183,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public void updateComputer(Computer computer) throws DaoException, IllegalArgumentException {
 
     logger.debug("Dao: update computer with computer: " + computer);
-    
+
     // Check
     ComputerValidator.validate(computer);
 
@@ -325,7 +235,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public void deleteComputer(int id) {
 
     logger.debug("Dao: delete computer by id:" + id);
-    
+
     // Check
     ComputerValidator.checkValidId(id);
 
@@ -360,7 +270,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public List<Computer> findRange(int offset, int limit) throws DaoException {
 
     logger.debug("Dao: find computer by range, offset:" + offset + " limit:" + limit);
-    
+
     // Check
     ComputerValidator.checkStartingRow(offset);
     ComputerValidator.checkSize(limit);
@@ -438,7 +348,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public List<Computer> findByQuery(QueryPageParameter qp) {
 
     logger.debug("Dao: find computer by query" + qp);
-    
+
     // Check
     QueryPageParameterValidator.validate(qp);
 
@@ -451,9 +361,9 @@ public class ComputerDaoImpl implements ComputerDao {
 
     try {
       // Get opened connection
-      //con = tm.getConnection();
+      // con = tm.getConnection();
       con = dataSource.getConnection();
-      
+
       // Prepare query
       String query = String.format(FIND_BY_QUERY_PARAM_QUERY, qp.getOrderBy().toString(),
           qp.getOrder().toString());
@@ -486,7 +396,7 @@ public class ComputerDaoImpl implements ComputerDao {
       throw new DaoException("Failed to find computers by query method" + qp, e);
     } finally {
       ConnectionCloser.silentCloses(results, ps);
-      //tm.close();
+      // tm.close();
       try {
         con.close();
       } catch (SQLException e) {
@@ -502,7 +412,7 @@ public class ComputerDaoImpl implements ComputerDao {
   public void deleteByCompanyId(int companyId) throws DaoException {
 
     logger.debug("Dao: delete computers by company id: " + companyId);
-    
+
     // Check
     CompanyValidator.checkValidId(companyId);
 

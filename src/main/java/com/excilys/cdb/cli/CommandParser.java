@@ -11,6 +11,9 @@ import com.excilys.cdb.cli.impl.UpdateComputerCmd;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
@@ -26,7 +29,7 @@ public class CommandParser {
   static final Logger logger = LoggerFactory.getLogger(CommandParser.class);
 
   // Constants
-  private static final String LIST_COMPANIES_CMD = "listcompanies";  
+  private static final String LIST_COMPANIES_CMD = "listcompanies";
   private static final String DELETE_COMPANY_CMD = "deletecompany";
   private static final String LIST_COMPUTERS_CMD = "listcomputers";
   private static final String GET_COMPUTER_DETAILS_CMD = "computerdetails";
@@ -37,7 +40,7 @@ public class CommandParser {
 
   // Attributes
   private CommandInvoker cmdInvoker;
-  
+  private ClassPathXmlApplicationContext ctx;
   private Scanner sc;
 
   /**
@@ -46,6 +49,7 @@ public class CommandParser {
   // Constructors
   public CommandParser() {
     this.cmdInvoker = new CommandInvoker();
+    this.ctx = new ClassPathXmlApplicationContext("/spring/cdb-context.xml");
     this.sc = new Scanner(System.in);
   }
 
@@ -57,35 +61,38 @@ public class CommandParser {
     System.out.println("\nEnter a command:\n");
     logger.debug("Parsing command...");
     String cmdStr = sc.next();
+    Command cmd;
+
     switch (cmdStr) {
       case LIST_COMPANIES_CMD:
-        cmdInvoker.setCommand(new DisplayAllCompanyCmd());
+        cmd = ctx.getBean(DisplayAllCompanyCmd.class);
         break;
       case DELETE_COMPANY_CMD:
-        cmdInvoker.setCommand(new DeleteCompanyCmd(sc));
+        cmd = ctx.getBean(DeleteCompanyCmd.class, sc);
         break;
       case LIST_COMPUTERS_CMD:
-        cmdInvoker.setCommand(new DisplayAllComputerCmd());
+        cmd = ctx.getBean(DisplayAllComputerCmd.class);
         break;
       case GET_COMPUTER_DETAILS_CMD:
-        cmdInvoker.setCommand(new DisplayComputerDetailsCmd(sc));
+        cmd = ctx.getBean(DisplayComputerDetailsCmd.class, sc);
         break;
       case CREATE_COMPUTER_CMD:
-        cmdInvoker.setCommand(new CreateComputerCmd(sc));
+        cmd = ctx.getBean(CreateComputerCmd.class, sc);
         break;
       case UPDATE_COMPUTER_CMD:
-        cmdInvoker.setCommand(new UpdateComputerCmd(sc));
+        cmd = ctx.getBean(UpdateComputerCmd.class, sc);
         break;
       case DELETE_COMPUTER_CMD:
-        cmdInvoker.setCommand(new DeleteComputerCmd(sc));
+        cmd = ctx.getBean(DeleteComputerCmd.class, sc);
         break;
       case EXIT_CMD:
-        cmdInvoker.setCommand(new ExitCmd());
+        cmd = ctx.getBean(ExitCmd.class);
         break;
       default:
         logger.warn("Command not found : " + cmdStr);
         return;
     }
+    cmdInvoker.setCommand(cmd);
     cmdInvoker.invoke();
   }
 

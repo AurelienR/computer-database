@@ -7,5 +7,5 @@ package com.excilys.cdb.cli;
  *
  */
 public interface Command {
-  public void execute();
+  void execute();
 }
