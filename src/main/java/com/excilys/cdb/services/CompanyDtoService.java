@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * Service layer to CompanyDAO.
  *
@@ -23,13 +23,6 @@ public class CompanyDtoService {
   // Services
   @Autowired
   private CompanyService companyService;
-
-  /**
-   * Instantiates a new company dto service.
-   */
-  // Constructors
-  private CompanyDtoService() {
-  }
 
   // Methods
   /**

@@ -2,7 +2,6 @@ package com.excilys.cdb.services;
 
 import com.excilys.cdb.daos.ComputerDao;
 import com.excilys.cdb.daos.DaoException;
-import com.excilys.cdb.daos.impl.ComputerDaoImpl;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.validators.ComputerValidator;
@@ -31,11 +30,6 @@ public class ComputerService {
   // Dao
   @Autowired
   ComputerDao computerDao;
-  
-  // Constructors
-  private ComputerService() {
-  }
-
   // Methods
   /**
    * Find Computers by query parameters criterias.

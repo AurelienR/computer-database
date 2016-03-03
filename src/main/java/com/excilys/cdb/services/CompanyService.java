@@ -31,44 +31,35 @@ public class CompanyService {
   @Autowired
   private CompanyDao companyDao;
   @Autowired
-  private ComputerDao computerDao; 
-
-  // Constructors
-  private CompanyService() {
-  }
+  private ComputerDao computerDao;
 
   // Methods
   /**
    * All companies stored in DB.
    * 
    * @return List of all Companies
-   * @throws DaoException
-   *           issues with DB
-   * @throws ValidatorException
-   *           validation of data
+   * @throws DaoException issues with DB
+   * @throws ValidatorException validation of data
    */
   public List<Company> findAll() {
-    
+
     logger.debug("Service: find all companies");
-    
+
     return companyDao.findAll();
   }
 
   /**
    * Find a Company by its id.
    * 
-   * @param id
-   *          id of the Company to find
+   * @param id id of the Company to find
    * @return List of matching Companies
-   * @throws DaoException
-   *           issues with DB
-   * @throws ValidatorException
-   *           issue with validation of Data
+   * @throws DaoException issues with DB
+   * @throws ValidatorException issue with validation of Data
    */
   public List<Company> findById(int id) {
-    
+
     logger.debug("Service find company by id: " + id);
-    
+
     // Validate id
     CompanyValidator.checkValidId(id);
 
@@ -79,13 +70,10 @@ public class CompanyService {
   /**
    * Find a companies by name.
    * 
-   * @param name
-   *          name of companies to find
+   * @param name name of companies to find
    * @return return a list of matching Company
-   * @throws DaoException
-   *           issue with DB
-   * @throws ValidatorException
-   *           issue with data
+   * @throws DaoException issue with DB
+   * @throws ValidatorException issue with data
    */
   public List<Company> findByName(String name) {
 
@@ -102,13 +90,10 @@ public class CompanyService {
   /**
    * Add the passed company to de DB.
    * 
-   * @param company
-   *          company to add to DB
+   * @param company company to add to DB
    * @return id of the company created
-   * @throws DaoException
-   *           issues with DB
-   * @throws ValidatorException
-   *           issues with data
+   * @throws DaoException issues with DB
+   * @throws ValidatorException issues with data
    */
   public int createCompany(Company company) {
 
@@ -124,12 +109,9 @@ public class CompanyService {
   /**
    * Delete the Company by its id.
    * 
-   * @param id
-   *          id of the Company to find
-   * @throws DaoException
-   *           issues with DB
-   * @throws ValidatorException
-   *           issues with data
+   * @param id id of the Company to find
+   * @throws DaoException issues with DB
+   * @throws ValidatorException issues with data
    */
   @Transactional
   public void deleteCompany(int id) {

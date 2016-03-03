@@ -1,11 +1,12 @@
 package com.excilys.cdb.daos.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.List;
+import com.excilys.cdb.daos.ComputerDao;
+import com.excilys.cdb.mappers.ComputerRowMapper;
+import com.excilys.cdb.models.Computer;
+import com.excilys.cdb.models.QueryPageParameter;
+import com.excilys.cdb.validators.CompanyValidator;
+import com.excilys.cdb.validators.ComputerValidator;
+import com.excilys.cdb.validators.QueryPageParameterValidator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,13 +17,12 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.cdb.daos.ComputerDao;
-import com.excilys.cdb.mappers.ComputerRowMapper;
-import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.models.QueryPageParameter;
-import com.excilys.cdb.validators.CompanyValidator;
-import com.excilys.cdb.validators.ComputerValidator;
-import com.excilys.cdb.validators.QueryPageParameterValidator;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Manage computer data operation with the Database
@@ -33,228 +33,228 @@ import com.excilys.cdb.validators.QueryPageParameterValidator;
 @Repository
 public class ComputerDaoImpl implements ComputerDao {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-    private ComputerRowMapper computerRowMapper = new ComputerRowMapper();
-    
-    // Logger
-    static final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
+  private ComputerRowMapper computerRowMapper = new ComputerRowMapper();
 
-    // DB column names
-    public static final String INTRO_COLUMN = "introduced";
-    public static final String DISC_COLUMN = "discontinued";
+  // Logger
+  static final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
-    // SQL Queries
-    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM computer"
-	    + "LEFT JOIN company ON computer.company_id = company.id "
-	    + " WHERE (computer.name LIKE ? OR company.name LIKE ? )";
-    private static final String FIND_ALL_QUERY = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id";
-    private static final String FIND_BY_QUERY_PARAM_QUERY = "SELECT * FROM computer "
-	    + "LEFT JOIN company ON computer.company_id = company.id "
-	    + " WHERE (computer.name LIKE ? OR company.name LIKE ? ) ORDER BY %s %s LIMIT ? OFFSET ?";
-    private static final String FIND_BYID_QUERY = "SELECT * FROM computer "
-	    + "LEFT JOIN company ON computer.company_id = company.id WHERE computer.id=?";
-    private static final String FIND_BYNAME_QUERY = "SELECT * FROM computer "
-	    + "LEFT JOIN company ON computer.company_id = company.id WHERE computer.name=?";
-    private static final String INSERT_QUERY = "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
-    private static final String UPDATE_QUERY = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
-    private static final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
-    private static final String DELETE_BYCOMPANY_QUERY = "DELETE FROM computer WHERE company_id=?";
+  // DB column names
+  public static final String INTRO_COLUMN = "introduced";
+  public static final String DISC_COLUMN = "discontinued";
 
-    // Constructors
-    private ComputerDaoImpl() {
-    }
+  // SQL Queries
+  private static final String COUNT_QUERY =
+      "SELECT COUNT(*) FROM computer" + " LEFT JOIN company ON computer.company_id = company.id "
+          + " WHERE (computer.name LIKE ? OR company.name LIKE ? )";
+  private static final String FIND_ALL_QUERY =
+      "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id";
+  private static final String FIND_BY_QUERY_PARAM_QUERY =
+      "SELECT * FROM computer " + "LEFT JOIN company ON computer.company_id = company.id "
+          + " WHERE (computer.name LIKE ? OR company.name LIKE ? ) ORDER BY %s %s LIMIT ? OFFSET ?";
+  private static final String FIND_BYID_QUERY = "SELECT * FROM computer "
+      + "LEFT JOIN company ON computer.company_id = company.id WHERE computer.id=?";
+  private static final String FIND_BYNAME_QUERY = "SELECT * FROM computer "
+      + "LEFT JOIN company ON computer.company_id = company.id WHERE computer.name=?";
+  private static final String INSERT_QUERY =
+      "INSERT INTO computer(name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
+  private static final String UPDATE_QUERY =
+      "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
+  private static final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
+  private static final String DELETE_BYCOMPANY_QUERY = "DELETE FROM computer WHERE company_id=?";
 
-    // Methods
-    @Override
-    public List<Computer> findAll() {
+  // Constructors
+  private ComputerDaoImpl() {
+  }
 
-	logger.debug("Dao: Find all computers");
-	List<Computer> computerList = null;
+  // Methods
+  @Override
+  public List<Computer> findAll() {
 
-	// Retrieve and map all computers
-	computerList = jdbcTemplate.query(FIND_ALL_QUERY, computerRowMapper);
+    logger.debug("Dao: Find all computers");
+    List<Computer> computerList = null;
 
-	return computerList;
-    }
+    // Retrieve and map all computers
+    computerList = jdbcTemplate.query(FIND_ALL_QUERY, computerRowMapper);
 
-    @Override
-    public List<Computer> findById(int id) {
+    return computerList;
+  }
 
-	logger.debug("Dao: find computer by its id: " + id);
+  @Override
+  public List<Computer> findById(int id) {
 
-	// Check
-	ComputerValidator.checkValidId(id);
+    logger.debug("Dao: find computer by its id: " + id);
 
-	List<Computer> computerList = null;
+    // Check
+    ComputerValidator.checkValidId(id);
 
-	// Retrieve and map matching
-	computerList = jdbcTemplate.query(FIND_BYID_QUERY, computerRowMapper, id);
+    List<Computer> computerList = null;
 
-	return computerList;
-    }
+    // Retrieve and map matching
+    computerList = jdbcTemplate.query(FIND_BYID_QUERY, computerRowMapper, id);
 
-    @Override
-    public List<Computer> findByName(String name) {
+    return computerList;
+  }
 
-	logger.debug("Dao: find computer by name:" + name);
+  @Override
+  public List<Computer> findByName(String name) {
 
-	// Check
-	ComputerValidator.checkNameNotNull(name);
-	ComputerValidator.checkNameNotEmpty(name);
+    logger.debug("Dao: find computer by name:" + name);
 
-	List<Computer> computerList = null;
+    // Check
+    ComputerValidator.checkNameNotNull(name);
+    ComputerValidator.checkNameNotEmpty(name);
 
-	// Retrieve and map matching computers
-	computerList = jdbcTemplate.query(FIND_BYNAME_QUERY, computerRowMapper, name);
+    List<Computer> computerList = null;
 
-	return computerList;
-    }
+    // Retrieve and map matching computers
+    computerList = jdbcTemplate.query(FIND_BYNAME_QUERY, computerRowMapper, name);
 
-    @Override
-    public int insertComputer(Computer computer) {
+    return computerList;
+  }
 
-	logger.debug("Dao: insert a computer: " + computer);
+  @Override
+  public int insertComputer(Computer computer) {
 
-	// Check
-	ComputerValidator.validate(computer);
-	
-	KeyHolder holder = new GeneratedKeyHolder();
+    logger.debug("Dao: insert a computer: " + computer);
 
-	// Insert computer with custom prepared statement
-	jdbcTemplate.update(new PreparedStatementCreator() {
+    // Check
+    ComputerValidator.validate(computer);
 
-	    @Override
-	    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
+    KeyHolder holder = new GeneratedKeyHolder();
 
-		// Replace query fields
-		ps.setString(1, computer.getName());
+    // Insert computer with custom prepared statement
+    jdbcTemplate.update(new PreparedStatementCreator() {
 
-		if (computer.getIntroduced() == null) {
-		    ps.setTimestamp(2, null);
-		} else {
-		    ps.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
-		}
-		if (computer.getDiscontinued() == null) {
-		    ps.setTimestamp(3, null);
-		} else {
-		    ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
-		}
+      @Override
+      public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+        PreparedStatement ps =
+            connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
 
-		if (computer.getCompany() == null) {
-		    ps.setNull(4, java.sql.Types.BIGINT);
-		} else {
-		    ps.setInt(4, computer.getCompany().getId());
-		}
+        // Replace query fields
+        ps.setString(1, computer.getName());
 
-		return ps;
-	    }
-	}, holder);
+        if (computer.getIntroduced() == null) {
+          ps.setTimestamp(2, null);
+        } else {
+          ps.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
+        }
+        if (computer.getDiscontinued() == null) {
+          ps.setTimestamp(3, null);
+        } else {
+          ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
+        }
 
-	// Get id of the inserted computer
-	int id = (int) holder.getKey().longValue();
+        if (computer.getCompany() == null) {
+          ps.setNull(4, java.sql.Types.BIGINT);
+        } else {
+          ps.setInt(4, computer.getCompany().getId());
+        }
 
-	return id;
-    }
+        return ps;
+      }
+    }, holder);
 
-    @Override
-    public void updateComputer(Computer computer) {
+    // Get id of the inserted computer
+    int id = (int) holder.getKey().longValue();
 
-	logger.debug("Dao: update computer with computer: " + computer);
+    return id;
+  }
 
-	// Check
-	ComputerValidator.validate(computer);
+  @Override
+  public void updateComputer(Computer computer) {
 
-	// Update computer with custom prepared statement
-	jdbcTemplate.update(new PreparedStatementCreator() {
-	    @Override
-	    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
-		// Replace query fields
-		ps.setString(1, computer.getName());
-		if (computer.getIntroduced() == null) {
-		    ps.setTimestamp(2, null);
-		} else {
-		    ps.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
-		}
-		if (computer.getDiscontinued() == null) {
-		    ps.setTimestamp(3, null);
-		} else {
-		    ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
-		}
-		if (computer.getCompany() == null) {
-		    ps.setNull(4, java.sql.Types.BIGINT);
-		} else {
-		    ps.setInt(4, computer.getCompany().getId());
-		}
+    logger.debug("Dao: update computer with computer: " + computer);
 
-		ps.setInt(5, computer.getId());
+    // Check
+    ComputerValidator.validate(computer);
 
-		return ps;
-	    }
-	});
-    }
+    // Update computer with custom prepared statement
+    jdbcTemplate.update(new PreparedStatementCreator() {
+      @Override
+      public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
+        // Replace query fields
+        ps.setString(1, computer.getName());
+        if (computer.getIntroduced() == null) {
+          ps.setTimestamp(2, null);
+        } else {
+          ps.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
+        }
+        if (computer.getDiscontinued() == null) {
+          ps.setTimestamp(3, null);
+        } else {
+          ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
+        }
+        if (computer.getCompany() == null) {
+          ps.setNull(4, java.sql.Types.BIGINT);
+        } else {
+          ps.setInt(4, computer.getCompany().getId());
+        }
 
-    @Override
-    public void deleteComputer(int id) {
+        ps.setInt(5, computer.getId());
 
-	logger.debug("Dao: delete computer by id:" + id);
+        return ps;
+      }
+    });
+  }
 
-	// Check
-	ComputerValidator.checkValidId(id);
+  @Override
+  public void deleteComputer(int id) {
 
-	// Delete computers with matching id
-	jdbcTemplate.update(DELETE_QUERY, id);
-    }
+    logger.debug("Dao: delete computer by id:" + id);
 
+    // Check
+    ComputerValidator.checkValidId(id);
 
-    @Override
-    public int count(QueryPageParameter qp) {
+    // Delete computers with matching id
+    jdbcTemplate.update(DELETE_QUERY, id);
+  }
 
-	logger.debug("Dao: get count of total computers");
+  @Override
+  public int count(QueryPageParameter qp) {
 
-	// Count matching computers
-	int count = jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class,qp.getQuerySearch(),qp.getQuerySearch());
+    logger.debug("Dao: get count of total computers");
 
-	return count;
-    }
+    // Count matching computers
+    int count = jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class, qp.getQuerySearch(),
+        qp.getQuerySearch());
 
-    @Override
-    public List<Computer> findByQuery(QueryPageParameter qp) {
+    return count;
+  }
 
-	logger.debug("Dao: find computer by query" + qp);
+  @Override
+  public List<Computer> findByQuery(QueryPageParameter qp) {
 
-	// Check
-	QueryPageParameterValidator.validate(qp);
+    logger.debug("Dao: find computer by query" + qp);
 
-	// Init local variables
-	List<Computer> computerList = null;
+    // Check
+    QueryPageParameterValidator.validate(qp);
 
-	// Prepare query
-	String query = String.format(FIND_BY_QUERY_PARAM_QUERY, qp.getOrderBy().toString(), qp.getOrder().toString());
+    // Init local variables
+    List<Computer> computerList = null;
 
+    // Prepare query
+    String query = String.format(FIND_BY_QUERY_PARAM_QUERY, qp.getOrderBy().toString(),
+        qp.getOrder().toString());
 
-	// Retrieve matching computers
-	computerList = jdbcTemplate.query(FIND_BY_QUERY_PARAM_QUERY,
-		computerRowMapper,
-		qp.getQuerySearch(),
-		qp.getQuerySearch(),
-		qp.getLimit(),
-		qp.getOffset());
+    // Retrieve matching computers
+    computerList = jdbcTemplate.query(query, computerRowMapper, qp.getQuerySearch(),
+        qp.getQuerySearch(), qp.getLimit(), qp.getOffset());
 
-	return computerList;
-    }
+    return computerList;
+  }
 
-    @Override
-    public void deleteByCompanyId(int companyId) {
+  @Override
+  public void deleteByCompanyId(int companyId) {
 
-	logger.debug("Dao: delete computers by company id: " + companyId);
+    logger.debug("Dao: delete computers by company id: " + companyId);
 
-	// Check
-	CompanyValidator.checkValidId(companyId);
+    // Check
+    CompanyValidator.checkValidId(companyId);
 
-	// Delete computers
-	jdbcTemplate.update(DELETE_BYCOMPANY_QUERY, companyId);
-    }
+    // Delete computers
+    jdbcTemplate.update(DELETE_BYCOMPANY_QUERY, companyId);
+  }
 }

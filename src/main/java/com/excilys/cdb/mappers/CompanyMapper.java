@@ -1,6 +1,5 @@
 package com.excilys.cdb.mappers;
 
-import com.excilys.cdb.daos.impl.CompanyDaoImpl;
 import com.excilys.cdb.dtos.CompanyDto;
 import com.excilys.cdb.models.Company;
 
@@ -47,7 +46,7 @@ public class CompanyMapper {
       return null;
     }
     CompanyDto companyDto = new CompanyDto(company.getId(), company.getName());
-    logger.debug("\n\t\tMapper: map: company: " + company + "\n\t\t TO: companyDto: " + companyDto);
+    logger.debug("\n\t\tMapper: map: company: " + company + "\n\t\tTO: companyDto: " + companyDto);
     return companyDto;
   }
 
@@ -64,7 +63,7 @@ public class CompanyMapper {
 
     Company company = new Company(companyDto.getId(), companyDto.getName());
 
-    logger.debug("\n\t\tMapper: map: companyDto: " + companyDto + "\n\t\t TO: company: " + company);
+    logger.debug("\n\t\tMapper: map: companyDto: " + companyDto + "\n\t\tTO: company: " + company);
 
     return company;
   }
@@ -83,7 +82,7 @@ public class CompanyMapper {
     companies.parallelStream().forEachOrdered(c -> companyDtos.add(toCompanyDto(c)));
 
     logger.debug(
-        "\n\t\tMapper: map: List<Company>:" + companies + "\n\t\t TO: companyDtos: " + companyDtos);
+        "\n\t\tMapper: map: List<Company>:" + companies + "\n\t\tTO: companyDtos: " + companyDtos);
 
     return companyDtos;
   }

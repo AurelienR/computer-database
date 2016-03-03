@@ -27,13 +27,6 @@ public class ComputerDtoService {
   @Autowired
   private ComputerService computerService;
   
-  
-  /**
-   * Instantiates a new computer dto service.
-   */
-  // Constructors
-  private ComputerDtoService() {
-  }
 
   // Methods
   /**

@@ -65,7 +65,7 @@ public class QueryPageParameterMapper {
     }
 
     logger.debug("\n\t\tMapper: Map: [index:" + pageStr + " , size:" + pageSizeStr + ", search:"
-        + searchStr + ", orderby:" + orderByStr + " , order:" + orderStr + "]" + "\n\t\t TO:" + qp);
+        + searchStr + ", orderby:" + orderByStr + " , order:" + orderStr + "]" + "\n\t\tTO:" + qp);
 
     return qp;
   }

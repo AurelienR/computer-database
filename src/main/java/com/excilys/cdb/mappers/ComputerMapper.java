@@ -1,6 +1,5 @@
 package com.excilys.cdb.mappers;
 
-import com.excilys.cdb.daos.impl.ComputerDaoImpl;
 import com.excilys.cdb.dtos.CompanyDto;
 import com.excilys.cdb.dtos.ComputerDto;
 import com.excilys.cdb.models.Company;
@@ -12,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +67,7 @@ public class ComputerMapper {
 
     ComputerDto computerDto = new ComputerDto(id, computerName, introStr, discStr, companyDto);
     logger
-        .debug("\n\t\tMapper: map: computer" + computer + "\n\t\t TO: ComputerDto: " + computerDto);
+        .debug("\n\t\tMapper: map: computer" + computer + "\n\t\tTO: ComputerDto: " + computerDto);
 
     return computerDto;
   }
@@ -102,7 +100,7 @@ public class ComputerMapper {
         new ComputerDto(id, nameStr, introducedStr, discontinuedStr, companyDto);
 
     logger
-        .debug("\n\t\tMapper: map: request:" + request + "\n\t\t TO: ComputerDto: " + computerDto);
+        .debug("\n\t\tMapper: map: request:" + request + "\n\t\tTO: ComputerDto: " + computerDto);
 
     return computerDto;
   }
@@ -120,7 +118,7 @@ public class ComputerMapper {
     List<ComputerDto> computerDtos = new ArrayList<ComputerDto>();
     computers.parallelStream().forEachOrdered(c -> computerDtos.add(toComputerDto(c)));
 
-    logger.debug("\n\t\tMapper: Map: List<Computer>:" + computers + "\n\t\t TO: List<ComputerDto>:"
+    logger.debug("\n\t\tMapper: Map: List<Computer>:" + computers + "\n\t\tTO: List<ComputerDto>:"
         + computerDtos);
 
     return computerDtos;
@@ -144,7 +142,7 @@ public class ComputerMapper {
     Computer computer = new Computer(id, computerName, company, disc, intro);
 
     logger.debug(
-        "\n\t\tMapper: map: computerDto: " + computerDto + "\n\t\t TO: computer: " + computer);
+        "\n\t\tMapper: map: computerDto: " + computerDto + "\n\t\tTO: computer: " + computer);
 
     return computer;
   }
