@@ -209,6 +209,7 @@ public class ComputerDaoImpl implements ComputerDao {
     jdbcTemplate.update(DELETE_QUERY, id);
   }
 
+  
   @Override
   public long count(QueryPageParameter qp) {
 

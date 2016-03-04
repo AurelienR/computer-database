@@ -26,11 +26,7 @@
 		<jstl.version>1.2</jstl.version>
 		<javax.el.version>3.0.0</javax.el.version>
 		<!-- Spring -->
-		<spring-context>4.2.5.RELEASE</spring-context>
-		<spring-core>4.2.5.RELEASE</spring-core>
-		<spring-beans>4.2.5.RELEASE</spring-beans>
-		<spring-web>4.2.5.RELEASE</spring-web>
-		<spring-jdbc>4.2.5.RELEASE</spring-jdbc>
+		<spring.version>4.2.5.RELEASE</spring.version>
 		<!-- Tests -->
 		<junit.version>4.12</junit.version>
 		<h2db.version>1.4.191</h2db.version>
@@ -84,27 +80,32 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${spring-core}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${spring-context}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>${spring-beans}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>${spring-web}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>${spring-jdbc}</version>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
 		<!-- Tests -->
 		<dependency>
@@ -211,7 +212,7 @@
 		</dependency>
 
 	</dependencies>
-	
+
 	<!-- **************** BUILD **************** -->
 	<build>
 

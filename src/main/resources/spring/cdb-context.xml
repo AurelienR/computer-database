@@ -14,7 +14,7 @@ http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 <context:component-scan base-package="com.excilys.cdb.services" />
 <context:component-scan base-package="com.excilys.cdb.cli" />
 <context:component-scan base-package="com.excilys.cdb.daos" />
-<context:component-scan base-package="com.mkyong.customer" />
+
 
 
 <bean id="dataSource"

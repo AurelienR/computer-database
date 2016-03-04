@@ -1,6 +1,8 @@
 package junit.com.excilys.cdb.services;
 
-import com.excilys.cdb.daos.impl.ComputerDaoImpl;
+import static org.mockito.Mockito.when;
+
+import com.excilys.cdb.daos.ComputerDao;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.ComputerService;
 import com.excilys.cdb.validators.ValidatorException;
@@ -9,26 +11,27 @@ import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
 /**
  * The Class ComputerServiceTest.
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(ComputerDaoImpl.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:/spring/cdb-context-test.xml")
 public class ComputerServiceTest {
 
   @Autowired
   ComputerService computerService;
-  
+
   /** The computer dao. */
-  ComputerDaoImpl computerDao;
-  
+  @Autowired
+  ComputerDao computerDao;
+
   /** The computers. */
   List<Computer> computers;
 
@@ -37,16 +40,7 @@ public class ComputerServiceTest {
    */
   @Before
   public void init() {
-    // Mock ComputerDAO
-    PowerMockito.mockStatic(ComputerDaoImpl.class);
-    computerDao = EasyMock.createMock(ComputerDaoImpl.class);
-
-    try {
-      PowerMockito.whenNew(ComputerDaoImpl.class).withAnyArguments().thenReturn(computerDao);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
+    MockitoAnnotations.initMocks(this);
   }
 
   /**
@@ -54,8 +48,8 @@ public class ComputerServiceTest {
    */
   @Test(expected = ValidatorException.class)
   public void findByIdNegativeParamTest() {
-    int testedId = -2;
-    EasyMock.expect(computerDao.findById(testedId)).andReturn(null);
+    long testedId = -2L;
+    when(computerDao.findById(testedId)).thenReturn(null);
     computerService.findById(testedId);
   }
 
@@ -65,9 +59,9 @@ public class ComputerServiceTest {
   @Test(expected = ValidatorException.class)
   public void findByNameNullParamTest() {
     String testedName = null;
-    EasyMock.expect(computerDao.findByName(testedName)).andReturn(null);
+    when(computerDao.findByName(testedName)).thenReturn(null);
     computerService.findByName(testedName);
-    
+
   }
 
   /**
@@ -76,7 +70,7 @@ public class ComputerServiceTest {
   @Test(expected = ValidatorException.class)
   public void findByNameEmptyStringParamTest() {
     String testedName = "";
-    EasyMock.expect(computerDao.findByName(testedName)).andReturn(null);
+    when(computerDao.findByName(testedName)).thenReturn(null);
     computerService.findByName(testedName);
   }
 
@@ -85,7 +79,7 @@ public class ComputerServiceTest {
    */
   @Test(expected = ValidatorException.class)
   public void deleteByIdNegativeParamTest() {
-    int testedId = -2;
+    long testedId = -2;
     computerService.deleteComputer(testedId);
     EasyMock.expectLastCall().once();
   }

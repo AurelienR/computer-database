@@ -14,17 +14,25 @@ import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.utils.DateFormatManagerException;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerMapperTest {
 
+  // Logger
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComputerMapperTest.class);
+  
+  // Mocks
   @Mock
   ComputerDto computerDto;
   @Mock
@@ -34,22 +42,43 @@ public class ComputerMapperTest {
   @Mock
   CompanyDto companyDto;
 
+  
+  // Hook methods
+  @BeforeClass
+  public static void prepareTest() {
+    LOGGER.info("---------------- START ComputerMapperTest ----------------\n");
+  }
+
+  @AfterClass
+  public static void endTest() {
+    LOGGER.info("---------------- END ComputerMapperTest ----------------\n");
+  }
+
+  /**
+   * Before test case.
+   */
   @Before
   public void setUp() {
-
+    LOGGER.info("START TEST CASE");    
   }
 
+  /**
+   * After test case.
+   */
   @After
   public void tearDown() {
-    computerDto = null;
-    computer = null;
+    companyDto = null;
+    company = null;
+    LOGGER.info("END TEST CASE\n\n");
   }
 
+  // TESTS CASES
   /**
    * Test toComputerDTO method with parameter.
    */
   @Test
   public void toComputerDtoNullParameterTest() {
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
     try {
       ComputerDto resultComputerDto = ComputerMapper.toComputerDto((Computer)null);
       assertNull(resultComputerDto);
@@ -64,6 +93,8 @@ public class ComputerMapperTest {
   @Test
   public void toComputerDtoInvalidComputerTest() {
 
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
+    
     when(computer.getId()).thenReturn(-5L);
     when(computer.getName()).thenReturn(null);
     when(computer.getIntroduced()).thenReturn(null);
@@ -89,6 +120,8 @@ public class ComputerMapperTest {
   @Test
   public void toComputerDtoValidComputerTest() {
 
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
+    
     LocalDateTime intro = LocalDateTime.of(2013, 02, 28, 14, 20);
     LocalDateTime disc = LocalDateTime.of(2016, 02, 28, 14, 20);
 
@@ -120,6 +153,9 @@ public class ComputerMapperTest {
    */
   @Test
   public void toComputerNullParameterTest() {
+    
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
+    
     try {
       Computer resultComputer = ComputerMapper.toComputer(null);
       assertNull(resultComputer);
@@ -134,6 +170,8 @@ public class ComputerMapperTest {
   @Test
   public void toComputerInvalidComputerDtoTest() {
 
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
+    
     LocalDateTime intro = LocalDateTime.of(2016, 03, 04, 00, 00);
     LocalDateTime disc = LocalDateTime.of(2017, 03, 04, 00, 00);
 
@@ -163,6 +201,8 @@ public class ComputerMapperTest {
    */
   @Test(expected = DateFormatManagerException.class)
   public void toComputerInvalidDateFormatTest() {
+    
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
 
     when(computerDto.getId()).thenReturn(-5L);
     when(computerDto.getName()).thenReturn(null);
@@ -179,6 +219,8 @@ public class ComputerMapperTest {
   @Test
   public void toComputerValidComputerDtoTest() {
 
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
+    
     LocalDateTime intro = LocalDateTime.of(2016, 03, 04, 00, 00);
     LocalDateTime disc = LocalDateTime.of(2017, 03, 04, 00, 00);
 

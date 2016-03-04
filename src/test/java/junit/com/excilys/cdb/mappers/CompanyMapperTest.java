@@ -11,11 +11,18 @@ import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.models.Company;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,27 +30,51 @@ import java.util.List;
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyMapperTest {
 
+  // Logger
+  private static final Logger LOGGER = LoggerFactory.getLogger(CompanyMapperTest.class);
+
+  // Mocks
   @Mock
   CompanyDto companyDto;
   @Mock
   Company company;
-
-  @Before
-  public void setUp() {
-
+  
+  // Hook methods
+  @BeforeClass
+  public static void prepareTest() {
+    LOGGER.info("---------------- START CompanyMapperTest ----------------\n");
   }
 
+  @AfterClass
+  public static void endTest() {
+    LOGGER.info("---------------- END CompanyMapperTest ----------------\n");
+  }
+
+  /**
+   * Before test case.
+   */
+  @Before
+  public void setUp() {
+    LOGGER.info("START TEST CASE");    
+  }
+
+  /**
+   * After test case.
+   */
   @After
   public void tearDown() {
     companyDto = null;
     company = null;
+    LOGGER.info("END TEST CASE\n\n");
   }
 
+  // TESTS CASES
   /**
    * Test toCompanyDTO method with null parameter.
    */
   @Test
   public void toCompanyDtoNullParameterTest() {
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
     try {
       CompanyDto resultCompanyDto = CompanyMapper.toCompanyDto(null);
       assertNull(resultCompanyDto);
@@ -57,7 +88,7 @@ public class CompanyMapperTest {
    */
   @Test
   public void toCompanyDtoInvalidCompanyTest() {
-
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
     when(company.getId()).thenReturn(-5L);
     when(company.getName()).thenReturn(null);
 
@@ -76,7 +107,7 @@ public class CompanyMapperTest {
    */
   @Test
   public void toCompanyDtoValidCompanyTest() {
-
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
     when(company.getId()).thenReturn(5L);
     when(company.getName()).thenReturn("apple");
 
@@ -95,6 +126,7 @@ public class CompanyMapperTest {
    */
   @Test
   public void toCompanyNullParameterTest() {
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
     try {
       Company resultCompany = CompanyMapper.toCompany(null);
       assertNull(resultCompany);
@@ -108,7 +140,7 @@ public class CompanyMapperTest {
    */
   @Test
   public void toCompanyInvalidCompanyDtoTest() {
-
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
     when(companyDto.getId()).thenReturn(-30L);
     when(companyDto.getName()).thenReturn(null);
 
@@ -127,7 +159,7 @@ public class CompanyMapperTest {
    */
   @Test
   public void toCompanyValidCompanyDtoTest() {
-
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
     when(companyDto.getId()).thenReturn(6L);
     when(companyDto.getName()).thenReturn("apple");
 
@@ -146,7 +178,7 @@ public class CompanyMapperTest {
    */
   @Test
   public void toCompanyDtoListNullParamTest() {
-
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
     try {
       List<CompanyDto> resultCompany = CompanyMapper.toCompanyDtoList(null);
       assertNull(resultCompany);
@@ -160,7 +192,7 @@ public class CompanyMapperTest {
    */
   @Test
   public void toCompanyDtoListInvalidParamTest() {
-
+    LOGGER.info(Thread.currentThread().getStackTrace()[1].getMethodName());
     long id = -1L;
     String name = null;
 
