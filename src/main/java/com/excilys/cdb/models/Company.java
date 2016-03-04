@@ -10,22 +10,22 @@ import javax.validation.constraints.Min;
  */
 public class Company {
   @Min(value = 0, message = "Company id doit être supérieur à {value}")
-  private int id = 0;
+  private long id = 0;
   private String name;
 
   public Company() {
   }
 
-  public Company(int id, String name) {
+  public Company(long id, String name) {
     this.id = id;
     this.name = name;
   }
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(long id) {
     this.id = id;
   }
 
@@ -36,7 +36,7 @@ public class Company {
   public void setName(String name) {
     this.name = name;
   }
-  
+
   @Override
   public String toString() {
     return "Company [id=" + id + ", name=" + name + "]";
@@ -46,7 +46,7 @@ public class Company {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + id;
+    result = prime * result + (int) (id ^ (id >>> 32));
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
   }

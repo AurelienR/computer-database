@@ -11,7 +11,6 @@ import com.excilys.cdb.services.ComputerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -34,7 +33,7 @@ public class CreateComputerCmd implements Command {
   // Service
   @Autowired
   private ComputerService computerService;
-  
+
   private final String dateFormat = "dd/MM/yyyy";
   private Scanner sc;
 

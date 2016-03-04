@@ -7,7 +7,6 @@ import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.ComputerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * CLI to display all computers
@@ -17,10 +16,10 @@ import org.springframework.stereotype.Component;
  */
 public class DisplayAllComputerCmd implements Command {
 
-  // Service 
+  // Service
   @Autowired
   private ComputerService computerService;
-  
+
   public DisplayAllComputerCmd() {
   }
 

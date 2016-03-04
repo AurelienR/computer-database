@@ -20,7 +20,7 @@ public class Computer {
 
   // Attributes
   @Min(value = 0, message = "Computer id doit être supérieur à {value}")
-  private int id = 0;
+  private long id = 0;
   private Company company;
   @NotNull(message = "Computer name should be not null")
   @Size(min = 0, message = "Computer name cannot be empty string")
@@ -31,19 +31,14 @@ public class Computer {
   /**
    * Instantiates a new computer.
    *
-   * @param id
-   *          the id
-   * @param name
-   *          the name of the computer
-   * @param company
-   *          the related company
-   * @param discontinued
-   *          the discontinued date
-   * @param introduced
-   *          the introduced date
+   * @param id the id
+   * @param name the name of the computer
+   * @param company the related company
+   * @param discontinued the discontinued date
+   * @param introduced the introduced date
    */
   // Constructors
-  public Computer(int id, String name, Company company, LocalDateTime discontinued,
+  public Computer(long id, String name, Company company, LocalDateTime discontinued,
       LocalDateTime introduced) {
     this.id = id;
     this.name = name;
@@ -56,11 +51,11 @@ public class Computer {
   }
 
   // Getter and Setter
-  public int getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(long id) {
     this.id = id;
   }
 
@@ -96,7 +91,6 @@ public class Computer {
     this.introduced = introduced;
   }
 
-
   @Override
   public String toString() {
     return "Computer [id=" + id + ", company=" + company + ", name=" + name + ", discontinued="
@@ -107,10 +101,7 @@ public class Computer {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((company == null) ? 0 : company.hashCode());
-    result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
-    result = prime * result + id;
-    result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
+    result = prime * result + (int) (id ^ (id >>> 32));
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
   }
@@ -127,28 +118,7 @@ public class Computer {
       return false;
     }
     Computer other = (Computer) obj;
-    if (company == null) {
-      if (other.company != null) {
-        return false;
-      }
-    } else if (!company.equals(other.company)) {
-      return false;
-    }
-    if (discontinued == null) {
-      if (other.discontinued != null) {
-        return false;
-      }
-    } else if (!discontinued.equals(other.discontinued)) {
-      return false;
-    }
     if (id != other.id) {
-      return false;
-    }
-    if (introduced == null) {
-      if (other.introduced != null) {
-        return false;
-      }
-    } else if (!introduced.equals(other.introduced)) {
       return false;
     }
     if (name == null) {

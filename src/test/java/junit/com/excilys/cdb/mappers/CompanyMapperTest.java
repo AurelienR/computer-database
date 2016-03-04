@@ -58,13 +58,13 @@ public class CompanyMapperTest {
   @Test
   public void toCompanyDtoInvalidCompanyTest() {
 
-    when(company.getId()).thenReturn(-5);
+    when(company.getId()).thenReturn(-5L);
     when(company.getName()).thenReturn(null);
 
     try {
       CompanyDto resultCompanyDto = CompanyMapper.toCompanyDto(company);
       assertNotNull(resultCompanyDto);
-      assertEquals(resultCompanyDto.getId(), -5);
+      assertEquals(resultCompanyDto.getId(), -5L);
       assertEquals(resultCompanyDto.getName(), null);
     } catch (Throwable t) {
       fail("Exception thrown should not be thrown");
@@ -77,13 +77,13 @@ public class CompanyMapperTest {
   @Test
   public void toCompanyDtoValidCompanyTest() {
 
-    when(company.getId()).thenReturn(5);
+    when(company.getId()).thenReturn(5L);
     when(company.getName()).thenReturn("apple");
 
     try {
       CompanyDto resultCompanyDto = CompanyMapper.toCompanyDto(company);
       assertNotNull(resultCompanyDto);
-      assertEquals(resultCompanyDto.getId(), 5);
+      assertEquals(resultCompanyDto.getId(), 5L);
       assertEquals(resultCompanyDto.getName(), "apple");
     } catch (Throwable t) {
       fail("Exception thrown should not be thrown");
@@ -109,13 +109,13 @@ public class CompanyMapperTest {
   @Test
   public void toCompanyInvalidCompanyDtoTest() {
 
-    when(companyDto.getId()).thenReturn(-30);
+    when(companyDto.getId()).thenReturn(-30L);
     when(companyDto.getName()).thenReturn(null);
 
     try {
       Company resultCompany = CompanyMapper.toCompany(companyDto);
       assertNotNull(resultCompany);
-      assertEquals(resultCompany.getId(), -30);
+      assertEquals(resultCompany.getId(), -30L);
       assertEquals(resultCompany.getName(), null);
     } catch (Throwable t) {
       fail("Exception thrown should not be thrown");
@@ -128,13 +128,13 @@ public class CompanyMapperTest {
   @Test
   public void toCompanyValidCompanyDtoTest() {
 
-    when(companyDto.getId()).thenReturn(6);
+    when(companyDto.getId()).thenReturn(6L);
     when(companyDto.getName()).thenReturn("apple");
 
     try {
       Company resultCompany = CompanyMapper.toCompany(companyDto);
       assertNotNull(resultCompany);
-      assertEquals(resultCompany.getId(), 6);
+      assertEquals(resultCompany.getId(), 6L);
       assertEquals(resultCompany.getName(), "apple");
     } catch (Throwable t) {
       fail("Exception thrown should not be thrown");
@@ -161,7 +161,7 @@ public class CompanyMapperTest {
   @Test
   public void toCompanyDtoListInvalidParamTest() {
 
-    int id = -1;
+    long id = -1L;
     String name = null;
 
     when(company.getId()).thenReturn(id);

@@ -12,21 +12,19 @@ public class CompanyValidator extends ModelValidator {
   /**
    * Validate Company fields.
    * 
-   * @param company
-   *          company to validate
-   * @throws ValidatorException
-   *           if inconsistent fields value
+   * @param company company to validate
+   * @throws ValidatorException if inconsistent fields value
    */
   public static void validate(Company company) throws ValidatorException {
     CompanyValidator.checkNameNotEmpty(company.getName());
     CompanyValidator.checkNameNotNull(company.getName());
     CompanyValidator.checkValidId(company.getId());
   }
-  
+
   /**
    * Check starting row.
    *
-   * @param startingRow          starting row to check
+   * @param startingRow starting row to check
    * @throws ValidatorException the validator exception
    */
   public static void checkStartingRow(int startingRow) throws ValidatorException {
@@ -39,8 +37,8 @@ public class CompanyValidator extends ModelValidator {
   /**
    * Check size parameter.
    *
-   * @param size          size to check
-   * @throws ValidatorException           if size is < 0
+   * @param size size to check
+   * @throws ValidatorException if size is < 0
    */
   public static void checkSize(int size) throws ValidatorException {
     if (size < 0) {

@@ -8,7 +8,6 @@ import com.excilys.cdb.mappers.QueryPageParameterMapper;
 import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.services.CompanyDtoService;
 import com.excilys.cdb.services.ComputerDtoService;
-import com.excilys.cdb.services.ComputerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -23,8 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ComputersServlet.
- * Retrieve informations of one or all computers.
+ * Servlet implementation class ComputersServlet. Retrieve informations of one or all computers.
  */
 @WebServlet("/computers")
 public class ComputerInfo extends HttpServlet {
@@ -32,7 +30,7 @@ public class ComputerInfo extends HttpServlet {
 
   public static final String LIST_COMPUTERS_URI = "/views/dashboard.jsp";
   private static final String EDIT_COMPUTER_URI = "/views/editComputer.jsp";
-  
+
   // Services
   @Autowired
   ComputerDtoService computerDtoService;
@@ -47,14 +45,13 @@ public class ComputerInfo extends HttpServlet {
   public ComputerInfo() {
     super();
   }
-  
+
   @Override
   public void init() throws ServletException {
     super.init();
     // Inject to spring context
     SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
   }
-
 
   /**
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response).
@@ -68,7 +65,7 @@ public class ComputerInfo extends HttpServlet {
     if (idStr != null) {
       // URL GET "/computers?id=..."
       // Parse Id
-      int id = Integer.parseInt(idStr);
+      Long id = Long.parseLong(idStr);
 
       // Retrieve company et computers
       ComputerDto computerDto = computerDtoService.findById(id).get(0);
@@ -80,7 +77,7 @@ public class ComputerInfo extends HttpServlet {
 
       // Forward to jsp
       request.getRequestDispatcher(EDIT_COMPUTER_URI).forward(request, response);
-      
+
     } else {
       // URL GET "/computers?page=...&pageSize=..."
       // Get related query
@@ -88,7 +85,7 @@ public class ComputerInfo extends HttpServlet {
 
       // Retrieve DTOs
       List<ComputerDto> computerDtos = computerDtoService.findByQuery(qp);
-      
+
       // Get total matching computers
       qp.setMatchingRowCount(computerDtoService.count(qp));
       ComputerPageDto pageDto = ComputerPageMapper.toComputerPageDto(qp, computerDtos);

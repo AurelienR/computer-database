@@ -59,7 +59,7 @@ public class ComputerDeletion extends HttpServlet {
     // Delete each computer by id
     for (String idStr : ids) {
       // Car can throw exception
-      int id = Integer.parseInt(idStr);
+      long id = Long.parseLong(idStr);
       computerDtoService.deleteComputer(id);
     }
 

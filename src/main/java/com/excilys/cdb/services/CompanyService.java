@@ -56,7 +56,7 @@ public class CompanyService {
    * @throws DaoException issues with DB
    * @throws ValidatorException issue with validation of Data
    */
-  public List<Company> findById(int id) {
+  public List<Company> findById(long id) {
 
     logger.debug("Service find company by id: " + id);
 
@@ -95,7 +95,7 @@ public class CompanyService {
    * @throws DaoException issues with DB
    * @throws ValidatorException issues with data
    */
-  public int createCompany(Company company) {
+  public long createCompany(Company company) {
 
     logger.debug("Service: create company:" + company);
 
@@ -114,7 +114,7 @@ public class CompanyService {
    * @throws ValidatorException issues with data
    */
   @Transactional
-  public void deleteCompany(int id) {
+  public void deleteCompany(long id) {
 
     logger.debug("Service: Delete Company");
 

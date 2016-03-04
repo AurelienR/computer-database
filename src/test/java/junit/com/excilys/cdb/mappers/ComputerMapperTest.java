@@ -64,7 +64,7 @@ public class ComputerMapperTest {
   @Test
   public void toComputerDtoInvalidComputerTest() {
 
-    when(computer.getId()).thenReturn(-5);
+    when(computer.getId()).thenReturn(-5L);
     when(computer.getName()).thenReturn(null);
     when(computer.getIntroduced()).thenReturn(null);
     when(computer.getDiscontinued()).thenReturn(null);
@@ -92,10 +92,10 @@ public class ComputerMapperTest {
     LocalDateTime intro = LocalDateTime.of(2013, 02, 28, 14, 20);
     LocalDateTime disc = LocalDateTime.of(2016, 02, 28, 14, 20);
 
-    when(company.getId()).thenReturn(28);
+    when(company.getId()).thenReturn(28L);
     when(company.getName()).thenReturn("testCompany");
 
-    when(computer.getId()).thenReturn(5);
+    when(computer.getId()).thenReturn(5L);
     when(computer.getName()).thenReturn("testComputer");
     when(computer.getIntroduced()).thenReturn(intro);
     when(computer.getDiscontinued()).thenReturn(disc);
@@ -137,7 +137,7 @@ public class ComputerMapperTest {
     LocalDateTime intro = LocalDateTime.of(2016, 03, 04, 00, 00);
     LocalDateTime disc = LocalDateTime.of(2017, 03, 04, 00, 00);
 
-    when(computerDto.getId()).thenReturn(-5);
+    when(computerDto.getId()).thenReturn(-5L);
     when(computerDto.getName()).thenReturn(null);
     when(computerDto.getIntroduced()).thenReturn("2016-03-04");
     when(computerDto.getDiscontinued()).thenReturn("2017-03-04");
@@ -164,7 +164,7 @@ public class ComputerMapperTest {
   @Test(expected = DateFormatManagerException.class)
   public void toComputerInvalidDateFormatTest() {
 
-    when(computerDto.getId()).thenReturn(-5);
+    when(computerDto.getId()).thenReturn(-5L);
     when(computerDto.getName()).thenReturn(null);
     when(computerDto.getIntroduced()).thenReturn("13/50/30091");
     when(computerDto.getDiscontinued()).thenReturn("2017-03-04");
@@ -182,10 +182,10 @@ public class ComputerMapperTest {
     LocalDateTime intro = LocalDateTime.of(2016, 03, 04, 00, 00);
     LocalDateTime disc = LocalDateTime.of(2017, 03, 04, 00, 00);
 
-    when(companyDto.getId()).thenReturn(202);
+    when(companyDto.getId()).thenReturn(202L);
     when(companyDto.getName()).thenReturn("CompanyTest");
 
-    when(computerDto.getId()).thenReturn(5);
+    when(computerDto.getId()).thenReturn(5L);
     when(computerDto.getName()).thenReturn("ComputerTest");
     when(computerDto.getIntroduced()).thenReturn("2016-03-04");
     when(computerDto.getDiscontinued()).thenReturn("2017-03-04");

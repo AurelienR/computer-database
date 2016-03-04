@@ -25,8 +25,7 @@ public enum OrderBy {
   /**
    * Instantiates a new order by.
    *
-   * @param text
-   *          the text
+   * @param text the text
    */
   private OrderBy(String text) {
     this.text = text;

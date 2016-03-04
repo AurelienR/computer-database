@@ -11,7 +11,6 @@ import com.excilys.cdb.services.ComputerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -35,7 +34,7 @@ public class UpdateComputerCmd implements Command {
   // Service
   @Autowired
   private ComputerService computerService;
-  
+
   private final String dateFormat = "dd/MM/yyyy";
   private Scanner sc;
 
@@ -81,8 +80,7 @@ public class UpdateComputerCmd implements Command {
 
       System.out.println("CompanyName ( must match existring one): ");
       List<Company> companies;
-      if ((companies = inputCmdParser.getValidCompanyByName(sc)) != null
-          && !companies.isEmpty()) {
+      if ((companies = inputCmdParser.getValidCompanyByName(sc)) != null && !companies.isEmpty()) {
         Company company = companies.get(0);
         logger.debug("computer.company: " + company);
         newComputer.setCompany(company);

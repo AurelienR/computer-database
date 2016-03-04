@@ -6,7 +6,6 @@ package com.excilys.cdb.models;
  * @author excilys
  */
 public enum Order {
-  
   ASC, 
  DESC
 }

@@ -59,13 +59,13 @@ public class ComputerPageMapper {
    *          total rows matching
    * @return count of pages
    */
-  private static int getPageCount(int pageSize, int totalRows) {
+  private static int getPageCount(int pageSize, long totalRows) {
 
     if ((totalRows % pageSize) == 0) {
-      return Math.floorDiv(totalRows, pageSize);
+      return (int) Math.floorDiv(totalRows, pageSize);
     }
 
-    return Math.floorDiv(totalRows, pageSize) + 1;
+    return (int) Math.floorDiv(totalRows, pageSize) + 1;
   }
 
 }

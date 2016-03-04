@@ -101,7 +101,7 @@ public class QueryPageParameterValidator {
    * @param count          count of matching rows to check
    * @throws ValidatorException           if count is < 0
    */
-  public static void checkMatchingRowCount(int count) throws ValidatorException {
+  public static void checkMatchingRowCount(long count) throws ValidatorException {
     if (count < 0) {
       throw new ValidatorException("MatchingRowCount cannot be a negative number: " + count);
     }

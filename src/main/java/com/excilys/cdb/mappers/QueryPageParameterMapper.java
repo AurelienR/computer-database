@@ -17,16 +17,11 @@ public class QueryPageParameterMapper {
   /**
    * Creates the.
    *
-   * @param pageStr
-   *          the page index
-   * @param pageSizeStr
-   *          the page size
-   * @param searchStr
-   *          the search
-   * @param orderByStr
-   *          the order by
-   * @param orderStr
-   *          the order
+   * @param pageStr the page index
+   * @param pageSizeStr the page size
+   * @param searchStr the search
+   * @param orderByStr the order by
+   * @param orderStr the order
    * @return the query page parameter
    */
   public static QueryPageParameter toQueryPageParameter(String pageStr, String pageSizeStr,
@@ -73,8 +68,7 @@ public class QueryPageParameterMapper {
   /**
    * Creates the querypageParameter to send to services.
    *
-   * @param request
-   *          the request that contains page info
+   * @param request the request that contains page info
    * @return the query page parameter
    */
   public static QueryPageParameter toQueryPageParameter(HttpServletRequest request) {

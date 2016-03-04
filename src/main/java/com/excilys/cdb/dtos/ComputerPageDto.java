@@ -11,7 +11,7 @@ public class ComputerPageDto {
   public String order = "ASC";
   public String search = "";
   public int pageCount;
-  public int matchingRowCount = 0;
+  public long matchingRowCount = 0;
   public List<ComputerDto> computers;
 
   /**
@@ -46,7 +46,7 @@ public class ComputerPageDto {
    * @param computers
    *          the related list of computers
    */
-  public ComputerPageDto(int pageCount, int matchingRowCount, List<ComputerDto> computers) {
+  public ComputerPageDto(int pageCount, long matchingRowCount, List<ComputerDto> computers) {
     this.pageCount = pageCount;
     this.matchingRowCount = matchingRowCount;
     this.computers = computers;
@@ -108,11 +108,11 @@ public class ComputerPageDto {
     this.search = search;
   }
 
-  public int getMatchingRowCount() {
+  public long getMatchingRowCount() {
     return matchingRowCount;
   }
 
-  public void setMatchingRowCount(int matchingRowCount) {
+  public void setMatchingRowCount(long matchingRowCount) {
     this.matchingRowCount = matchingRowCount;
   }
 

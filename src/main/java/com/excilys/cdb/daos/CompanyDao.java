@@ -28,7 +28,7 @@ public interface CompanyDao {
    * @throws DaoException
    *           issue with db
    */
-  List<Company> findById(int id);
+  List<Company> findById(long id);
 
   /**
    * Find all company stored in DB by its name.
@@ -46,7 +46,7 @@ public interface CompanyDao {
    * @return return id of the company inserted
    * @throws DaoException           issue with db
    */
-  int insertCompany(Company company);
+  long insertCompany(Company company);
 
   /**
    * Delete a company by its id.
@@ -54,6 +54,6 @@ public interface CompanyDao {
    * @param id          id of the company to delete
    * @throws DaoException           issue with db
    */
-  void deleteCompany(int id);
+  void deleteCompany(long id);
 
 }

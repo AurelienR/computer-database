@@ -62,7 +62,7 @@ public class CompanyDaoImpl implements CompanyDao {
   }
 
   @Override
-  public List<Company> findById(int id) {
+  public List<Company> findById(long id) {
 
     logger.debug("Dao: Find company by its id:" + id);
 
@@ -97,7 +97,7 @@ public class CompanyDaoImpl implements CompanyDao {
   }
 
   @Override
-  public int insertCompany(Company company) {
+  public long insertCompany(Company company) {
 
     logger.debug("Dao: insert company: " + company);
 
@@ -118,13 +118,11 @@ public class CompanyDaoImpl implements CompanyDao {
       }
     }, holder);
 
-    int id = (int) holder.getKey().longValue();
-
-    return id;
+    return holder.getKey().longValue();
   }
 
   @Override
-  public void deleteCompany(int id) {
+  public void deleteCompany(long id) {
 
     logger.debug("Dao: delete company by id:" + id);
 

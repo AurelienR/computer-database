@@ -32,7 +32,7 @@ public interface ComputerDao {
    * @throws DaoException
    *           issue on db
    */
-  int count(QueryPageParameter qp);
+  long count(QueryPageParameter qp);
 
   /**
    * Find all computer stored in DB.
@@ -53,7 +53,7 @@ public interface ComputerDao {
    * @throws DaoException
    *           issue on db
    */
-  List<Computer> findById(int id);
+  List<Computer> findById(long id);
 
   /**
    * Find all computer stored in DB by its name.
@@ -75,7 +75,7 @@ public interface ComputerDao {
    * @throws DaoException
    *           issue on db
    */
-  int insertComputer(Computer computer) throws DaoException;
+  long insertComputer(Computer computer);
 
   /**
    * Update passed computer in the DB (find computer by its id).
@@ -85,7 +85,7 @@ public interface ComputerDao {
    * @throws DaoException
    *           issue on db
    */
-  void updateComputer(Computer computer) throws DaoException;
+  void updateComputer(Computer computer);
 
   /**
    * Delete a computer by it's id.
@@ -95,7 +95,7 @@ public interface ComputerDao {
    * @throws DaoException
    *           issue on db
    */
-  void deleteComputer(int id) throws DaoException;
+  void deleteComputer(long id);
 
   /**
    * Delete the computers by there company id.
@@ -105,5 +105,5 @@ public interface ComputerDao {
    * @throws DaoException
    *           issue on db
    */
-  void deleteByCompanyId(int companyId) throws DaoException;
+  void deleteByCompanyId(long companyId);
 }

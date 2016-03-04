@@ -29,7 +29,7 @@ public class ComputerRowMapper implements RowMapper<Computer> {
     
     // Set computer fields
     // Id
-    int computerId = rs.getInt("computer.id");
+    long computerId = rs.getLong("computer.id");
     // Name
     String computerName = rs.getString("computer.name");
 
@@ -52,7 +52,7 @@ public class ComputerRowMapper implements RowMapper<Computer> {
     }
 
     // Initialize related company
-    Company company = new Company(rs.getInt("company.id"), rs.getString("company.name"));
+    Company company = new Company(rs.getLong("company.id"), rs.getString("company.name"));
     // Initialize computer
     Computer computer = new Computer(computerId, computerName, company, discontinued, introduced);
     

@@ -82,7 +82,7 @@ public class ComputerDaoImpl implements ComputerDao {
   }
 
   @Override
-  public List<Computer> findById(int id) {
+  public List<Computer> findById(long id) {
 
     logger.debug("Dao: find computer by its id: " + id);
 
@@ -115,7 +115,7 @@ public class ComputerDaoImpl implements ComputerDao {
   }
 
   @Override
-  public int insertComputer(Computer computer) {
+  public long insertComputer(Computer computer) {
 
     logger.debug("Dao: insert a computer: " + computer);
 
@@ -149,17 +149,14 @@ public class ComputerDaoImpl implements ComputerDao {
         if (computer.getCompany() == null) {
           ps.setNull(4, java.sql.Types.BIGINT);
         } else {
-          ps.setInt(4, computer.getCompany().getId());
+          ps.setLong(4, computer.getCompany().getId());
         }
 
         return ps;
       }
     }, holder);
-
-    // Get id of the inserted computer
-    int id = (int) holder.getKey().longValue();
-
-    return id;
+    
+    return holder.getKey().longValue();
   }
 
   @Override
@@ -190,10 +187,10 @@ public class ComputerDaoImpl implements ComputerDao {
         if (computer.getCompany() == null) {
           ps.setNull(4, java.sql.Types.BIGINT);
         } else {
-          ps.setInt(4, computer.getCompany().getId());
+          ps.setLong(4, computer.getCompany().getId());
         }
 
-        ps.setInt(5, computer.getId());
+        ps.setLong(5, computer.getId());
 
         return ps;
       }
@@ -201,7 +198,7 @@ public class ComputerDaoImpl implements ComputerDao {
   }
 
   @Override
-  public void deleteComputer(int id) {
+  public void deleteComputer(long id) {
 
     logger.debug("Dao: delete computer by id:" + id);
 
@@ -213,7 +210,7 @@ public class ComputerDaoImpl implements ComputerDao {
   }
 
   @Override
-  public int count(QueryPageParameter qp) {
+  public long count(QueryPageParameter qp) {
 
     logger.debug("Dao: get count of total computers");
 
@@ -247,7 +244,7 @@ public class ComputerDaoImpl implements ComputerDao {
   }
 
   @Override
-  public void deleteByCompanyId(int companyId) {
+  public void deleteByCompanyId(long companyId) {
 
     logger.debug("Dao: delete computers by company id: " + companyId);
 

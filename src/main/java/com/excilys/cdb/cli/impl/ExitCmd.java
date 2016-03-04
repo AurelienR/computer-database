@@ -2,8 +2,6 @@ package com.excilys.cdb.cli.impl;
 
 import com.excilys.cdb.cli.Command;
 
-import org.springframework.stereotype.Component;
-
 /**
  * CLI to exit the program
  * 

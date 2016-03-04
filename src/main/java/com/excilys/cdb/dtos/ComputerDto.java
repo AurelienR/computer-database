@@ -2,7 +2,7 @@ package com.excilys.cdb.dtos;
 
 public class ComputerDto {
 
-  public int id;
+  public long id;
   public String name;
   public String introduced;
   public String discontinued;
@@ -22,7 +22,7 @@ public class ComputerDto {
    * @param company
    *          the related company
    */
-  public ComputerDto(int id, String name, String introduced, String discontinued,
+  public ComputerDto(long id, String name, String introduced, String discontinued,
       CompanyDto company) {
     this.id = id;
     this.name = name;
@@ -31,11 +31,11 @@ public class ComputerDto {
     this.company = company;
   }
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(long id) {
     this.id = id;
   }
 

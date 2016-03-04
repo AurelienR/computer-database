@@ -13,7 +13,7 @@ public class QueryPageParameter {
   private String search = "";
   private OrderBy orderBy = OrderBy.id;
   private Order order = Order.ASC;
-  private int matchingRowCount = 0;
+  private long matchingRowCount = 0L;
 
   /**
    * Instantiates a new query page parameter.
@@ -151,7 +151,7 @@ public class QueryPageParameter {
    *
    * @return the matchinRowCount
    */
-  public int getMatchingRowCount() {
+  public long getMatchingRowCount() {
     return matchingRowCount;
   }
 
@@ -161,7 +161,7 @@ public class QueryPageParameter {
    * @param matchinRowCount
    *          the matchinRowCount to set
    */
-  public void setMatchingRowCount(int matchinRowCount) {
+  public void setMatchingRowCount(long matchinRowCount) {
     this.matchingRowCount = matchinRowCount;
   }
 

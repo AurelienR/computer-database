@@ -43,7 +43,7 @@ public class CompanyDtoService {
    * @param id          id of the company to search
    * @return List of matching CompanyDTOs
    */
-  public List<CompanyDto> findById(int id) {
+  public List<CompanyDto> findById(long id) {
 
     // Validate id
     CompanyDtoValidator.checkValidId(id);
@@ -80,7 +80,7 @@ public class CompanyDtoService {
    * @param companyDto          company to add
    * @return id of the created company
    */
-  public int createCompany(CompanyDto companyDto) {
+  public long createCompany(CompanyDto companyDto) {
 
     // Validate company
     CompanyDtoValidator.validate(companyDto);

@@ -59,7 +59,7 @@ public class ComputerMapper {
       return null;
     }
 
-    int id = computer.getId();
+    long id = computer.getId();
     String computerName = computer.getName();
     String introStr = DateFormatManager.toHtmlDateString(computer.getIntroduced());
     String discStr = DateFormatManager.toHtmlDateString(computer.getDiscontinued());
@@ -80,16 +80,16 @@ public class ComputerMapper {
    */
   public static ComputerDto toComputerDto(HttpServletRequest request) {
     // Retrieve Computer information
-    int id = Integer.parseInt(request.getParameter("id"));
+    long id = Long.parseLong(request.getParameter("id"));
     String nameStr = request.getParameter("computerName");
     String introducedStr = request.getParameter("introduced");
     String discontinuedStr = request.getParameter("discontinued");
 
     // Retrieve related Company
-    int companyId;
+    long companyId;
     CompanyDto companyDto;
     try {
-      companyId = Integer.parseInt(request.getParameter("companyId"));
+      companyId = Long.parseLong(request.getParameter("companyId"));
       companyDto = new CompanyDto(companyId, null);
     } catch (NumberFormatException e) {
       companyDto = null;
@@ -134,7 +134,7 @@ public class ComputerMapper {
     if (computerDto == null) {
       return null;
     }
-    int id = computerDto.getId();
+    long id = computerDto.getId();
     String computerName = computerDto.getName();
     LocalDateTime intro = DateFormatManager.parseHtmlDateString(computerDto.getIntroduced());
     LocalDateTime disc = DateFormatManager.parseHtmlDateString(computerDto.getDiscontinued());

@@ -52,7 +52,7 @@ public class ComputerDtoService {
    *
    * @return the related count
    */
-  public int count(QueryPageParameter qp) {
+  public long count(QueryPageParameter qp) {
       
     // Check
     QueryPageParameterValidator.checkSearch(qp.getSearch());
@@ -82,7 +82,7 @@ public class ComputerDtoService {
    * @return the list of related ComputerDto
    * @throws ValidationException issue with date
    */
-  public List<ComputerDto> findById(int id) {
+  public List<ComputerDto> findById(long id) {
 
     // Validate id
     ComputerDtoValidator.checkValidId(id);
@@ -122,7 +122,7 @@ public class ComputerDtoService {
    * @return the int
    * @throws ValidationException the validation exception
    */
-  public int createComputer(ComputerDto computerDto) {
+  public long createComputer(ComputerDto computerDto) {
 
     // Validate computerDTO
     ComputerDtoValidator.validate(computerDto);
@@ -158,7 +158,7 @@ public class ComputerDtoService {
    * @param id the id
    * @throws ValidationException the validation exception
    */
-  public void deleteComputer(int id) {
+  public void deleteComputer(long id) {
 
     // Validate id
     ComputerDtoValidator.checkValidId(id);

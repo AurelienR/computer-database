@@ -30,17 +30,15 @@ public class ComputerService {
   // Dao
   @Autowired
   ComputerDao computerDao;
+
   // Methods
   /**
    * Find Computers by query parameters criterias.
    * 
-   * @param qp
-   *          query parameters to based search on
+   * @param qp query parameters to based search on
    * @return Ordering list of matching Computers
-   * @throws DaoException
-   *           issues with DB
-   * @throws ValidatorException
-   *           issues with data
+   * @throws DaoException issues with DB
+   * @throws ValidatorException issues with data
    */
   public List<Computer> findByQuery(QueryPageParameter qp) {
 
@@ -57,16 +55,15 @@ public class ComputerService {
    * Count all computers in db.
    * 
    * @return total number of computers in DB
-   * @throws DaoException
-   *           issue with db
+   * @throws DaoException issue with db
    */
-  public int count(QueryPageParameter qp) {
+  public long count(QueryPageParameter qp) {
 
     logger.debug("Service: count all computers");
 
     // Check
     QueryPageParameterValidator.checkSearch(qp.getSearch());
-    
+
     // Get count
     return computerDao.count(qp);
   }
@@ -75,8 +72,7 @@ public class ComputerService {
    * Find the full list of computers stored in DB.
    * 
    * @return list of all computers
-   * @throws DaoException
-   *           issues with db
+   * @throws DaoException issues with db
    */
   public List<Computer> findAll() {
 
@@ -88,15 +84,12 @@ public class ComputerService {
   /**
    * Find computers by their id.
    * 
-   * @param id
-   *          id of the computer to search for
+   * @param id id of the computer to search for
    * @return List of matching computers
-   * @throws DaoException
-   *           issues with DB
-   * @throws ValidatorException
-   *           issues with data
+   * @throws DaoException issues with DB
+   * @throws ValidatorException issues with data
    */
-  public List<Computer> findById(int id) {
+  public List<Computer> findById(long id) {
 
     logger.debug("Service: find computer by id: " + id);
 
@@ -110,13 +103,10 @@ public class ComputerService {
   /**
    * Find computers by their name.
    * 
-   * @param name
-   *          name of the computer to search for
+   * @param name name of the computer to search for
    * @return List of matching computers
-   * @throws DaoException
-   *           issues with db
-   * @throws ValidatorException
-   *           issues with data
+   * @throws DaoException issues with db
+   * @throws ValidatorException issues with data
    */
   public List<Computer> findByName(String name) {
 
@@ -133,15 +123,12 @@ public class ComputerService {
   /**
    * Add passed computer to DB.
    * 
-   * @param computer
-   *          computer to add to db
+   * @param computer computer to add to db
    * @return id of the computer added
-   * @throws DaoException
-   *           issues with DB
-   * @throws ValidatorException
-   *           issues with data
+   * @throws DaoException issues with DB
+   * @throws ValidatorException issues with data
    */
-  public int createComputer(Computer computer) {
+  public long createComputer(Computer computer) {
 
     logger.debug("Service: create computer:" + computer);
 
@@ -155,12 +142,9 @@ public class ComputerService {
   /**
    * Update passed computer in db.
    * 
-   * @param computer
-   *          to update (based on its id)
-   * @throws DaoException
-   *           issues with db
-   * @throws ValidatorException
-   *           issues with data
+   * @param computer to update (based on its id)
+   * @throws DaoException issues with db
+   * @throws ValidatorException issues with data
    */
   public void updateComputer(Computer computer) {
 
@@ -176,14 +160,11 @@ public class ComputerService {
   /**
    * Delete a computer by its id.
    * 
-   * @param id
-   *          id of the computer to delete
-   * @throws DaoException
-   *           issues with db
-   * @throws ValidatorException
-   *           issues with data
+   * @param id id of the computer to delete
+   * @throws DaoException issues with db
+   * @throws ValidatorException issues with data
    */
-  public void deleteComputer(int id) {
+  public void deleteComputer(long id) {
 
     logger.debug("Service: delete computer by id:" + id);
 

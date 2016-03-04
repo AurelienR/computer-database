@@ -2,21 +2,21 @@ package com.excilys.cdb.dtos;
 
 public class CompanyDto {
 
-  public int id;
+  public long id;
   public String name;
 
-  public CompanyDto(int id, String name) {
+  public CompanyDto(long id, String name) {
     this.id = id;
     this.name = name;
   }
 
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 
 
-  public void setId(int id) {
+  public void setId(long id) {
     this.id = id;
   }
 
@@ -34,7 +34,6 @@ public class CompanyDto {
   @Override
   public String toString() {
     return "CompanyDto [id=" + id + ", name=" + name + "]";
-  }
-  
+  }  
   
 }
