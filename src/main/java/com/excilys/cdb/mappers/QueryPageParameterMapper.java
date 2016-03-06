@@ -11,76 +11,88 @@ import javax.servlet.http.HttpServletRequest;
 
 public class QueryPageParameterMapper {
 
-  // Logger
-  static final Logger logger = LoggerFactory.getLogger(QueryPageParameterMapper.class);
+    // Logger
+    static final Logger logger = LoggerFactory.getLogger(QueryPageParameterMapper.class);
 
-  /**
-   * Creates the.
-   *
-   * @param pageStr the page index
-   * @param pageSizeStr the page size
-   * @param searchStr the search
-   * @param orderByStr the order by
-   * @param orderStr the order
-   * @return the query page parameter
-   */
-  public static QueryPageParameter toQueryPageParameter(String pageStr, String pageSizeStr,
-      String searchStr, String orderByStr, String orderStr) {
+    /**
+     * Creates the.
+     *
+     * @param pageStr
+     *            the page index
+     * @param pageSizeStr
+     *            the page size
+     * @param searchStr
+     *            the search
+     * @param orderByStr
+     *            the order by
+     * @param orderStr
+     *            the order
+     * @return the query page parameter
+     */
+    public static QueryPageParameter toQueryPageParameter(String pageStr, String pageSizeStr, String searchStr,
+	    String orderByStr, String orderStr) {
 
-    // Retrieve related dashboard page
-    QueryPageParameter qp = new QueryPageParameter();
+	int pageIndex = 1;
+	int pageSize = 30;
+	
+	if (pageStr != null && !pageStr.isEmpty()) {
+	    pageIndex = Integer.parseInt(pageStr);	   
+	}
+	
+	if (pageSizeStr != null && !pageStr.isEmpty()) {
+	    pageSize = Integer.parseInt(pageSizeStr);	    
+	}
 
-    if (pageStr != null && !pageStr.isEmpty()) {
-
-      int pageIndex = Integer.parseInt(pageStr);
-
-      if (pageIndex < 1) {
-        pageIndex = 1;
-      }
-      qp.setPageIndex(pageIndex);
-    }
-    if (pageSizeStr != null && !pageStr.isEmpty()) {
-
-      int pageSize = Integer.parseInt(pageSizeStr);
-
-      if (pageSize < 1) {
-        pageSize = 30;
-      }
-
-      qp.setPageSize(pageSize);
-    }
-    if (searchStr != null && !searchStr.isEmpty()) {
-      qp.setSearch(searchStr);
-    }
-    if (orderByStr != null && !orderByStr.isEmpty()) {
-      qp.setOrderBy(OrderBy.valueOf(orderByStr));
-    }
-    if (orderStr != null && !orderStr.isEmpty()) {
-      qp.setOrder(Order.valueOf(orderStr));
+	return toQueryPageParameter(pageIndex, pageSize, searchStr, orderByStr, orderStr);
+	
     }
 
-    logger.debug("\n\t\tMapper: Map: [index:" + pageStr + " , size:" + pageSizeStr + ", search:"
-        + searchStr + ", orderby:" + orderByStr + " , order:" + orderStr + "]" + "\n\t\tTO:" + qp);
+    public static QueryPageParameter toQueryPageParameter(int pageIndex, int pageSize, String searchStr,
+	    String orderByStr, String orderStr) {
 
-    return qp;
-  }
+	// Retrieve related dashboard page
+	QueryPageParameter qp = new QueryPageParameter();
 
-  /**
-   * Creates the querypageParameter to send to services.
-   *
-   * @param request the request that contains page info
-   * @return the query page parameter
-   */
-  public static QueryPageParameter toQueryPageParameter(HttpServletRequest request) {
+	if (pageIndex >= 1) {
+	    qp.setPageIndex(pageIndex);
+	}
 
-    // Retrieve parameters
-    String pageStr = request.getParameter("page");
-    String pageSizeStr = request.getParameter("pageSize");
-    String orderByStr = request.getParameter("orderBy");
-    String orderStr = request.getParameter("order");
-    String searchStr = request.getParameter("search");
+	if (pageSize >= 1) {
+	    qp.setPageSize(pageSize);
+	}
 
-    return toQueryPageParameter(pageStr, pageSizeStr, searchStr, orderByStr, orderStr);
-  }
+	if (searchStr != null && !searchStr.isEmpty()) {
+	    qp.setSearch(searchStr);
+	}
+	if (orderByStr != null && !orderByStr.isEmpty()) {
+	    qp.setOrderBy(OrderBy.valueOf(orderByStr));
+	}
+	if (orderStr != null && !orderStr.isEmpty()) {
+	    qp.setOrder(Order.valueOf(orderStr));
+	}
+
+	logger.debug("\n\t\tMapper: Map: [index:" + pageIndex + " , size:" + pageSize + ", search:" + searchStr
+		+ ", orderby:" + orderByStr + " , order:" + orderStr + "]" + "\n\t\tTO:" + qp);
+	return qp;
+    }
+
+    /**
+     * Creates the querypageParameter to send to services.
+     *
+     * @param request
+     *            the request that contains page info
+     * @return the query page parameter
+     */
+    public static QueryPageParameter toQueryPageParameter(HttpServletRequest request) {
+
+	// Retrieve parameters
+	String pageStr = request.getParameter("page");
+	String pageSizeStr = request.getParameter("pageSize");
+	String orderByStr = request.getParameter("orderBy");
+	String orderStr = request.getParameter("order");
+	String searchStr = request.getParameter("search");
+
+	return toQueryPageParameter(pageStr, pageSizeStr, searchStr, orderByStr, orderStr);
+    }
 
 }

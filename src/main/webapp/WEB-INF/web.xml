@@ -17,6 +17,18 @@
 	         org.springframework.web.context.ContextLoaderListener
 	     </listener-class>
 	 </listener>
+	 
+	<!-- Spring Controllers --> 
+	  <servlet>
+    <servlet-name>computerController</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>computerController</servlet-name>
+    <url-pattern>/computers/*</url-pattern>
+  </servlet-mapping>
 	
 	<!-- Welcome URL -->
 	<welcome-file-list>

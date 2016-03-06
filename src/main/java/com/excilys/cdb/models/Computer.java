@@ -1,7 +1,5 @@
 package com.excilys.cdb.models;
 
-import com.excilys.cdb.validators.bean.ComputerDates;
-
 import java.time.LocalDateTime;
 
 import javax.validation.constraints.Min;
@@ -15,7 +13,6 @@ import javax.validation.constraints.Size;
  *
  */
 
-@ComputerDates
 public class Computer {
 
   // Attributes
