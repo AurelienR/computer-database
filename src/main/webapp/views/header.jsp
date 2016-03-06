@@ -3,7 +3,7 @@
 <%@ taglib prefix="myLib" tagdir="/WEB-INF/tags"%>
 <header class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
-		<myLib:link target="./computers" pageIndex="1"
+		<myLib:link target="/computer-database/computers" pageIndex="1"
 			pageSize="30" classe="navbar-brand"> Application -Computer Database </myLib:link>
 	</div>
 </header>

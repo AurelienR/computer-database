@@ -1,14 +1,17 @@
 package junit.com.excilys.cdb.mappers;
 
+import com.excilys.cdb.dtos.CompanyDto;
+import com.excilys.cdb.mappers.CompanyMapper;
+import com.excilys.cdb.models.Company;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
-
-import com.excilys.cdb.dtos.CompanyDto;
-import com.excilys.cdb.mappers.CompanyMapper;
-import com.excilys.cdb.models.Company;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -17,15 +20,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyMapperTest {
@@ -38,7 +35,7 @@ public class CompanyMapperTest {
   CompanyDto companyDto;
   @Mock
   Company company;
-  
+
   // Hook methods
   @BeforeClass
   public static void prepareTest() {
@@ -55,7 +52,7 @@ public class CompanyMapperTest {
    */
   @Before
   public void setUp() {
-    LOGGER.info("START TEST CASE");    
+    LOGGER.info("START TEST CASE");
   }
 
   /**

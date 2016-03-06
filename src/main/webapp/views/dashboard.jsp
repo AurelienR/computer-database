@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="myLib" tagdir="/WEB-INF/tags"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <html>
 <head>
 <title>Computer Database</title>
@@ -29,16 +30,16 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="./newComputer">Add
+					<a class="btn btn-success" id="addComputer" href="./computers/new">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
 		</div>
 
-		<form id="deleteForm" action="./deleteComputer" method="POST">
-			<input type="hidden" name="selection" value="">
-		</form>
+		<form:form id="deleteForm" action="/computer-database/computers/delete" method="POST"  modelAttribute="idsStr">
+			<input type="hidden" name="selection" value=""/>
+		</form:form>
 
 		<div class="container" style="margin-top: 10px;">
 			<table class="table table-striped table-bordered">
@@ -122,7 +123,7 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id}"></td>
-							<td><a href="./computers?id=${computer.id}" onclick="">${computer.name}</a>
+							<td><a href="./computers/${computer.id}" onclick="">${computer.name}</a>
 							</td>
 
 							<td><fmt:parseDate pattern="yyyy-MM-dd"

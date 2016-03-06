@@ -2,11 +2,11 @@ package com.excilys.cdb.dtos;
 
 public class ComputerDto {
 
-  public long id;
-  public String name;
-  public String introduced;
-  public String discontinued;
-  public CompanyDto company;
+  private long id;
+  private String name;
+  private String introduced;
+  private String discontinued;
+  private CompanyDto company;
 
   /**
    * Instantiates a new computer dto.
@@ -31,6 +31,10 @@ public class ComputerDto {
     this.company = company;
   }
 
+  public ComputerDto(){
+    
+  }
+  
   public long getId() {
     return id;
   }

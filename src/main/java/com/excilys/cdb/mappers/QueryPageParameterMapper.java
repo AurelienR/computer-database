@@ -27,28 +27,35 @@ public class QueryPageParameterMapper {
   public static QueryPageParameter toQueryPageParameter(String pageStr, String pageSizeStr,
       String searchStr, String orderByStr, String orderStr) {
 
+    int pageIndex = 1;
+    int pageSize = 30;
+
+    if (pageStr != null && !pageStr.isEmpty()) {
+      pageIndex = Integer.parseInt(pageStr);
+    }
+
+    if (pageSizeStr != null && !pageStr.isEmpty()) {
+      pageSize = Integer.parseInt(pageSizeStr);
+    }
+
+    return toQueryPageParameter(pageIndex, pageSize, searchStr, orderByStr, orderStr);
+
+  }
+
+  public static QueryPageParameter toQueryPageParameter(int pageIndex, int pageSize,
+      String searchStr, String orderByStr, String orderStr) {
+
     // Retrieve related dashboard page
     QueryPageParameter qp = new QueryPageParameter();
 
-    if (pageStr != null && !pageStr.isEmpty()) {
-
-      int pageIndex = Integer.parseInt(pageStr);
-
-      if (pageIndex < 1) {
-        pageIndex = 1;
-      }
+    if (pageIndex >= 1) {
       qp.setPageIndex(pageIndex);
     }
-    if (pageSizeStr != null && !pageStr.isEmpty()) {
 
-      int pageSize = Integer.parseInt(pageSizeStr);
-
-      if (pageSize < 1) {
-        pageSize = 30;
-      }
-
+    if (pageSize >= 1) {
       qp.setPageSize(pageSize);
     }
+
     if (searchStr != null && !searchStr.isEmpty()) {
       qp.setSearch(searchStr);
     }
@@ -59,9 +66,8 @@ public class QueryPageParameterMapper {
       qp.setOrder(Order.valueOf(orderStr));
     }
 
-    logger.debug("\n\t\tMapper: Map: [index:" + pageStr + " , size:" + pageSizeStr + ", search:"
+    logger.debug("\n\t\tMapper: Map: [index:" + pageIndex + " , size:" + pageSize + ", search:"
         + searchStr + ", orderby:" + orderByStr + " , order:" + orderStr + "]" + "\n\t\tTO:" + qp);
-
     return qp;
   }
 

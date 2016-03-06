@@ -15,7 +15,7 @@ public class CompanyDtoValidator extends ModelValidator {
    * @param companyDto          companyDTO to validate
    * @throws ValidatorException           if inconsistent fields value
    */
-  public static void validate(CompanyDto companyDto) throws ValidatorException {
+  public static void validate(CompanyDto companyDto) throws ValidatorException {    
     CompanyDtoValidator.checkNameNotNull(companyDto.getName());
     CompanyDtoValidator.checkNameNotEmpty(companyDto.getName());
     CompanyDtoValidator.checkValidId(companyDto.getId());
