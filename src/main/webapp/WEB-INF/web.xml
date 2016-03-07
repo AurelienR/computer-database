@@ -44,6 +44,7 @@
 		<url-pattern>*.js</url-pattern>
 	</servlet-mapping>
 
+
 	<!-- Welcome URL -->
 	<welcome-file-list>
 		<welcome-file>/computers</welcome-file>

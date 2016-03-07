@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
@@ -12,9 +13,9 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<context:annotation-config />
 	<mvc:annotation-driven />
 
-    <mvc:resources location="/css/" mapping="/css/**" />
-    <mvc:resources location="/js/" mapping="/js/**" />
-    <mvc:resources location="/fonts/" mapping="/fonts/**" />
+	<mvc:resources location="/css/" mapping="/css/**" />
+	<mvc:resources location="/js/" mapping="/js/**" />
+	<mvc:resources location="/fonts/" mapping="/fonts/**" />
 
 	<!-- Define views servlet location -->
 	<bean

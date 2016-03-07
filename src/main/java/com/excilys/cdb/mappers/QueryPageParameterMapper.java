@@ -42,6 +42,16 @@ public class QueryPageParameterMapper {
 
   }
 
+  /**
+   * To query page parameter.
+   *
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @param searchStr the search str
+   * @param orderByStr the order by str
+   * @param orderStr the order str
+   * @return the query page parameter
+   */
   public static QueryPageParameter toQueryPageParameter(int pageIndex, int pageSize,
       String searchStr, String orderByStr, String orderStr) {
 

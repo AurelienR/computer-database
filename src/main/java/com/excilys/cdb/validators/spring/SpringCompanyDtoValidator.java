@@ -1,13 +1,13 @@
 package com.excilys.cdb.validators.spring;
 
-import javax.validation.ValidationException;
+import com.excilys.cdb.dtos.CompanyDto;
+import com.excilys.cdb.validators.CompanyDtoValidator;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.excilys.cdb.dtos.CompanyDto;
-import com.excilys.cdb.validators.CompanyDtoValidator;
+import javax.validation.ValidationException;
 
 @Component
 public class SpringCompanyDtoValidator implements Validator {

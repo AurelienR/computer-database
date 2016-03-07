@@ -10,9 +10,9 @@ public class CompanyDto {
     this.name = name;
   }
 
-  public CompanyDto(){
+  public CompanyDto() {
   }
-  
+
   public long getId() {
     return id;
   }
@@ -67,5 +67,4 @@ public class CompanyDto {
     }
     return true;
   }
-
 }

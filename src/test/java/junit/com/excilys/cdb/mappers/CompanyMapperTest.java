@@ -1,17 +1,14 @@
 package junit.com.excilys.cdb.mappers;
 
-import com.excilys.cdb.dtos.CompanyDto;
-import com.excilys.cdb.mappers.CompanyMapper;
-import com.excilys.cdb.models.Company;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
+
+import com.excilys.cdb.dtos.CompanyDto;
+import com.excilys.cdb.mappers.CompanyMapper;
+import com.excilys.cdb.models.Company;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -23,6 +20,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyMapperTest {
