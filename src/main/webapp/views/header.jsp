@@ -9,7 +9,7 @@
 			<spring:message code="title.header" />
 		</myLib:link>
 		  <ul class="nav navbar-nav navbar-right">
-            <li><a href="?lang=fr_US">FR</a></li>
+            <li><a href="?lang=fr_FR">FR</a></li>
             <li><a href="?lang=en_US">EN</a></li>
           </ul>
 	</div>

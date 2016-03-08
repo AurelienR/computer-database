@@ -30,7 +30,7 @@ public class CompanyDaoImpl implements CompanyDao {
   private static final CompanyRowMapper companyRowMapper = new CompanyRowMapper();
 
   // Logger
-  static final Logger logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDaoImpl.class);
 
   // DB column name
   public static final String NAME_COLUMN = "name";
@@ -50,7 +50,7 @@ public class CompanyDaoImpl implements CompanyDao {
   // Methods
   @Override
   public List<Company> findAll() {
-    logger.debug("Dao: Find all companies");
+    LOGGER.debug("Dao: Find all companies");
 
     // Local variable declaration
     List<Company> companyList = null;
@@ -64,7 +64,7 @@ public class CompanyDaoImpl implements CompanyDao {
   @Override
   public List<Company> findById(long id) {
 
-    logger.debug("Dao: Find company by its id:" + id);
+    LOGGER.debug("Dao: Find company by its id:" + id);
 
     // Check
     CompanyValidator.checkValidId(id);
@@ -81,7 +81,7 @@ public class CompanyDaoImpl implements CompanyDao {
   @Override
   public List<Company> findByName(String name) {
 
-    logger.debug("Dao: Find company by its name : " + name);
+    LOGGER.debug("Dao: Find company by its name : " + name);
 
     // Check
     CompanyValidator.checkNameNotNull(name);
@@ -99,7 +99,7 @@ public class CompanyDaoImpl implements CompanyDao {
   @Override
   public long insertCompany(Company company) {
 
-    logger.debug("Dao: insert company: " + company);
+    LOGGER.debug("Dao: insert company: " + company);
 
     // Check
     CompanyValidator.validate(company);
@@ -124,7 +124,7 @@ public class CompanyDaoImpl implements CompanyDao {
   @Override
   public void deleteCompany(long id) {
 
-    logger.debug("Dao: delete company by id:" + id);
+    LOGGER.debug("Dao: delete company by id:" + id);
 
     // Check
     CompanyValidator.checkValidId(id);

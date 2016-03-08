@@ -25,7 +25,7 @@ import java.util.List;
 public class CompanyService {
 
   // Logger
-  static final Logger logger = LoggerFactory.getLogger(CompanyService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CompanyService.class);
 
   // Dao
   @Autowired
@@ -43,7 +43,7 @@ public class CompanyService {
    */
   public List<Company> findAll() {
 
-    logger.debug("Service: find all companies");
+    LOGGER.debug("Service: find all companies");
 
     return companyDao.findAll();
   }
@@ -58,7 +58,7 @@ public class CompanyService {
    */
   public List<Company> findById(long id) {
 
-    logger.debug("Service find company by id: " + id);
+    LOGGER.debug("Service find company by id: " + id);
 
     // Validate id
     CompanyValidator.checkValidId(id);
@@ -77,7 +77,7 @@ public class CompanyService {
    */
   public List<Company> findByName(String name) {
 
-    logger.debug("Service: find company by name: " + name);
+    LOGGER.debug("Service: find company by name: " + name);
 
     // Validate Name
     CompanyValidator.checkNameNotNull(name);
@@ -97,7 +97,7 @@ public class CompanyService {
    */
   public long createCompany(Company company) {
 
-    logger.debug("Service: create company:" + company);
+    LOGGER.debug("Service: create company:" + company);
 
     // Validate Company
     CompanyValidator.validate(company);
@@ -116,16 +116,16 @@ public class CompanyService {
   @Transactional
   public void deleteCompany(long id) {
 
-    logger.debug("Service: Delete Company");
+    LOGGER.debug("Service: Delete Company");
 
     // Check
     CompanyValidator.checkValidId(id);
 
     // Transaction
-    logger.debug("Initialize transaction");
-    logger.debug("Delete computers by company id");
+    LOGGER.debug("Initialize transaction");
+    LOGGER.debug("Delete computers by company id");
     computerDao.deleteByCompanyId(id);
-    logger.debug("Delete company");
+    LOGGER.debug("Delete company");
     companyDao.deleteCompany(id);
 
   }

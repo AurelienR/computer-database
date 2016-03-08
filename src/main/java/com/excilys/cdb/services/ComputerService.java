@@ -25,7 +25,7 @@ import java.util.List;
 public class ComputerService {
 
   // Logger
-  static final Logger logger = LoggerFactory.getLogger(ComputerService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
 
   // Dao
   @Autowired
@@ -42,7 +42,7 @@ public class ComputerService {
    */
   public List<Computer> findByQuery(QueryPageParameter qp) {
 
-    logger.debug("Service: find commputer by queryPageParameter, qp:" + qp);
+    LOGGER.debug("Service: find commputer by queryPageParameter, qp:" + qp);
 
     // Validate queryParameter
     QueryPageParameterValidator.validate(qp);
@@ -59,7 +59,7 @@ public class ComputerService {
    */
   public long count(QueryPageParameter qp) {
 
-    logger.debug("Service: count all computers");
+    LOGGER.debug("Service: count all computers");
 
     // Check
     QueryPageParameterValidator.checkSearch(qp.getSearch());
@@ -76,7 +76,7 @@ public class ComputerService {
    */
   public List<Computer> findAll() {
 
-    logger.debug("Service: find all computers");
+    LOGGER.debug("Service: find all computers");
 
     return computerDao.findAll();
   }
@@ -91,7 +91,7 @@ public class ComputerService {
    */
   public List<Computer> findById(long id) {
 
-    logger.debug("Service: find computer by id: " + id);
+    LOGGER.debug("Service: find computer by id: " + id);
 
     // Validate id
     ComputerValidator.checkValidId(id);
@@ -110,7 +110,7 @@ public class ComputerService {
    */
   public List<Computer> findByName(String name) {
 
-    logger.debug("Service: find computer by name:" + name);
+    LOGGER.debug("Service: find computer by name:" + name);
 
     // Validate name
     ComputerValidator.checkNameNotNull(name);
@@ -130,7 +130,7 @@ public class ComputerService {
    */
   public long createComputer(Computer computer) {
 
-    logger.debug("Service: create computer:" + computer);
+    LOGGER.debug("Service: create computer:" + computer);
 
     // Validate computer
     ComputerValidator.validate(computer);
@@ -148,7 +148,7 @@ public class ComputerService {
    */
   public void updateComputer(Computer computer) {
 
-    logger.debug("Service: update computer:" + computer);
+    LOGGER.debug("Service: update computer:" + computer);
 
     // Validate computer
     ComputerValidator.validate(computer);
@@ -166,7 +166,7 @@ public class ComputerService {
    */
   public void deleteComputer(long id) {
 
-    logger.debug("Service: delete computer by id:" + id);
+    LOGGER.debug("Service: delete computer by id:" + id);
 
     // Validate computer
     ComputerValidator.checkValidId(id);

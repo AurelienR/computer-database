@@ -38,7 +38,7 @@ public class ComputerDaoImpl implements ComputerDao {
   private ComputerRowMapper computerRowMapper = new ComputerRowMapper();
 
   // Logger
-  static final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
   // DB column names
   public static final String INTRO_COLUMN = "introduced";
@@ -72,7 +72,7 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public List<Computer> findAll() {
 
-    logger.debug("Dao: Find all computers");
+    LOGGER.debug("Dao: Find all computers");
     List<Computer> computerList = null;
 
     // Retrieve and map all computers
@@ -84,7 +84,7 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public List<Computer> findById(long id) {
 
-    logger.debug("Dao: find computer by its id: " + id);
+    LOGGER.debug("Dao: find computer by its id: " + id);
 
     // Check
     ComputerValidator.checkValidId(id);
@@ -100,7 +100,7 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public List<Computer> findByName(String name) {
 
-    logger.debug("Dao: find computer by name:" + name);
+    LOGGER.debug("Dao: find computer by name:" + name);
 
     // Check
     ComputerValidator.checkNameNotNull(name);
@@ -117,7 +117,7 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public long insertComputer(Computer computer) {
 
-    logger.debug("Dao: insert a computer: " + computer);
+    LOGGER.debug("Dao: insert a computer: " + computer);
 
     // Check
     ComputerValidator.validate(computer);
@@ -162,7 +162,7 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public void updateComputer(Computer computer) {
 
-    logger.debug("Dao: update computer with computer: " + computer);
+    LOGGER.debug("Dao: update computer with computer: " + computer);
 
     // Check
     ComputerValidator.validate(computer);
@@ -200,7 +200,7 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public void deleteComputer(long id) {
 
-    logger.debug("Dao: delete computer by id:" + id);
+    LOGGER.debug("Dao: delete computer by id:" + id);
 
     // Check
     ComputerValidator.checkValidId(id);
@@ -213,7 +213,7 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public long count(QueryPageParameter qp) {
 
-    logger.debug("Dao: get count of total computers");
+    LOGGER.debug("Dao: get count of total computers");
 
     // Count matching computers
     int count = jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class, qp.getQuerySearch(),
@@ -225,7 +225,7 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public List<Computer> findByQuery(QueryPageParameter qp) {
 
-    logger.debug("Dao: find computer by query" + qp);
+    LOGGER.debug("Dao: find computer by query" + qp);
 
     // Check
     QueryPageParameterValidator.validate(qp);
@@ -247,7 +247,7 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public void deleteByCompanyId(long companyId) {
 
-    logger.debug("Dao: delete computers by company id: " + companyId);
+    LOGGER.debug("Dao: delete computers by company id: " + companyId);
 
     // Check
     CompanyValidator.checkValidId(companyId);

@@ -17,7 +17,7 @@ import java.util.List;
 public class ComputerPageMapper {
 
   // Logger
-  static final Logger logger = LoggerFactory.getLogger(ComputerPageMapper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComputerPageMapper.class);
 
   /**
    * Initialize a ComputerPageDTO based on queryparameter.
@@ -44,7 +44,7 @@ public class ComputerPageMapper {
     int count = getPageCount(qp.getPageSize(), qp.getMatchingRowCount());
     ComputerPageDto computerPageDto = new ComputerPageDto(qp, count, computerDtos);
 
-    logger.debug("\n\t\tMapper: map: [ qp:" + qp + ", computerDtos:" + computerDtos + "] \n\t\tTO:"
+    LOGGER.debug("\n\t\tMapper: map: [ qp:" + qp + ", computerDtos:" + computerDtos + "] \n\t\tTO:"
         + computerPageDto);
 
     return computerPageDto;

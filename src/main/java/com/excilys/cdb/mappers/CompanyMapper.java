@@ -14,7 +14,7 @@ import java.util.List;
 public class CompanyMapper {
 
   // Logger
-  static final Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
+  static final Logger LOGGER = LoggerFactory.getLogger(CompanyMapper.class);
 
   /**
    * Gets deserialized resultSet to list of companies.
@@ -46,7 +46,7 @@ public class CompanyMapper {
       return null;
     }
     CompanyDto companyDto = new CompanyDto(company.getId(), company.getName());
-    logger.debug("\n\t\tMapper: map: company: " + company + "\n\t\tTO: companyDto: " + companyDto);
+    LOGGER.debug("\n\t\tMapper: map: company: " + company + "\n\t\tTO: companyDto: " + companyDto);
     return companyDto;
   }
 
@@ -63,7 +63,7 @@ public class CompanyMapper {
 
     Company company = new Company(companyDto.getId(), companyDto.getName());
 
-    logger.debug("\n\t\tMapper: map: companyDto: " + companyDto + "\n\t\tTO: company: " + company);
+    LOGGER.debug("\n\t\tMapper: map: companyDto: " + companyDto + "\n\t\tTO: company: " + company);
 
     return company;
   }
@@ -81,7 +81,7 @@ public class CompanyMapper {
     List<CompanyDto> companyDtos = new ArrayList<CompanyDto>();
     companies.parallelStream().forEachOrdered(c -> companyDtos.add(toCompanyDto(c)));
 
-    logger.debug(
+    LOGGER.debug(
         "\n\t\tMapper: map: List<Company>:" + companies + "\n\t\tTO: companyDtos: " + companyDtos);
 
     return companyDtos;

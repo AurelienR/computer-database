@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 public class QueryPageParameterMapper {
 
   // Logger
-  static final Logger logger = LoggerFactory.getLogger(QueryPageParameterMapper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(QueryPageParameterMapper.class);
 
   /**
    * Creates the.
@@ -76,7 +76,7 @@ public class QueryPageParameterMapper {
       qp.setOrder(Order.valueOf(orderStr));
     }
 
-    logger.debug("\n\t\tMapper: Map: [index:" + pageIndex + " , size:" + pageSize + ", search:"
+    LOGGER.debug("\n\t\tMapper: Map: [index:" + pageIndex + " , size:" + pageSize + ", search:"
         + searchStr + ", orderby:" + orderByStr + " , order:" + orderStr + "]" + "\n\t\tTO:" + qp);
     return qp;
   }
