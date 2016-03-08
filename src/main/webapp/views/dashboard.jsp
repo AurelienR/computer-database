@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="myLib" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <html>
 <head>
@@ -13,41 +14,58 @@
 <link href="./css/main.css" rel="stylesheet" media="screen" />
 </head>
 <body>
+	<!-- ***************************** LOCALIZATION DECLARATION ***************************** -->
+	<!-- Buttons -->
+	<spring:message code="btn.search" var="btnSearch" />
+	<spring:message code="btn.filterByName" var="btnFilterByName" />
+	<spring:message code="btn.addComputer" var="btnAddComputer" />
+	<!-- Column headers -->
+	<spring:message code="label.computerName" var="labelComputerName" />
+	<spring:message code="label.introduced" var="labelIntroduced" />
+	<spring:message code="label.discontinued" var="labelDiscontinued" />
+	<spring:message code="label.company" var="labelCompany" />
+	<spring:message code="btn.edit" var="btnEdit" />
+
+	<!-- ***************************** HEADER ***************************** -->
 	<jsp:include page="header.jsp" />
 
 	<section id="main">
+		<!-- ***************************** SEARCH AREA ***************************** -->
 		<div class="container">
-			<h1 id="homeTitle">${page.matchingRowCount} computers found</h1>
+			<h1 id="homeTitle">${page.matchingRowCount}
+				<spring:message code="msg.computersFound" />
+			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="./computers" method="GET"
 						class="form-inline">
-
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="${btnSearch}" /> <input
+							type="submit" id="searchsubmit" value="${btnFilterByName}"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="./computers/new">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="./computers/new">${btnAddComputer}</a>
+					<a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();">${btnEdit}</a>
 				</div>
 			</div>
 		</div>
 
-		<form:form id="deleteForm" action="/computer-database/computers/delete" method="POST"  modelAttribute="idsStr">
-			<input type="hidden" name="selection" value=""/>
+		<!-- ***************************** PAGE RESULTS ***************************** -->
+		<form:form id="deleteForm"
+			action="/computer-database/computers/delete" method="POST"
+			modelAttribute="idsStr">
+			<input type="hidden" name="selection" value="" />
 		</form:form>
 
 		<div class="container" style="margin-top: 10px;">
 			<table class="table table-striped table-bordered">
 				<thead>
+					<!-- ***************************** COLUMN HEADERS ***************************** -->
 					<tr>
-						<!-- Variable declarations for passing labels as parameters -->
-						<!-- Table header for Computer Name -->
-
+						<!-- Delete options -->
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
 							style="vertical-align: top;"> - <a href="#"
@@ -55,69 +73,65 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
+						<!-- Header Computername -->
 						<th><c:choose>
-								<c:when
-									test="${page.orderBy != 'name' || page.order != 'ASC'}">
+								<c:when test="${page.orderBy != 'name' || page.order != 'ASC'}">
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="ASC" orderBy="name"
-										search="${page.search}">Computer name</myLib:link>
+										search="${page.search}">${labelComputerName}</myLib:link>
 								</c:when>
 								<c:otherwise>
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="DESC" orderBy="name"
-										search="${page.search}">Computer name</myLib:link>
+										search="${page.search}">${labelComputerName}</myLib:link>
 								</c:otherwise>
 							</c:choose></th>
+						<!-- Header Introduced -->
 						<th><c:choose>
 								<c:when
 									test="${page.orderBy != 'introduced' || page.order != 'ASC'}">
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="ASC" orderBy="introduced"
-										search="${page.search}">Introduced date</myLib:link>
+										search="${page.search}">${labelIntroduced}</myLib:link>
 								</c:when>
 								<c:otherwise>
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="DESC" orderBy="introduced"
-										search="${page.search}">Introduced date</myLib:link>
+										search="${page.search}">${labelIntroduced}</myLib:link>
 								</c:otherwise>
 							</c:choose></th>
-						<!-- Table header for Discontinued Date -->
-						<th>
-							<c:choose>
+						<!-- Header Discontinued -->
+						<th><c:choose>
 								<c:when
 									test="${page.orderBy != 'discontinued' || page.order != 'ASC'}">
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="ASC" orderBy="discontinued"
-										search="${page.search}">Discontinued date</myLib:link>
+										search="${page.search}">${labelDiscontinued}</myLib:link>
 								</c:when>
 								<c:otherwise>
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="DESC"
-										orderBy="discontinued" search="${page.search}">Discontinued date</myLib:link>
+										orderBy="discontinued" search="${page.search}">${labelDiscontinued}</myLib:link>
 								</c:otherwise>
-							</c:choose>
-						</th>
-						<!-- Table header for Company -->
-						<th>
-							<c:choose>
+							</c:choose></th>
+						<!-- Header Company -->
+						<th><c:choose>
 								<c:when
 									test="${page.orderBy != 'company' || page.order != 'ASC'}">
-							<myLib:link target="./computers" pageIndex="1"
-								pageSize="${page.pageSize}" order="ASC"
-								orderBy="company" search="${page.search}">Company</myLib:link>
+									<myLib:link target="./computers" pageIndex="1"
+										pageSize="${page.pageSize}" order="ASC" orderBy="company"
+										search="${page.search}">${labelCompany}</myLib:link>
 								</c:when>
 								<c:otherwise>
-																<myLib:link target="./computers" pageIndex="1"
-								pageSize="${page.pageSize}" order="DESC"
-								orderBy="company" search="${page.search}">Company</myLib:link>
+									<myLib:link target="./computers" pageIndex="1"
+										pageSize="${page.pageSize}" order="DESC" orderBy="company"
+										search="${page.search}">${labelCompany}</myLib:link>
 								</c:otherwise>
-								</c:choose>
-								
-								</th>
-							
+							</c:choose></th>
+
 					</tr>
 				</thead>
-				<!-- Browse attribute computers -->
+				<!-- ***************************** TABLE RESULTS ***************************** -->
 				<tbody id="results">
 					<c:forEach var="computer" items="${requestScope.page.computers}">
 						<tr>
@@ -140,15 +154,17 @@
 		</div>
 	</section>
 
+	<!-- ***************************** FOOTER ***************************** -->
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 
+			<!-- ***************************** PAGINATION ***************************** -->
 			<myLib:pagination target="./computers" currPage="${page.current}"
 				totalPages="${page.pageCount}" pageSize="${page.pageSize}"
 				orderBy="${page.orderBy}" order="${page.order}"
 				search="${page.search}" />
 
-
+			<!-- ***************************** PAGE SIZE ***************************** -->
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<c:choose>
 					<c:when test="${page.pageSize==30}">
@@ -195,6 +211,8 @@
 			</div>
 		</div>
 	</footer>
+
+	<!-- ***************************** SCRIPTS ***************************** -->
 	<script src="./js/jquery.min.js"></script>
 	<script src="./js/bootstrap.min.js"></script>
 	<script src="./js/dashboard.js"></script>

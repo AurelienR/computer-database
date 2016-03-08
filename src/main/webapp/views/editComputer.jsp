@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
 <title>Computer Database</title>
@@ -10,8 +11,19 @@
 <link href="../css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-
-	<jsp:include page="header.jsp"/>
+	<!-- ***************************** LOCALIZATION DECLARATION ***************************** -->
+	<!-- Labels -->
+	<spring:message code="label.computerName" var="labelComputerName" />
+	<spring:message code="label.introduced" var="labelIntroduced" />
+	<spring:message code="label.discontinued" var="labelDiscontinued" />
+	<spring:message code="label.company" var="labelCompany" />
+	<!-- Buttons -->
+	<spring:message code="btn.edit" var="btnEdit" />
+	<spring:message code="btn.cancel" var="btnCancel" />
+	<!-- Words -->
+	<spring:message code="word.or" var="wordOr" />
+	<!-- ***************************** HEADER ***************************** -->
+	<jsp:include page="header.jsp" />
 
 	<section id="main">
 		<div class="container">
@@ -19,28 +31,38 @@
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<div class="label label-default pull-right">id:
 						${computer.id}</div>
-					<h1>Edit Computer</h1>
+					<h1>
+						<spring:message code="msg.editComputer" />
+					</h1>
 
-					<form:form action="./${computer.id}" method="POST">
-						<form:input type="hidden" id="id" path="computer.id" value="${computer.id}" />
+					<form:form action="./${computer.id}" method="POST"
+						modelAttribute="computer">
+						<form:input type="hidden" id="id" path="id" value="${computer.id}" />
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <form:input
-									type="text" class="form-control" id="computerName" path="name"
-									value="${computer.name}"/>
+								<label for="computerName">${labelComputerName}</label>
+								<form:input type="text" class="form-control" id="computerName"
+									path="name" placeholder="${labelComputerName}"
+									value="${computer.name}" />
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <form:input
-									type="date" class="form-control" id="introduced" path="introduced" value="${computer.introduced}"/>
+								<label for="introduced">${labelIntroduced}</label>
+								<form:input type="date" class="form-control" id="introduced"
+									path="introduced" placeholder="${labelIntroduced}"
+									value="${computer.introduced}" />
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <form:input
-									type="date" class="form-control" id="discontinued" path="discontinued" value="${computer.discontinued}"/>
+								<label for="discontinued">${labelDiscontinued}</label>
+								<form:input type="date" class="form-control" id="discontinued"
+									path="discontinued" placeholder="${labelDiscontinued}"
+									value="${computer.discontinued}" />
 							</div>
 							<div class="form-group  has-feedback">
-								<label for="companyId">Company</label> <form:select
-									class="form-control" id="companyId" path="company.Id">
-									<option value="0">Nothing selected</option>
+								<label for="companyId">${labelCompany}</label>
+								<form:select class="form-control" id="companyId"
+									path="company.Id">
+									<option value="0"><spring:message
+											code="msg.nothingSelected" /></option>
 									<c:forEach var="company" items="${requestScope.companies}">
 										<option value="${company.id}"
 											${company.id == requestScope.computer.company.id ? 'selected="selected"' : ''}>${company.name}</option>
@@ -49,14 +71,16 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Edit" class="btn btn-primary">
-							or <a href="/computers" class="btn btn-default">Cancel</a>
+
+							<input type="submit" value="${btnEdit}" class="btn btn-primary">
+							${wordOr} <a href="../computers" class="btn btn-default">${btnCancel}</a>
 						</div>
 					</form:form>
 				</div>
 			</div>
 		</div>
 	</section>
+	<!-- ***************************** SCRIPTS ***************************** -->
 	<script src="../js/jquery.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/utilValidator.js"></script>

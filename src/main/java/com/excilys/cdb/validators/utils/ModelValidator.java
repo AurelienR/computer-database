@@ -1,4 +1,6 @@
-package com.excilys.cdb.validators;
+package com.excilys.cdb.validators.utils;
+
+import com.excilys.cdb.validators.ValidatorException;
 
 /**
  * Basic Model validation.

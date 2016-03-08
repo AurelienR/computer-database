@@ -1,6 +1,7 @@
-package com.excilys.cdb.validators;
+package com.excilys.cdb.validators.utils;
 
 import com.excilys.cdb.dtos.CompanyDto;
+import com.excilys.cdb.validators.ValidatorException;
 
 /**
  * Validate CompanyDTO state.

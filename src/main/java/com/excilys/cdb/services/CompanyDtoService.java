@@ -3,7 +3,7 @@ package com.excilys.cdb.services;
 import com.excilys.cdb.dtos.CompanyDto;
 import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.models.Company;
-import com.excilys.cdb.validators.CompanyDtoValidator;
+import com.excilys.cdb.validators.utils.CompanyDtoValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

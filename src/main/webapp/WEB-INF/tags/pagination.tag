@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="myLib" tagdir="/WEB-INF/tags"%>
 <%@ tag body-content="empty"%>
 <%@ attribute name="target" required="true" type="java.lang.String"%>
@@ -30,7 +31,7 @@
 		<li><myLib:link target="${target}" pageIndex="${currPage - 1}"
 				pageSize="${pageSize}" order="${order}" orderBy="${orderBy}"
 				search="${search}">
-				<span aria-hidden="true">&larr; Previous</span>
+				<span aria-hidden="true">&larr; <spring:message code="btn.previous" /></span>
 			</myLib:link></li>
 	</c:if>
 
@@ -80,7 +81,7 @@
 		<li><myLib:link target="${target}" pageIndex="${currPage + 1}"
 				pageSize="${pageSize}" order="${order}" orderBy="${orderBy}"
 				search="${search}">
-				<span aria-hidden="true">Next &rarr;</span>
+				<span aria-hidden="true"><spring:message code="btn.next" /> &rarr;</span>
 			</myLib:link></li>
 	</c:if>
 

@@ -1,6 +1,7 @@
-package com.excilys.cdb.validators;
+package com.excilys.cdb.validators.utils;
 
 import com.excilys.cdb.models.Computer;
+import com.excilys.cdb.validators.ValidatorException;
 
 import java.time.LocalDateTime;
 

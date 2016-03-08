@@ -1,7 +1,10 @@
-package com.excilys.cdb.validators;
+package com.excilys.cdb.validators.utils;
 
 import com.excilys.cdb.dtos.ComputerDto;
 import com.excilys.cdb.utils.DateFormatManager;
+import com.excilys.cdb.validators.ValidatorException;
+
+import java.time.LocalDateTime;
 
 /**
  * Validate ComputerDTO state
@@ -14,8 +17,7 @@ public class ComputerDtoValidator extends ModelValidator {
   /**
    * Checknot null date field.
    * 
-   * @param date
-   *          date to validate
+   * @param date date to validate
    * @throws ValidatorException issue with data
    */
   public static void checkDateIsNotNull(String date) throws ValidatorException {
@@ -39,10 +41,8 @@ public class ComputerDtoValidator extends ModelValidator {
   /**
    * Check dates consistency (introduced and discontinued).
    * 
-   * @param computerDto
-   *          computerDTO to check
-   * @throws ValidatorException
-   *           if issues on date consistencies
+   * @param computerDto computerDTO to check
+   * @throws ValidatorException if issues on date consistencies
    */
   public static void checkDateConsistency(ComputerDto computerDto) throws ValidatorException {
     checkDateConsistency(computerDto.getIntroduced(), computerDto.getDiscontinued());
@@ -51,27 +51,32 @@ public class ComputerDtoValidator extends ModelValidator {
   /**
    * Check dates consistency (introduced and discontinued).
    * 
-   * @param intro
-   *          introduced date
-   * @param disc
-   *          discontinued date
-   * @throws ValidatorException
-   *           if issues on date consistencies
+   * @param intro introduced date
+   * @param disc discontinued date
+   * @throws ValidatorException if issues on date consistencies
    */
   public static void checkDateConsistency(String intro, String disc) throws ValidatorException {
     if ((intro == null || intro.isEmpty()) && (disc != null && !disc.isEmpty())) {
       throw new ValidatorException(
           "Introduced string should be not null/empty if discontinued string is not null/empty");
+    } else if ((intro != null && !intro.isEmpty()) && (disc != null && !disc.isEmpty())
+        && (DateFormatManager.isValidHtmlStringFormat(intro)
+            && DateFormatManager.isValidHtmlStringFormat(disc))) {
+
+      LocalDateTime introDate = DateFormatManager.parseHtmlDateString(intro);
+      LocalDateTime discDate = DateFormatManager.parseHtmlDateString(disc);
+
+      if (discDate.isBefore(introDate)) {
+        throw new ValidatorException("Introduced date should be set befored discontinued date");
+      }
     }
   }
 
   /**
    * Check date string is matchin HTML spec format.
    * 
-   * @param dateStr
-   *          date string to check
-   * @throws ValidatorException
-   *           if date string is not matching HTML format
+   * @param dateStr date string to check
+   * @throws ValidatorException if date string is not matching HTML format
    */
   public static void checkIsValidDateFormat(String dateStr) throws ValidatorException {
     if (!DateFormatManager.isValidHtmlStringFormat(dateStr)) {
@@ -83,10 +88,8 @@ public class ComputerDtoValidator extends ModelValidator {
   /**
    * Check date HTML format if date string is not null.
    * 
-   * @param dateStr
-   *          date string to check
-   * @throws ValidatorException
-   *           if date string is not null or not matching HTML format
+   * @param dateStr date string to check
+   * @throws ValidatorException if date string is not null or not matching HTML format
    */
   public static void checkDateFormatIfNotNull(String dateStr) throws ValidatorException {
     if (dateStr != null && !dateStr.isEmpty()) {
@@ -100,10 +103,8 @@ public class ComputerDtoValidator extends ModelValidator {
   /**
    * Check introduced and discontinued dates formats.
    * 
-   * @param computerDto
-   *          computerDTO to check dates from
-   * @throws ValidatorException
-   *           if computerDTO date is not HTML formated
+   * @param computerDto computerDTO to check dates from
+   * @throws ValidatorException if computerDTO date is not HTML formated
    */
   public static void checkDateFormatIfNotNull(ComputerDto computerDto) throws ValidatorException {
     checkDateFormatIfNotNull(computerDto.getIntroduced());
@@ -113,10 +114,8 @@ public class ComputerDtoValidator extends ModelValidator {
   /**
    * Validate all ComputerDTO fields.
    * 
-   * @param computerDto
-   *          computerDTO to validate
-   * @throws ValidatorException
-   *           if computerDTO is not valid
+   * @param computerDto computerDTO to validate
+   * @throws ValidatorException if computerDTO is not valid
    */
   public static void validate(ComputerDto computerDto) throws ValidatorException {
 

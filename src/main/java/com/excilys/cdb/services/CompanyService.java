@@ -4,8 +4,8 @@ import com.excilys.cdb.daos.CompanyDao;
 import com.excilys.cdb.daos.ComputerDao;
 import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.models.Company;
-import com.excilys.cdb.validators.CompanyValidator;
 import com.excilys.cdb.validators.ValidatorException;
+import com.excilys.cdb.validators.utils.CompanyValidator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

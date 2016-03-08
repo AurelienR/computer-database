@@ -1,8 +1,9 @@
-package com.excilys.cdb.validators;
+package com.excilys.cdb.validators.utils;
 
 import com.excilys.cdb.models.Order;
 import com.excilys.cdb.models.OrderBy;
 import com.excilys.cdb.models.QueryPageParameter;
+import com.excilys.cdb.validators.ValidatorException;
 
 /**
  * Check QueryPageParameter state.

@@ -3,7 +3,7 @@ package com.excilys.cdb.daos.impl;
 import com.excilys.cdb.daos.CompanyDao;
 import com.excilys.cdb.mappers.CompanyRowMapper;
 import com.excilys.cdb.models.Company;
-import com.excilys.cdb.validators.CompanyValidator;
+import com.excilys.cdb.validators.utils.CompanyValidator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

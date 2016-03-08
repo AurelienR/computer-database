@@ -4,8 +4,8 @@ import com.excilys.cdb.dtos.ComputerDto;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.QueryPageParameter;
-import com.excilys.cdb.validators.ComputerDtoValidator;
-import com.excilys.cdb.validators.QueryPageParameterValidator;
+import com.excilys.cdb.validators.utils.ComputerDtoValidator;
+import com.excilys.cdb.validators.utils.QueryPageParameterValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,26 +1,35 @@
 package com.excilys.cdb.dtos;
 
+
+import com.excilys.cdb.validators.annotations.ComputerDtoDateFormat;
+import com.excilys.cdb.validators.annotations.ComputerDtoDatesConsistency;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+@ComputerDtoDatesConsistency
 public class ComputerDto {
 
+  @Min(value = 0, message = "Computer id doit être supérieur à {value}")
   private long id;
+  @NotNull(message = "Computer name should be not null")
+  @Size(min = 0, message = "Computer name cannot be empty string")
   private String name;
+  @ComputerDtoDateFormat
   private String introduced;
+  @ComputerDtoDateFormat
   private String discontinued;
   private CompanyDto company;
 
   /**
    * Instantiates a new computer dto.
    *
-   * @param id
-   *          the id of the computer
-   * @param name
-   *          the name of the computer
-   * @param introduced
-   *          the introduced date
-   * @param discontinued
-   *          the discontinued date
-   * @param company
-   *          the related company
+   * @param id the id of the computer
+   * @param name the name of the computer
+   * @param introduced the introduced date
+   * @param discontinued the discontinued date
+   * @param company the related company
    */
   public ComputerDto(long id, String name, String introduced, String discontinued,
       CompanyDto company) {
@@ -31,10 +40,10 @@ public class ComputerDto {
     this.company = company;
   }
 
-  public ComputerDto(){
-    
+  public ComputerDto() {
+
   }
-  
+
   public long getId() {
     return id;
   }

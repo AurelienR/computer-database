@@ -4,9 +4,9 @@ import com.excilys.cdb.daos.ComputerDao;
 import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.QueryPageParameter;
-import com.excilys.cdb.validators.ComputerValidator;
-import com.excilys.cdb.validators.QueryPageParameterValidator;
 import com.excilys.cdb.validators.ValidatorException;
+import com.excilys.cdb.validators.utils.ComputerValidator;
+import com.excilys.cdb.validators.utils.QueryPageParameterValidator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
