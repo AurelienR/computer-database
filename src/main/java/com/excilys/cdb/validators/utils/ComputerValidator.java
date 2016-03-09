@@ -53,6 +53,8 @@ public class ComputerValidator extends ModelValidator {
     }
   }
 
+  
+  
   /**
    * Check starting row.
    *
@@ -89,6 +91,7 @@ public class ComputerValidator extends ModelValidator {
     ComputerValidator.checkValidId(computer.getId());
     ComputerValidator.checkNameNotNull(computer.getName());
     ComputerValidator.checkNameNotEmpty(computer.getName());
+    ComputerValidator.checkDatesConsistence(computer.getIntroduced(), computer.getDiscontinued());
     // Check related company
     if (computer.getCompany() != null) {
       CompanyValidator.checkValidId(computer.getCompany().getId());
