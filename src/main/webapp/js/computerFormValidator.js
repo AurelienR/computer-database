@@ -1,4 +1,6 @@
-// Bind add form fields to validation logic
+/**
+ * Bind form inputs
+ */
 $(function() {
     $('#computerName').bind('input propertychange', function() {
     	validationNameDisplay($(this));
@@ -22,8 +24,8 @@ $(function() {
     });
     
     $('addForm').submit(function(){
-    	$('#introduced').val(getValidDateString(('#introduced').val()).toISOString());
-    	$('#discontinued').val(getValidDateString(('#discontinued').val()).toISOString());
+    	$('#introduced').val(toLocalFormatDateStr(('#introduced').val()));
+    	$('#discontinued').val(toLocalFormatDateStr(('#discontinued').val()));
     });
     
 });
@@ -39,7 +41,7 @@ function validationNameDisplay(inputElement){
 		setSuccessDisplay(inputElement);
 	}
 	else{
-		setFailureDisplay(inputElement,"Name is required");
+		setFailureDisplay(inputElement, field_required_err);
 	}
 	
 }
@@ -56,7 +58,7 @@ function validationIntroducedDisplay(inputElement){
 		setSuccessDisplay(inputElement);
 	}
 	else{
-		setFailureDisplay(inputElement,"<ul><li> Format dd/MM/yyyy </li><li>Cannot be set before 01/01/1970</li><ul>");
+		setFailureDisplay(inputElement,"<ul><li>"+ date_format_err +" </li><li>"+min_date_err+"</li><ul>");
 	}
 }
 
@@ -72,7 +74,7 @@ function validationDiscontinuedDisplay(inputElement){
 		setSuccessDisplay(inputElement);
 	}
 	else{
-		setFailureDisplay(inputElement,"<ul><li> Format dd/MM/yyyy </li><li>Cannot be set before 01/01/1970</li> <li> Greater than introduced date </li><ul>");
+		setFailureDisplay(inputElement,"<ul><li>"+ date_format_err+"</li><li>"+min_date_err+"</li> <li>"+ date_inconsistency_err +" </li><ul>");
 	}
 }
 
@@ -139,7 +141,7 @@ parentDivElement.append("<span class=\"glyphicon glyphicon-warning-sign form-con
 }
 
 /**
- * Set passed element to failure (work on Bootstrap classe)
+ * Set passed element to failure (work on Bootstrap class)
  * @param inputElement any form element
  */
 function setFailureDisplay(inputElement,errorMessageStr){
@@ -178,11 +180,11 @@ function isComputerNameValid(){
  */
 function isIntroducedValid(){
 	
-	var introduced = $("#introduced").val();
-	var discontinued = $("#discontinued").val();
+	var introduced = toLocalFormatDateStr($("#introduced").val());
+	var discontinued = toLocalFormatDateStr($("#discontinued").val());
 	
-	if((isEmptyField(introduced) || !isValidDate(introduced)) && !isEmptyField(discontinued) ) return false
-	if(!isEmptyField(introduced) && !isValidDate(introduced)) return false;
+	if((isEmptyField(introduced) || !isValidDateStr(introduced)) && !isEmptyField(discontinued) ) return false
+	if(!isEmptyField(introduced) && !isValidDateStr(introduced)) return false;
 	
 	return true;
 }
@@ -193,11 +195,11 @@ function isIntroducedValid(){
  */
 function isDiscontinuedValid(){
 	
-	var introduced = $("#introduced").val();
-	var discontinued = $("#discontinued").val();	
+	var introduced = toLocalFormatDateStr($("#introduced").val());
+	var discontinued = toLocalFormatDateStr($("#discontinued").val());	
 
 	if(!isEmptyField(discontinued) && !isEmptyField(introduced) && isGreaterThan(introduced,discontinued)) return false;
-	if(!isEmptyField(discontinued) && !isValidDate(discontinued)) return false;
+	if(!isEmptyField(discontinued) && !isValidDateStr(discontinued)) return false;
 	
 	return true;
 }

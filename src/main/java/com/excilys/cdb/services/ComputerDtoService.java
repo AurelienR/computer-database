@@ -82,16 +82,16 @@ public class ComputerDtoService {
    * @return the list of related ComputerDto
    * @throws ValidationException issue with date
    */
-  public List<ComputerDto> findById(long id) {
+  public ComputerDto findById(long id) {
 
     // Validate id
     ComputerDtoValidator.checkValidId(id);
 
     // Retrieve Computers
-    List<Computer> computers = computerService.findById(id);
+    Computer computer = computerService.findById(id);
 
     // Map
-    return ComputerMapper.toComputerDtoList(computers);
+    return ComputerMapper.toComputerDto(computer);
   }
 
   

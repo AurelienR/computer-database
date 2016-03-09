@@ -42,7 +42,7 @@ public class ComputerService {
    */
   public List<Computer> findByQuery(QueryPageParameter qp) {
 
-    LOGGER.debug("Service: find commputer by queryPageParameter, qp:" + qp);
+    LOGGER.debug("Service: find commputer by queryPageParameter, qp: {}", qp);
 
     // Validate queryParameter
     QueryPageParameterValidator.validate(qp);
@@ -89,9 +89,9 @@ public class ComputerService {
    * @throws DaoException issues with DB
    * @throws ValidatorException issues with data
    */
-  public List<Computer> findById(long id) {
+  public Computer findById(long id) {
 
-    LOGGER.debug("Service: find computer by id: " + id);
+    LOGGER.debug("Service: find computer by id: {}", id);
 
     // Validate id
     ComputerValidator.checkValidId(id);
@@ -110,7 +110,7 @@ public class ComputerService {
    */
   public List<Computer> findByName(String name) {
 
-    LOGGER.debug("Service: find computer by name:" + name);
+    LOGGER.debug("Service: find computer by name:{}", name);
 
     // Validate name
     ComputerValidator.checkNameNotNull(name);
@@ -130,7 +130,7 @@ public class ComputerService {
    */
   public long createComputer(Computer computer) {
 
-    LOGGER.debug("Service: create computer:" + computer);
+    LOGGER.debug("Service: create computer: {}",computer);
 
     // Validate computer
     ComputerValidator.validate(computer);
@@ -148,7 +148,7 @@ public class ComputerService {
    */
   public void updateComputer(Computer computer) {
 
-    LOGGER.debug("Service: update computer:" + computer);
+    LOGGER.debug("Service: update computer: {}",computer);
 
     // Validate computer
     ComputerValidator.validate(computer);
@@ -166,7 +166,7 @@ public class ComputerService {
    */
   public void deleteComputer(long id) {
 
-    LOGGER.debug("Service: delete computer by id:" + id);
+    LOGGER.debug("Service: delete computer by id: {}", id);
 
     // Validate computer
     ComputerValidator.checkValidId(id);

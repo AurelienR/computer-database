@@ -100,10 +100,8 @@ public class ComputerServiceTest {
   @Test
   public void findByValidIdTest() {
     long testedId = 64L;
-    computers = new ArrayList<Computer>();
-    computers.add(new Computer(testedId, "TestComputer", null, null, null));
-    when(computerDao.findById(testedId)).thenReturn(computers);
-    long result = computerService.findById(testedId).get(0).getId();
+    when(computerDao.findById(testedId)).thenReturn(new Computer(testedId, "TestComputer", null, null, null));
+    long result = computerService.findById(testedId).getId();
 
     assertEquals(testedId, result);
   }

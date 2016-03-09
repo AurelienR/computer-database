@@ -22,7 +22,7 @@ import java.util.Scanner;
 public class DeleteComputerCmd implements Command {
 
   // Logger
-  static final Logger logger = LoggerFactory.getLogger(DeleteComputerCmd.class);
+  static final Logger LOGGER = LoggerFactory.getLogger(DeleteComputerCmd.class);
 
   // Parser
   @Autowired
@@ -49,7 +49,7 @@ public class DeleteComputerCmd implements Command {
       Computer computer = inputCmdParser.getValidComputerByName(sc).get(0);
 
       // Delete computer
-      logger.debug("Try to delete computer: " + computer);
+      LOGGER.debug("Try to delete computer: {}",computer);
       computerService.deleteComputer(computer.getId());
 
     } catch (IllegalArgumentException e) {

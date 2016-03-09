@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @ComputerDtoDatesConsistency
 public class ComputerDto {
 
-  @Min(value = 0, message = "Computer id doit être supérieur à {value}")
+  @Min(value = 0, message = "Computer id cannot be negative number {value}")
   private long id;
   @NotNull(message = "Computer name should be not null")
   @Size(min = 0, message = "Computer name cannot be empty string")

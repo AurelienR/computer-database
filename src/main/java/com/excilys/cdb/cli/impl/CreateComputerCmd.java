@@ -25,7 +25,7 @@ import java.util.Scanner;
 public class CreateComputerCmd implements Command {
 
   // Logger
-  static final Logger logger = LoggerFactory.getLogger(CreateComputerCmd.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CreateComputerCmd.class);
 
   // Parser
   @Autowired
@@ -51,30 +51,30 @@ public class CreateComputerCmd implements Command {
       // Get name input
       System.out.println("Name:");
       String computerName = inputCmdParser.getRequiredNameInput(sc);
-      logger.debug("computer.name: " + computerName);
+      LOGGER.debug("computer.name: " + computerName);
       computer.setName(computerName);
 
       // Get introduced date input
       System.out.println("Introduced date (" + dateFormat + "): ");
       sc.nextLine();
       LocalDateTime introDate = inputCmdParser.getDateInput(sc, dateFormat);
-      logger.debug("computer.introduced: " + introDate.toString());
+      LOGGER.debug("computer.introduced: " + introDate.toString());
       computer.setIntroduced(introDate);
 
       // Get discontinued date input
       System.out.println("Discontinued date (" + dateFormat + "): ");
       LocalDateTime discDate = inputCmdParser.getDateInput(sc, dateFormat);
-      logger.debug("computer.discontinued: " + discDate.toString());
+      LOGGER.debug("computer.discontinued: " + discDate.toString());
       computer.setDiscontinued(discDate);
 
       // Get company input
       System.out.println("CompanyName ( must match existring one): ");
       Company company = inputCmdParser.getRequiredValidCompanyByName(sc).get(0);
-      logger.debug("computer.company: " + company.toString());
+      LOGGER.debug("computer.company: {}", company);
       computer.setCompany(company);
 
       // Create computer
-      logger.debug("Try to create computer: " + computer);
+      LOGGER.debug("Try to create computer: {}", computer);
       computerService.createComputer(computer);
 
     } catch (ParseException e) {

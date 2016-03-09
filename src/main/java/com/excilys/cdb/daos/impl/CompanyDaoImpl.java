@@ -62,7 +62,7 @@ public class CompanyDaoImpl implements CompanyDao {
   }
 
   @Override
-  public List<Company> findById(long id) {
+  public Company findById(long id) {
 
     LOGGER.debug("Dao: Find company by its id:" + id);
 
@@ -75,7 +75,7 @@ public class CompanyDaoImpl implements CompanyDao {
     // Retrieve and map all matching companies by id
     companyList = jdbcTemplate.query(FIND_BYID_QUERY, companyRowMapper, id);
 
-    return companyList;
+    return companyList.get(0);
   }
 
   @Override

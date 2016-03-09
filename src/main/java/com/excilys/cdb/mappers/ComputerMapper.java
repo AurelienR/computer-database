@@ -67,7 +67,7 @@ public class ComputerMapper {
 
     ComputerDto computerDto = new ComputerDto(id, computerName, introStr, discStr, companyDto);
     LOGGER
-        .debug("\n\t\tMapper: map: computer" + computer + "\n\t\tTO: ComputerDto: " + computerDto);
+        .debug("\n\t\tMapper: map: computer: {}\n\t\tTO: ComputerDto: {}" ,  computer,computerDto);
 
     return computerDto;
   }
@@ -100,7 +100,7 @@ public class ComputerMapper {
         new ComputerDto(id, nameStr, introducedStr, discontinuedStr, companyDto);
 
     LOGGER
-        .debug("\n\t\tMapper: map: request:" + request + "\n\t\tTO: ComputerDto: " + computerDto);
+        .debug("\n\t\tMapper: map: request: {}\n\t\tTO: ComputerDto: {}", request,computerDto);
 
     return computerDto;
   }
@@ -118,8 +118,7 @@ public class ComputerMapper {
     List<ComputerDto> computerDtos = new ArrayList<ComputerDto>();
     computers.parallelStream().forEachOrdered(c -> computerDtos.add(toComputerDto(c)));
 
-    LOGGER.debug("\n\t\tMapper: Map: List<Computer>:" + computers + "\n\t\tTO: List<ComputerDto>:"
-        + computerDtos);
+    LOGGER.debug("\n\t\tMapper: Map: List<Computer>: {}\n\t\tTO: List<ComputerDto>: {}",computers,computerDtos);
 
     return computerDtos;
   }
@@ -142,7 +141,7 @@ public class ComputerMapper {
     Computer computer = new Computer(id, computerName, company, disc, intro);
 
     LOGGER.debug(
-        "\n\t\tMapper: map: computerDto: " + computerDto + "\n\t\tTO: computer: " + computer);
+        "\n\t\tMapper: map: computerDto: {}\n\t\tTO: computer: {}" , computerDto,computer);
 
     return computer;
   }

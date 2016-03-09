@@ -82,7 +82,7 @@ public class ComputerDaoImpl implements ComputerDao {
   }
 
   @Override
-  public List<Computer> findById(long id) {
+  public Computer findById(long id) {
 
     LOGGER.debug("Dao: find computer by its id: " + id);
 
@@ -94,7 +94,7 @@ public class ComputerDaoImpl implements ComputerDao {
     // Retrieve and map matching
     computerList = jdbcTemplate.query(FIND_BYID_QUERY, computerRowMapper, id);
 
-    return computerList;
+    return computerList.get(0);
   }
 
   @Override

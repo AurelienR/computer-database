@@ -24,11 +24,12 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath:/spring/spring-modules.xml</param-value>
+			<param-value>classpath:/spring/servlet-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
+	<!-- Mapping -->
 	<servlet-mapping>
 		<servlet-name>computerController</servlet-name>
 		<url-pattern>/</url-pattern>

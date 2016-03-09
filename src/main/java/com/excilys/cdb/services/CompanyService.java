@@ -56,9 +56,9 @@ public class CompanyService {
    * @throws DaoException issues with DB
    * @throws ValidatorException issue with validation of Data
    */
-  public List<Company> findById(long id) {
+  public Company findById(long id) {
 
-    LOGGER.debug("Service find company by id: " + id);
+    LOGGER.debug("Service find company by id: {}", id);
 
     // Validate id
     CompanyValidator.checkValidId(id);
@@ -77,7 +77,7 @@ public class CompanyService {
    */
   public List<Company> findByName(String name) {
 
-    LOGGER.debug("Service: find company by name: " + name);
+    LOGGER.debug("Service: find company by name: {}", name);
 
     // Validate Name
     CompanyValidator.checkNameNotNull(name);
@@ -97,7 +97,7 @@ public class CompanyService {
    */
   public long createCompany(Company company) {
 
-    LOGGER.debug("Service: create company:" + company);
+    LOGGER.debug("Service: create company: {}", company);
 
     // Validate Company
     CompanyValidator.validate(company);

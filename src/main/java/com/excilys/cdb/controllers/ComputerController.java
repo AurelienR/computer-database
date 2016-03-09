@@ -1,4 +1,4 @@
-package com.excilys.cdb.servlets;
+package com.excilys.cdb.controllers;
 
 import com.excilys.cdb.dtos.CompanyDto;
 import com.excilys.cdb.dtos.ComputerDto;
@@ -38,9 +38,18 @@ public class ComputerController {
   ComputerDtoService computerDtoService;
   @Autowired
   CompanyDtoService companyDtoService;
+   
+/**
+ * ComputerDto provider for model attribute.
+ * @return an empty ComputerDto
+ */
+@ModelAttribute("computerDto")
+  public ComputerDto getComputerDto() {
+     return new ComputerDto(0, "", null, null, new CompanyDto(0, ""));
+  }
 
   /**
-   * Display computer dashborad view.
+   * Display computer dashboard view.
    *
    * @param page index of computer list
    * @param pageSize number of computers displayed per pages
@@ -57,8 +66,7 @@ public class ComputerController {
       @RequestParam(value = "order", required = false) String order,
       @RequestParam(value = "search", required = false) String search, Model model) {
 
-    LOGGER.info("Controller: GET /computers : parameters:\n\tpage=" + page + " pageSize=" + pageSize
-        + " orderBy=" + orderBy + " order=" + order + " search=" + search);
+    LOGGER.info("Controller: GET /computers : parameters:\n\tpage={} pageSize={} orderBy={}  order={} search={}",page,pageSize,orderBy,order, search);
 
     // Get related queryPageParameter
     QueryPageParameter qp =
@@ -87,10 +95,10 @@ public class ComputerController {
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
   public String editView(@PathVariable Long id, Model model) {
 
-    LOGGER.info("Controller: GET /computer/" + id);
+    LOGGER.info("Controller: GET /computer/{}", id);
 
     // Retrieve company and computers
-    ComputerDto computerDto = computerDtoService.findById(id).get(0);
+    ComputerDto computerDto = computerDtoService.findById(id);
     List<CompanyDto> companyDtos = companyDtoService.findAll();
 
     // Prepare request
@@ -117,7 +125,7 @@ public class ComputerController {
 
     // Prepare request
     model.addAttribute("companies", companyDtos);
-    model.addAttribute("computerDto", new ComputerDto(0, "", null, null, new CompanyDto(0, "")));
+    //model.addAttribute("computerDto", new ComputerDto(0, "", null, null, new CompanyDto(0, "")));
 
     return "addComputer";
   }
@@ -130,12 +138,11 @@ public class ComputerController {
    * @param result the result
    * @return the string
    */
-  @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+  @RequestMapping(value = "/edit", method = RequestMethod.POST)
   public String editComputer(@PathVariable Long id, @Valid @ModelAttribute ComputerDto computerDto,
       BindingResult result, Model model) {
 
-    LOGGER.info("ComputerController: POST: /computers/" + id + " parameters:\n\tComputerDto: "
-        + computerDto);
+    LOGGER.info("ComputerController: POST: /computers/{} parameters:\n\tComputerDto: {} ",id , computerDto);
 
     // Manage validation DTO errors
     if (result.hasErrors()) {
@@ -148,11 +155,6 @@ public class ComputerController {
       model.addAttribute("companies", companyDtos);
       // Return to edit page
       return "editComputer";
-    }
-
-    if (!id.equals(computerDto.getId())) {
-      throw new DataIntegrityViolationException(
-          "Inconsistent url computer id and POST request informations");
     }
 
     // Edit computer
@@ -174,7 +176,7 @@ public class ComputerController {
       BindingResult result, Model model) {
 
     LOGGER
-        .info("ComputerController: POST /computers/new parameters\n\tComputerDto: " + computerDto);
+        .info("ComputerController: POST /computers/new parameters\n\tComputerDto: {}", computerDto);
 
     // Manage validation DTO errors
     if (result.hasErrors()) {
@@ -192,12 +194,10 @@ public class ComputerController {
     if (computerDto.getCompany() == null || computerDto.getCompany().getId() == 0) {
       computerDto.setCompany(null);
     }
-
-
+    
     // Create computer
     computerDtoService.createComputer(computerDto);
 
-    // Delete computer
     return "redirect:/computers";
   }
 
@@ -211,14 +211,13 @@ public class ComputerController {
   @RequestMapping(value = "/delete", method = RequestMethod.POST)
   public String deleteComputer(@ModelAttribute("selection") String idsStr, BindingResult result) {
 
-    LOGGER.info("ComputerController: POST /computers/delete parameters:\n\tIds: " + idsStr);
+    LOGGER.info("ComputerController: POST /computers/delete parameters:\n\tIds: {}", idsStr);
 
     // Retrieve parameters
     String[] ids = idsStr.split(",");
 
     // Delete each computer by id
     for (String idStr : ids) {
-      // Car can throw exception
       long id = Long.parseLong(idStr);
       computerDtoService.deleteComputer(id);
     }

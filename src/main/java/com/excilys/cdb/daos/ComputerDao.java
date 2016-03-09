@@ -49,11 +49,11 @@ public interface ComputerDao {
    * 
    * @param id
    *          id of the computer to find
-   * @return computers related to the id
+   * @return computer related to the id
    * @throws DaoException
    *           issue on db
    */
-  List<Computer> findById(long id);
+  Computer findById(long id);
 
   /**
    * Find all computer stored in DB by its name.

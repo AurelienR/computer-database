@@ -46,7 +46,7 @@ public class CompanyMapper {
       return null;
     }
     CompanyDto companyDto = new CompanyDto(company.getId(), company.getName());
-    LOGGER.debug("\n\t\tMapper: map: company: " + company + "\n\t\tTO: companyDto: " + companyDto);
+    LOGGER.debug("\n\t\tMapper: map: company: {}\n\t\tTO: companyDto: {}",company, companyDto);
     return companyDto;
   }
 
@@ -63,7 +63,7 @@ public class CompanyMapper {
 
     Company company = new Company(companyDto.getId(), companyDto.getName());
 
-    LOGGER.debug("\n\t\tMapper: map: companyDto: " + companyDto + "\n\t\tTO: company: " + company);
+    LOGGER.debug("\n\t\tMapper: map: companyDto: {}\n\t\tTO: company: {}", companyDto,company);
 
     return company;
   }
@@ -82,7 +82,7 @@ public class CompanyMapper {
     companies.parallelStream().forEachOrdered(c -> companyDtos.add(toCompanyDto(c)));
 
     LOGGER.debug(
-        "\n\t\tMapper: map: List<Company>:" + companies + "\n\t\tTO: companyDtos: " + companyDtos);
+        "\n\t\tMapper: map: List<Company>:{}\n\t\tTO: companyDtos: {}" ,companies,companyDtos);
 
     return companyDtos;
   }

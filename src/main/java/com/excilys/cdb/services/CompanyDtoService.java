@@ -43,16 +43,16 @@ public class CompanyDtoService {
    * @param id          id of the company to search
    * @return List of matching CompanyDTOs
    */
-  public List<CompanyDto> findById(long id) {
+  public CompanyDto findById(long id) {
 
     // Validate id
     CompanyDtoValidator.checkValidId(id);
 
     // Retrieve Companies
-    List<Company> companies = companyService.findById(id);
+    Company company = companyService.findById(id);
 
     // Map
-    return CompanyMapper.toCompanyDtoList(companies);
+    return CompanyMapper.toCompanyDto(company);
   }
 
   /**

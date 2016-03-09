@@ -11,17 +11,20 @@
 <link href="../css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
+
 	<!-- ***************************** LOCALIZATION DECLARATION ***************************** -->
 	<!-- Labels -->
 	<spring:message code="label.computerName" var="labelComputerName" />
 	<spring:message code="label.introduced" var="labelIntroduced" />
 	<spring:message code="label.discontinued" var="labelDiscontinued" />
-	<spring:message code="label.company" var="labelCompany" />
 	<!-- Buttons -->
 	<spring:message code="btn.add" var="btnAdd" />
-	<spring:message code="btn.cancel" var="btnCancel" />
-	<!-- Words -->
-	<spring:message code="word.or" var="wordOr" />
+	<!-- Error messages -->
+	<spring:message code="err.client.date_format" var="date_format_err"/>
+	<spring:message code="err.client.min_date" var="min_date_err"/>
+	<spring:message code="err.client.inconsistent_date" var="date_inconsistency_err"/>
+	<spring:message code="err.client.field_require" var="field_required_err"/>
+
 	<!-- ***************************** HEADER ***************************** -->
 	<jsp:include page="header.jsp" />
 
@@ -61,7 +64,7 @@
 									cssClass="alert alert-danger" />
 							</div>
 							<div class="form-group  has-feedback">
-								<form:label for="companyId" path="company.id">${labelCompany}</form:label>
+								<form:label for="companyId" path="company.id"><spring:message code="label.company"/></form:label>
 								<form:select class="form-control" id="companyId"
 									path="company.id">
 									<option value="null"><spring:message
@@ -77,9 +80,9 @@
 						</fieldset>
 						<div class="actions pull-right">
 							<input id="addBtn" type="submit" value="${btnAdd}"
-								class="btn btn-primary">
-							${wordOr}
-							<a href="../computers" class="btn btn-default">${btnCancel}</a>
+								class="btn btn-primary"> 
+							<spring:message code="word.or" /> 
+							<a href="../computers" class="btn btn-default"><spring:message code="btn.cancel"/></a>
 						</div>
 					</form:form>
 				</div>
@@ -87,6 +90,12 @@
 		</div>
 	</section>
 	<!-- ***************************** SCRIPTS ***************************** -->
+	<script>
+       var date_format_err = "${date_format_err}";
+       var min_date_err = "${min_date_err}";
+       var date_inconsistency_err = "${date_inconsistency_err}";
+       var field_required_err = "${field_required_err}";
+    </script>
 	<script src="../js/jquery.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/utilValidator.js"></script>

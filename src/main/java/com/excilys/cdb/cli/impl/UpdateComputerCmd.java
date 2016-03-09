@@ -26,7 +26,7 @@ import java.util.Scanner;
 public class UpdateComputerCmd implements Command {
 
   // Logger
-  static final Logger logger = LoggerFactory.getLogger(UpdateComputerCmd.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UpdateComputerCmd.class);
 
   // Parser
   @Autowired
@@ -52,13 +52,13 @@ public class UpdateComputerCmd implements Command {
       System.out.println("Name of the computer to update:");
       sc.nextLine();
       Computer newComputer = inputCmdParser.getRequiredValidComputerByName(sc).get(0);
-      logger.debug("Computer retrieved: " + newComputer);
+      LOGGER.debug("Computer retrieved: {}", newComputer);
 
       // Get new name input
       System.out.println("New Name:");
       String newName = inputCmdParser.getNameInput(sc);
       if (!newName.isEmpty()) {
-        logger.debug("computer.name: " + newName);
+        LOGGER.debug("computer.name: {}", newName);
         newComputer.setName(newName);
       }
 
@@ -67,14 +67,14 @@ public class UpdateComputerCmd implements Command {
       sc.nextLine();
       LocalDateTime introDate = inputCmdParser.getDateInput(sc, dateFormat);
       if (introDate != null) {
-        logger.debug("computer.introduced: " + introDate);
+        LOGGER.debug("computer.introduced:{} ", introDate);
         newComputer.setIntroduced(introDate);
       }
 
       System.out.println("Discontinued (" + dateFormat + "): ");
       LocalDateTime discDate = inputCmdParser.getDateInput(sc, dateFormat);
       if (introDate != null) {
-        logger.debug("computer.discontinued: " + discDate);
+        LOGGER.debug("computer.discontinued: {}", discDate);
         newComputer.setIntroduced(discDate);
       }
 
@@ -82,11 +82,11 @@ public class UpdateComputerCmd implements Command {
       List<Company> companies;
       if ((companies = inputCmdParser.getValidCompanyByName(sc)) != null && !companies.isEmpty()) {
         Company company = companies.get(0);
-        logger.debug("computer.company: " + company);
+        LOGGER.debug("computer.company: {}", company);
         newComputer.setCompany(company);
       }
 
-      logger.debug("Try to update computer:" + newComputer);
+      LOGGER.debug("Try to update computer: {}", newComputer);
       computerService.updateComputer(newComputer);
 
     } catch (ParseException e) {

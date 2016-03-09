@@ -18,13 +18,6 @@
 	<!-- Buttons -->
 	<spring:message code="btn.search" var="btnSearch" />
 	<spring:message code="btn.filterByName" var="btnFilterByName" />
-	<spring:message code="btn.addComputer" var="btnAddComputer" />
-	<!-- Column headers -->
-	<spring:message code="label.computerName" var="labelComputerName" />
-	<spring:message code="label.introduced" var="labelIntroduced" />
-	<spring:message code="label.discontinued" var="labelDiscontinued" />
-	<spring:message code="label.company" var="labelCompany" />
-	<spring:message code="btn.edit" var="btnEdit" />
 	
 	<!-- ***************************** HEADER ***************************** -->
 	<jsp:include page="header.jsp" />
@@ -46,9 +39,9 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="./computers/new">${btnAddComputer}</a>
+					<a class="btn btn-success" id="addComputer" href="./computers/new"><spring:message code="btn.addComputer"/></a>
 					<a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">${btnEdit}</a>
+						onclick="$.fn.toggleEditMode();"> <spring:message code="btn.edit"/></a>
 				</div>
 			</div>
 		</div>
@@ -73,17 +66,17 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<!-- Header Computername -->
+						<!-- Header Computer name -->
 						<th><c:choose>
 								<c:when test="${page.orderBy != 'name' || page.order != 'ASC'}">
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="ASC" orderBy="name"
-										search="${page.search}">${labelComputerName}</myLib:link>
+										search="${page.search}">  <spring:message code="label.computerName"/></myLib:link>
 								</c:when>
 								<c:otherwise>
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="DESC" orderBy="name"
-										search="${page.search}">${labelComputerName}</myLib:link>
+										search="${page.search}"><spring:message code="label.computerName"/></myLib:link>
 								</c:otherwise>
 							</c:choose></th>
 						<!-- Header Introduced -->
@@ -92,12 +85,12 @@
 									test="${page.orderBy != 'introduced' || page.order != 'ASC'}">
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="ASC" orderBy="introduced"
-										search="${page.search}">${labelIntroduced}</myLib:link>
+										search="${page.search}"><spring:message code="label.introduced"/></myLib:link>
 								</c:when>
 								<c:otherwise>
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="DESC" orderBy="introduced"
-										search="${page.search}">${labelIntroduced}</myLib:link>
+										search="${page.search}"><spring:message code="label.introduced"/></myLib:link>
 								</c:otherwise>
 							</c:choose></th>
 						<!-- Header Discontinued -->
@@ -106,12 +99,12 @@
 									test="${page.orderBy != 'discontinued' || page.order != 'ASC'}">
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="ASC" orderBy="discontinued"
-										search="${page.search}">${labelDiscontinued}</myLib:link>
+										search="${page.search}"><spring:message code="label.discontinued"/></myLib:link>
 								</c:when>
 								<c:otherwise>
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="DESC"
-										orderBy="discontinued" search="${page.search}">${labelDiscontinued}</myLib:link>
+										orderBy="discontinued" search="${page.search}"><spring:message code="label.discontinued"/></myLib:link>
 								</c:otherwise>
 							</c:choose></th>
 						<!-- Header Company -->
@@ -120,12 +113,12 @@
 									test="${page.orderBy != 'company' || page.order != 'ASC'}">
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="ASC" orderBy="company"
-										search="${page.search}">${labelCompany}</myLib:link>
+										search="${page.search}"><spring:message code="label.company"/></myLib:link>
 								</c:when>
 								<c:otherwise>
 									<myLib:link target="./computers" pageIndex="1"
 										pageSize="${page.pageSize}" order="DESC" orderBy="company"
-										search="${page.search}">${labelCompany}</myLib:link>
+										search="${page.search}"><spring:message code="label.company"/></myLib:link>
 								</c:otherwise>
 							</c:choose></th>
 
