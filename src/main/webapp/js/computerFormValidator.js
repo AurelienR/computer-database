@@ -20,6 +20,12 @@ $(function() {
         validationCompanyDisplay($('#companyId'));
         checkReadySubmission();
     });
+    
+    $('addForm').submit(function(){
+    	$('#introduced').val(getValidDateString(('#introduced').val()).toISOString());
+    	$('#discontinued').val(getValidDateString(('#discontinued').val()).toISOString());
+    });
+    
 });
 
 

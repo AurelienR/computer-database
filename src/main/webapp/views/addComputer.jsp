@@ -18,7 +18,7 @@
 	<spring:message code="label.discontinued" var="labelDiscontinued" />
 	<spring:message code="label.company" var="labelCompany" />
 	<!-- Buttons -->
-	<spring:message code="btn.edit" var="btnEdit" />
+	<spring:message code="btn.add" var="btnAdd" />
 	<spring:message code="btn.cancel" var="btnCancel" />
 	<!-- Words -->
 	<spring:message code="word.or" var="wordOr" />

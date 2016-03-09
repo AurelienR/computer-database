@@ -25,7 +25,7 @@
 	<spring:message code="label.discontinued" var="labelDiscontinued" />
 	<spring:message code="label.company" var="labelCompany" />
 	<spring:message code="btn.edit" var="btnEdit" />
-
+	
 	<!-- ***************************** HEADER ***************************** -->
 	<jsp:include page="header.jsp" />
 
