@@ -67,7 +67,7 @@
 								<form:label for="companyId" path="company.id"><spring:message code="label.company"/></form:label>
 								<form:select class="form-control" id="companyId"
 									path="company.id">
-									<option value="null"><spring:message
+									<option value="0"><spring:message
 											code="msg.nothingSelected" /></option>
 									<c:forEach var="company" items="${requestScope.companies}">
 										<option value="${company.id}"

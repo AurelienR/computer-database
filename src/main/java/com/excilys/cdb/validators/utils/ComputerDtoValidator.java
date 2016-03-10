@@ -60,11 +60,11 @@ public class ComputerDtoValidator extends ModelValidator {
       throw new ValidatorException(
           "Introduced string should be not null/empty if discontinued string is not null/empty");
     } else if ((intro != null && !intro.isEmpty()) && (disc != null && !disc.isEmpty())
-        && (DateFormatManager.isValidHtmlStringFormat(intro)
-            && DateFormatManager.isValidHtmlStringFormat(disc))) {
+        && (DateFormatManager.isValidLocalDateString(intro)
+            && DateFormatManager.isValidLocalDateString(disc))) {
 
-      LocalDateTime introDate = DateFormatManager.parseHtmlDateString(intro);
-      LocalDateTime discDate = DateFormatManager.parseHtmlDateString(disc);
+      LocalDateTime introDate = DateFormatManager.parseLocal(intro);
+      LocalDateTime discDate = DateFormatManager.parseLocal(disc);
 
       if (discDate.isBefore(introDate)) {
         throw new ValidatorException("Introduced date should be set befored discontinued date");
@@ -79,9 +79,9 @@ public class ComputerDtoValidator extends ModelValidator {
    * @throws ValidatorException if date string is not matching HTML format
    */
   public static void checkIsValidDateFormat(String dateStr) throws ValidatorException {
-    if (!DateFormatManager.isValidHtmlStringFormat(dateStr)) {
-      throw new ValidatorException(
-          "Date " + dateStr + " is not matching date format " + DateFormatManager.HTML_DATE_FORMAT);
+    if (!DateFormatManager.isValidLocalDateString(dateStr)) {
+      throw new ValidatorException("Date " + dateStr + " is not matching date format "
+          + DateFormatManager.getLocalDateFormat());
     }
   }
 
@@ -93,9 +93,9 @@ public class ComputerDtoValidator extends ModelValidator {
    */
   public static void checkDateFormatIfNotNull(String dateStr) throws ValidatorException {
     if (dateStr != null && !dateStr.isEmpty()) {
-      if (!DateFormatManager.isValidHtmlStringFormat(dateStr)) {
+      if (!DateFormatManager.isValidLocalDateString(dateStr)) {
         throw new ValidatorException("Date " + dateStr + " is not matching date format "
-            + DateFormatManager.HTML_DATE_FORMAT);
+            + DateFormatManager.getLocalDateFormat());
       }
     }
   }
@@ -123,8 +123,8 @@ public class ComputerDtoValidator extends ModelValidator {
     ComputerDtoValidator.checkValidId(computerDto.getId());
     ComputerDtoValidator.checkNameNotNull(computerDto.getName());
     ComputerDtoValidator.checkNameNotEmpty(computerDto.getName());
-    ComputerDtoValidator.checkDateConsistency(computerDto);
-    ComputerDtoValidator.checkDateFormatIfNotNull(computerDto);
+    checkDateConsistency(computerDto);
+    checkDateFormatIfNotNull(computerDto);
 
     // Validate related companyDTO
     if (computerDto.getCompany() != null) {

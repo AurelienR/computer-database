@@ -132,13 +132,8 @@
 								class="cb" value="${computer.id}"></td>
 							<td><a href="./computers/${computer.id}" onclick="">${computer.name}</a>
 							</td>
-
-							<td><fmt:parseDate pattern="yyyy-MM-dd"
-									value="${computer.introduced}" var="parsedDate" /> <fmt:formatDate
-									value="${parsedDate}" pattern="dd/MM/yyyy" /></td>
-							<td><fmt:parseDate pattern="yyyy-MM-dd"
-									value="${computer.discontinued}" var="parsedDate" /> <fmt:formatDate
-									value="${parsedDate}" pattern="dd/MM/yyyy" /></td>
+							<td>${computer.introduced}</td>
+							<td>${computer.discontinued}</td>
 							<td>${computer.company.name}</td>
 						</tr>
 					</c:forEach>

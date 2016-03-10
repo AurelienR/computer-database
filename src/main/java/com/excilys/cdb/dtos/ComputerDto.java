@@ -1,6 +1,5 @@
 package com.excilys.cdb.dtos;
 
-
 import com.excilys.cdb.validators.annotations.ComputerDtoDateFormat;
 import com.excilys.cdb.validators.annotations.ComputerDtoDatesConsistency;
 
@@ -8,7 +7,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@ComputerDtoDatesConsistency
+@ComputerDtoDatesConsistency(message = "Invalid date consistency")
 public class ComputerDto {
 
   @Min(value = 0, message = "Computer id cannot be negative number {value}")
@@ -16,9 +15,9 @@ public class ComputerDto {
   @NotNull(message = "Computer name should be not null")
   @Size(min = 0, message = "Computer name cannot be empty string")
   private String name;
-  @ComputerDtoDateFormat
+  @ComputerDtoDateFormat(message = "Invalid format for introduced date")
   private String introduced;
-  @ComputerDtoDateFormat
+  @ComputerDtoDateFormat(message = "Invalid format for discontinued date")
   private String discontinued;
   private CompanyDto company;
 

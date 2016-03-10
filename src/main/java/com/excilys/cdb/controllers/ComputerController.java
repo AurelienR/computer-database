@@ -12,7 +12,6 @@ import com.excilys.cdb.services.ComputerDtoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,14 +37,15 @@ public class ComputerController {
   ComputerDtoService computerDtoService;
   @Autowired
   CompanyDtoService companyDtoService;
-   
-/**
- * ComputerDto provider for model attribute.
- * @return an empty ComputerDto
- */
-@ModelAttribute("computerDto")
+
+  /**
+   * ComputerDto provider for model attribute.
+   * 
+   * @return an empty ComputerDto
+   */
+  @ModelAttribute("computerDto")
   public ComputerDto getComputerDto() {
-     return new ComputerDto(0, "", null, null, new CompanyDto(0, ""));
+    return new ComputerDto(0, "", null, null, new CompanyDto(0, ""));
   }
 
   /**
@@ -66,7 +66,9 @@ public class ComputerController {
       @RequestParam(value = "order", required = false) String order,
       @RequestParam(value = "search", required = false) String search, Model model) {
 
-    LOGGER.info("Controller: GET /computers : parameters:\n\tpage={} pageSize={} orderBy={}  order={} search={}",page,pageSize,orderBy,order, search);
+    LOGGER.info(
+        "Controller: GET /computers : parameters:\n\tpage={} pageSize={} orderBy={}  order={} search={}",
+        page, pageSize, orderBy, order, search);
 
     // Get related queryPageParameter
     QueryPageParameter qp =
@@ -125,7 +127,7 @@ public class ComputerController {
 
     // Prepare request
     model.addAttribute("companies", companyDtos);
-    //model.addAttribute("computerDto", new ComputerDto(0, "", null, null, new CompanyDto(0, "")));
+    // model.addAttribute("computerDto", new ComputerDto(0, "", null, null, new CompanyDto(0, "")));
 
     return "addComputer";
   }
@@ -142,12 +144,13 @@ public class ComputerController {
   public String editComputer(@PathVariable Long id, @Valid @ModelAttribute ComputerDto computerDto,
       BindingResult result, Model model) {
 
-    LOGGER.info("ComputerController: POST: /computers/{} parameters:\n\tComputerDto: {} ",id , computerDto);
+    LOGGER.info("ComputerController: POST: /computers/{} parameters:\n\tComputerDto: {} ", id,
+        computerDto);
 
     // Manage validation DTO errors
     if (result.hasErrors()) {
-      
-      LOGGER.info("ComputerController: Error on validating Dto");
+
+      LOGGER.error("ComputerController: Error on validating Dto");
       
       // Prepare models for edit view
       List<CompanyDto> companyDtos = companyDtoService.findAll();
@@ -175,26 +178,26 @@ public class ComputerController {
   public String newComputer(@Valid @ModelAttribute("computerDto") ComputerDto computerDto,
       BindingResult result, Model model) {
 
-    LOGGER
-        .info("ComputerController: POST /computers/new parameters\n\tComputerDto: {}", computerDto);
+    LOGGER.info("ComputerController: POST /computers/new parameters\n\tComputerDto: {}",
+        computerDto);
 
     // Manage validation DTO errors
     if (result.hasErrors()) {
-      
-      LOGGER.info("ComputerController: Error on validating Dto");
-      
+
+      LOGGER.error("ComputerController: Error on validating Dto");
+
       // Prepare models for edit view
       List<CompanyDto> companyDtos = companyDtoService.findAll();
-      model.addAttribute("computer", computerDto);
+      model.addAttribute("computerDto", computerDto);
       model.addAttribute("companies", companyDtos);
       // Return to edit page
       return "addComputer";
     }
-    
+
     if (computerDto.getCompany() == null || computerDto.getCompany().getId() == 0) {
       computerDto.setCompany(null);
     }
-    
+
     // Create computer
     computerDtoService.createComputer(computerDto);
 

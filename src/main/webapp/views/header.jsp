@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="myLib" tagdir="/WEB-INF/tags"%>
 <!-- ***************************** LOCALIZATION DECLARATION ***************************** -->
-<spring:message code="lang" var="lang" />
+<spring:message code="property.lang" var="lang" />
 <script>
    var lang = "${lang}";
 </script>
@@ -19,19 +19,19 @@
 		</myLib:link>
 		<ul class="nav navbar-nav navbar-right">
 			<c:choose>
-				<c:when test="${lang=='fr_FR'}">
-					<li class="disabled" ><a href="?lang=fr_FR">FR</a></li>
+				<c:when test="${lang=='fr'}">
+					<li class="disabled" ><a href="?lang=fr">FR</a></li>
 				</c:when>
 				<c:otherwise>
-					<li><a href="?lang=fr_FR">FR</a></li>
+					<li><a href="?lang=fr">FR</a></li>
 				</c:otherwise>
 			</c:choose>
 			<c:choose>
-				<c:when test="${lang=='en_US'}">
-					<li class="disabled" ><a href="?lang=en_US">EN</a></li>
+				<c:when test="${lang=='en'}">
+					<li class="disabled" ><a href="?lang=en">EN</a></li>
 				</c:when>
 				<c:otherwise>
-					<li><a href="?lang=en_US">EN</a></li>
+					<li><a href="?lang=en">EN</a></li>
 				</c:otherwise>
 			</c:choose>			
 		</ul>

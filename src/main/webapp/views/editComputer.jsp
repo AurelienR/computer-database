@@ -73,7 +73,6 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-
 							<input type="submit" value="${btnEdit}" class="btn btn-primary">
 							<spring:message code="word.or"/> <a href="../computers" class="btn btn-default"> <spring:message code="btn.cancel"/></a>
 						</div>

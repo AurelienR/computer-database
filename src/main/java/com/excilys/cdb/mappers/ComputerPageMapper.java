@@ -44,7 +44,7 @@ public class ComputerPageMapper {
     int count = getPageCount(qp.getPageSize(), qp.getMatchingRowCount());
     ComputerPageDto computerPageDto = new ComputerPageDto(qp, count, computerDtos);
 
-    LOGGER.debug("\n\t\tMapper: map: [ qp: {}, computerDtos:{}] \n\t\tTO:",qp,computerDtos,computerPageDto);
+    LOGGER.debug("\n\t\tMapper: map: [ qp: {}, computerDtos:{}] \n\t\tTO:{}",qp,computerDtos,computerPageDto);
 
     return computerPageDto;
   }

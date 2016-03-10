@@ -168,10 +168,10 @@ function isFRDate(dateStr){
 function toLocalFormatDateStr(dateStr){
 	if(isISODate(dateStr)){
 		var date = parseISODate(dateStr);
-		if(lang=="fr_FR"){
+		if(lang=="fr"){
 			return date.getUTCDate()+'/'+date.getUTCMonth()+'/'+date.getUTCFullYear();
 		}
-		if(lang=="en_US"){
+		if(lang=="en"){
 			return date.getUTCMonth()+'/'+date.getUTCDate()+'/'+date.getUTCFullYear();
 		}
 	}
@@ -185,10 +185,10 @@ function toLocalFormatDateStr(dateStr){
  */
 function getValidLocalDate(dateStr){	
 	
-	if(lang == "fr_FR" && isFRDate(dateStr)){
+	if(lang == "fr" && isFRDate(dateStr)){
 		return parseFRDate(dateStr);
 	}
-	else if(lang == "en_US" && isRFCDate(dateStr)){
+	else if(lang == "en" && isRFCDate(dateStr)){
 		return parseRFCDate(dateStr);
 	}
 
@@ -224,3 +224,15 @@ function isCoherentDate(d, m, y) {
 }
 
 
+/**
+ * Convert DateString to iso if current browser is chrome
+ * @param dateStr date to convert
+ * @returns same date string or iso date string
+ */
+function toISOIfChrome(dateStr){
+	var isChrome = !!window.chrome && !!window.chrome.webstore;
+	if(isChrome){
+		return getValidLocalDate(dateStr).toISOString();
+	}	
+	return dateStr;
+}

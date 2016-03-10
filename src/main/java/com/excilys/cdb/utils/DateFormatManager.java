@@ -1,30 +1,43 @@
 package com.excilys.cdb.utils;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Manage to parse, validate format string.
  *
  * @author AurelienR
  */
+@Component
 public class DateFormatManager {
 
-  /** The html date format. */
-  public static String HTML_DATE_FORMAT = "yyyy-MM-dd";
-  
-  /** The display date format. */
-  public static String DISPLAY_DATE_FORMAT = "dd-MM-yyyy";
+  private static final String LOCAL_DATE_PROPERTY_KEY = "property.dateFormat";
+  private static final String SERVLET_CONTEXT_PATH = "/spring/servlet-context.xml";
+
+  private static final MessageSource messageSource;
+
+  static {
+    try(ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("spring/servlet-context.xml")){
+      messageSource = (MessageSource) ctx.getBean("messageSource", MessageSource.class);
+      ctx.close();
+    }
+  }
 
   /**
    * Convert LocalDateTime to a string with the specified format.
    *
-   * @param date          date to convert to string
-   * @param dateFormat          dateformat use as string formatter
+   * @param date date to convert to string
+   * @param dateFormat dateformat use as string formatter
    * @return date string formated
    */
   public static String toDateString(LocalDateTime date, String dateFormat) {
@@ -42,18 +55,18 @@ public class DateFormatManager {
   /**
    * Parse a string date with a given date format to a LocalDateTime object.
    *
-   * @param dateStr          dateString to parse
-   * @param dateFormat          dateFormat to use for parsing
+   * @param dateStr dateString to parse
+   * @param dateFormat dateFormat to use for parsing
    * @return LocalDateTime related object
-   * @throws DateFormatManagerException  if date string is not parsable with the given date format
+   * @throws DateFormatManagerException if date string is not parsable with the given date format
    */
-  public static LocalDateTime parseDate(String dateStr, String dateFormat)
+  public static LocalDateTime parse(String dateStr, String dateFormat)
       throws DateFormatManagerException {
 
     // Null parameter case
     if (dateStr == null || dateStr.isEmpty()) {
       return null;
-    }     
+    }
 
     // Try parse
     Date date;
@@ -70,11 +83,11 @@ public class DateFormatManager {
   /**
    * Check whether if the passed string is matching the given date format.
    *
-   * @param dateStr          date String to check
-   * @param dateFormatStr          date format to compare with
+   * @param dateStr date String to check
+   * @param dateFormatStr date format to compare with
    * @return true if date is matching format, else false
    */
-  public static boolean isValidStringFormat(String dateStr, String dateFormatStr) {
+  public static boolean isValidDateString(String dateStr, String dateFormatStr) {
 
     SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatStr);
     dateFormat.setLenient(false);
@@ -87,56 +100,46 @@ public class DateFormatManager {
   }
 
   /**
-   * Check if passed date string is matching HTML spec format : yyyy-MM-dd.
+   * Gets the local date format.
    *
-   * @param dateStr          date string to parse
-   * @return true if date is matching format, else false
+   * @return the local date format
    */
-  public static boolean isValidHtmlStringFormat(String dateStr) {
-    return isValidStringFormat(dateStr, HTML_DATE_FORMAT);
+  public static String getLocalDateFormat() {
+    Locale local = LocaleContextHolder.getLocale();
+    return messageSource.getMessage(LOCAL_DATE_PROPERTY_KEY, null, local);
   }
 
   /**
-   * Parse date string with HTML spec format: yyyy-MM-dd.
+   * To local date string format.
    *
-   * @param dateStr          date String to parse
-   * @return true if date is matching format, else false
-   * @throws DateFormatManagerException           date string is not matching the format
+   * @param date the date to stringify
+   * @return the string formatted date
    */
-  public static LocalDateTime parseHtmlDateString(String dateStr)
-      throws DateFormatManagerException {
-    return parseDate(dateStr, HTML_DATE_FORMAT);
+  public static String toLocalDateStringFormat(LocalDateTime date) {
+    String dateFormat = getLocalDateFormat();
+    return toDateString(date, dateFormat);
   }
 
   /**
-   * Convert LocalDateTime object to HTML format string: yyyy-MM-dd.
+   * Parses the local date string.
    *
-   * @param date          LocalDateTime to convert
-   * @return related date string
+   * @param dateStr the date string to parse
+   * @return related LocalDateTime object
    */
-  public static String toHtmlDateString(LocalDateTime date) {
-    return toDateString(date, HTML_DATE_FORMAT);
+  public static LocalDateTime parseLocal(String dateStr) {
+    String dateFormat = getLocalDateFormat();
+    return parse(dateStr, dateFormat);
   }
 
   /**
-   * Convert parse date string with conventional display format string: dd/MM/yyyy.
+   * Checks if date string is valid with local date format.
    *
-   * @param dateStr          date string to parse
-   * @return LocalDateTime related object
-   * @throws DateFormatManagerException failed to parse date
+   * @param dateStr date string to parse
+   * @return true, if is valid local date string
    */
-  public static LocalDateTime parseDisplayDateString(String dateStr)
-      throws DateFormatManagerException {
-    return parseDate(dateStr, DISPLAY_DATE_FORMAT);
+  public static boolean isValidLocalDateString(String dateStr) {
+    String dateFormat = getLocalDateFormat();
+    return isValidDateString(dateStr, dateFormat);
   }
 
-  /**
-   * Convert LocalDateTime object to conventional display format string : dd/MM/yyyy.
-   *
-   * @param date date set to string
-   * @return related date string
-   */
-  public static String toDisplayDateString(LocalDateTime date) {
-    return toDateString(date, DISPLAY_DATE_FORMAT);
-  }
 }

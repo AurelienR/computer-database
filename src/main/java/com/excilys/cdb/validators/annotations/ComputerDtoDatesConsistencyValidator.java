@@ -16,7 +16,6 @@ public class ComputerDtoDatesConsistencyValidator
 
   @Override
   public boolean isValid(ComputerDto value, ConstraintValidatorContext context) {
-
     try {
       ComputerDtoValidator.checkDateConsistency(value);
     } catch (ValidatorException e) {

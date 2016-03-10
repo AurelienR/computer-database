@@ -9,9 +9,9 @@ import javax.validation.ConstraintValidatorContext;
 public class ComputerDtoDateFormatValidator
     implements ConstraintValidator<ComputerDtoDateFormat, String> {
 
+  
   @Override
   public void initialize(ComputerDtoDateFormat constraintAnnotation) {
-
   }
 
   @Override

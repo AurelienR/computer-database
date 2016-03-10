@@ -1,3 +1,4 @@
+
 package com.excilys.cdb.validators.annotations;
 
 import java.lang.annotation.Documented;

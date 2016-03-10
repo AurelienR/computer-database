@@ -43,10 +43,6 @@ public class CompanyDaoImpl implements CompanyDao {
   private static final String INSERT_QUERY = "INSERT INTO company (name) VALUES (?)";
   private static final String DELETE_QUERY = "DELETE FROM company WHERE id=?";
 
-  // Constructors
-  private CompanyDaoImpl() {
-  }
-
   // Methods
   @Override
   public List<Company> findAll() {

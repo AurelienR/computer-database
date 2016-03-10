@@ -64,10 +64,6 @@ public class ComputerDaoImpl implements ComputerDao {
   private static final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
   private static final String DELETE_BYCOMPANY_QUERY = "DELETE FROM computer WHERE company_id=?";
 
-  // Constructors
-  private ComputerDaoImpl() {
-  }
-
   // Methods
   @Override
   public List<Computer> findAll() {

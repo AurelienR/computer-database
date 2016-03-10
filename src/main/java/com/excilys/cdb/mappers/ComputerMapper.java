@@ -61,13 +61,12 @@ public class ComputerMapper {
 
     long id = computer.getId();
     String computerName = computer.getName();
-    String introStr = DateFormatManager.toHtmlDateString(computer.getIntroduced());
-    String discStr = DateFormatManager.toHtmlDateString(computer.getDiscontinued());
+    String introStr = DateFormatManager.toLocalDateStringFormat(computer.getIntroduced());
+    String discStr = DateFormatManager.toLocalDateStringFormat(computer.getDiscontinued());
     CompanyDto companyDto = CompanyMapper.toCompanyDto(computer.getCompany());
 
     ComputerDto computerDto = new ComputerDto(id, computerName, introStr, discStr, companyDto);
-    LOGGER
-        .debug("\n\t\tMapper: map: computer: {}\n\t\tTO: ComputerDto: {}" ,  computer,computerDto);
+    LOGGER.debug("\n\t\tMapper: map: computer: {}\n\t\tTO: ComputerDto: {}", computer, computerDto);
 
     return computerDto;
   }
@@ -99,8 +98,7 @@ public class ComputerMapper {
     ComputerDto computerDto =
         new ComputerDto(id, nameStr, introducedStr, discontinuedStr, companyDto);
 
-    LOGGER
-        .debug("\n\t\tMapper: map: request: {}\n\t\tTO: ComputerDto: {}", request,computerDto);
+    LOGGER.debug("\n\t\tMapper: map: request: {}\n\t\tTO: ComputerDto: {}", request, computerDto);
 
     return computerDto;
   }
@@ -116,9 +114,14 @@ public class ComputerMapper {
       return null;
     }
     List<ComputerDto> computerDtos = new ArrayList<ComputerDto>();
-    computers.parallelStream().forEachOrdered(c -> computerDtos.add(toComputerDto(c)));
+    
+    // computers.parallelStream().forEachOrdered(c -> computerDtos.add(toComputerDto(c)));
+    for (Computer c : computers) {
+      computerDtos.add(toComputerDto(c));
+    }
 
-    LOGGER.debug("\n\t\tMapper: Map: List<Computer>: {}\n\t\tTO: List<ComputerDto>: {}",computers,computerDtos);
+    LOGGER.debug("\n\t\tMapper: Map: List<Computer>: {}\n\t\tTO: List<ComputerDto>: {}", computers,
+        computerDtos);
 
     return computerDtos;
   }
@@ -135,13 +138,12 @@ public class ComputerMapper {
     }
     long id = computerDto.getId();
     String computerName = computerDto.getName();
-    LocalDateTime intro = DateFormatManager.parseHtmlDateString(computerDto.getIntroduced());
-    LocalDateTime disc = DateFormatManager.parseHtmlDateString(computerDto.getDiscontinued());
+    LocalDateTime intro = DateFormatManager.parseLocal(computerDto.getIntroduced());
+    LocalDateTime disc = DateFormatManager.parseLocal(computerDto.getDiscontinued());
     Company company = CompanyMapper.toCompany(computerDto.getCompany());
     Computer computer = new Computer(id, computerName, company, disc, intro);
 
-    LOGGER.debug(
-        "\n\t\tMapper: map: computerDto: {}\n\t\tTO: computer: {}" , computerDto,computer);
+    LOGGER.debug("\n\t\tMapper: map: computerDto: {}\n\t\tTO: computer: {}", computerDto, computer);
 
     return computer;
   }
