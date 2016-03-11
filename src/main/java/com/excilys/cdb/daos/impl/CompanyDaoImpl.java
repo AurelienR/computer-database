@@ -25,7 +25,7 @@ import java.util.List;
 @Repository
 public class CompanyDaoImpl implements CompanyDao {
 
-  @Autowired
+  //@Autowired
   private JdbcTemplate jdbcTemplate;
 
   // Mapper

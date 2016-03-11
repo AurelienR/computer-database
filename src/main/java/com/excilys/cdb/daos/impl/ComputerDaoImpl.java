@@ -35,7 +35,7 @@ import java.util.List;
 @Repository
 public class ComputerDaoImpl implements ComputerDao {
 
-  @Autowired
+  // @Autowired
   private JdbcTemplate jdbcTemplate;
   private ComputerRowMapper computerRowMapper = new ComputerRowMapper();
 

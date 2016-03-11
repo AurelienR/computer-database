@@ -27,6 +27,9 @@
 		<javax.el.version>3.0.0</javax.el.version>
 		<!-- Spring -->
 		<spring.version>4.2.5.RELEASE</spring.version>
+		<spring-data.version>1.9.4.RELEASE</spring-data.version>
+		<!-- Hibernate -->
+		<hibernate.version>5.1.0.Final</hibernate.version>
 		<!-- Tests -->
 		<junit.version>4.12</junit.version>
 		<h2db.version>1.4.191</h2db.version>
@@ -111,6 +114,27 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${spring-data.version}</version>
+		</dependency>
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+			<version>${hibernate.version}</version>
 		</dependency>
 		<!-- Tests -->
 		<dependency>

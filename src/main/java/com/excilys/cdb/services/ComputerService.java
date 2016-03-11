@@ -2,6 +2,7 @@ package com.excilys.cdb.services;
 
 import com.excilys.cdb.daos.ComputerDao;
 import com.excilys.cdb.daos.DaoException;
+import com.excilys.cdb.daos.repositories.ComputerRepository;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.validators.ValidatorException;
@@ -15,6 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 /**
  * Service layer to ComputerDAO
  * 
@@ -27,6 +31,12 @@ public class ComputerService {
   // Logger
   private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
 
+  @PersistenceContext
+  private EntityManager em;
+
+  @Autowired
+  private ComputerRepository computerRepository;
+  
   // Dao
   @Autowired
   ComputerDao computerDao;
@@ -46,7 +56,7 @@ public class ComputerService {
 
     // Validate queryParameter
     QueryPageParameterValidator.validate(qp);
-
+    
     // Return computers
     return computerDao.findByQuery(qp);
   }
@@ -77,8 +87,8 @@ public class ComputerService {
   public List<Computer> findAll() {
 
     LOGGER.debug("Service: find all computers");
-
-    return computerDao.findAll();
+    return computerRepository.findAll();
+    //return computerDao.findAll();
   }
 
   /**

@@ -2,9 +2,14 @@ package com.excilys.cdb.models;
 
 import java.time.LocalDateTime;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * Model of a Computer
@@ -12,25 +17,29 @@ import javax.validation.constraints.Size;
  * @author Aurelien.R
  *
  */
-
+@Entity
 public class Computer {
 
   // Attributes
-  @Min(value = 0, message = "Computer id doit être supérieur à {value}")
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id = 0;
-  private Company company;
-  @NotNull(message = "Computer name should be not null")
-  @Size(min = 0, message = "Computer name cannot be empty string")
+  @Column(nullable = true)
   private String name;
+  @Column(nullable = true)
   private LocalDateTime discontinued;
+  @Column(nullable = true)
   private LocalDateTime introduced;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "company_id")
+  private Company company;
 
   /**
    * Instantiates a new computer.
    *
    * @param id the id
    * @param name the name of the computer
-   * @param company the related company
+   * @param company the r elated company
    * @param discontinued the discontinued date
    * @param introduced the introduced date
    */

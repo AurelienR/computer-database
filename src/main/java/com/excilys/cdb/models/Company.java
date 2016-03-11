@@ -1,6 +1,10 @@
 package com.excilys.cdb.models;
 
-import javax.validation.constraints.Min;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Model of a company
@@ -8,9 +12,14 @@ import javax.validation.constraints.Min;
  * @author Aurelien.R
  *
  */
+@Entity
 public class Company {
-  @Min(value = 0, message = "Company id doit être supérieur à {value}")
+  
+  //Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id = 0;
+  @Column
   private String name;
 
   public Company() {
