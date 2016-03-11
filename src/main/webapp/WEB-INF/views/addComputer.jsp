@@ -51,14 +51,14 @@
 							</div>
 							<div class="form-group  has-feedback">
 								<form:label for="introduced" path="introduced">${labelIntroduced}</form:label>
-								<form:input type="date" class="form-control" id="introduced"
+								<form:input type="text" class="form-control" id="introduced"
 									path="introduced" placeholder="${labelIntroduced}"></form:input>
 								<form:errors element="div" path="introduced"
 									cssClass="alert alert-danger" />
 							</div>
 							<div class="form-group  has-feedback">
 								<form:label for="discontinued" path="discontinued">${labelDiscontinued}</form:label>
-								<form:input type="date" class="form-control" id="discontinued"
+								<form:input type="text" class="form-control" id="discontinued"
 									path="discontinued" placeholder="${labelDiscontinued}"></form:input>
 								<form:errors element="div" path="discontinued"
 									cssClass="alert alert-danger" />

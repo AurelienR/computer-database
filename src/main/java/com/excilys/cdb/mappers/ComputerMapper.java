@@ -114,11 +114,7 @@ public class ComputerMapper {
       return null;
     }
     List<ComputerDto> computerDtos = new ArrayList<ComputerDto>();
-    
-    // computers.parallelStream().forEachOrdered(c -> computerDtos.add(toComputerDto(c)));
-    for (Computer c : computers) {
-      computerDtos.add(toComputerDto(c));
-    }
+    computers.stream().forEachOrdered(c -> computerDtos.add(toComputerDto(c)));
 
     LOGGER.debug("\n\t\tMapper: Map: List<Computer>: {}\n\t\tTO: List<ComputerDto>: {}", computers,
         computerDtos);

@@ -1,5 +1,6 @@
 package com.excilys.cdb.controllers;
 
+import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.dtos.CompanyDto;
 import com.excilys.cdb.dtos.ComputerDto;
 import com.excilys.cdb.dtos.ComputerPageDto;
@@ -66,6 +67,8 @@ public class ComputerController {
       @RequestParam(value = "order", required = false) String order,
       @RequestParam(value = "search", required = false) String search, Model model) {
 
+    
+    
     LOGGER.info(
         "Controller: GET /computers : parameters:\n\tpage={} pageSize={} orderBy={}  order={} search={}",
         page, pageSize, orderBy, order, search);
@@ -83,7 +86,7 @@ public class ComputerController {
 
     // Prepare request
     model.addAttribute("page", pageDto);
-
+    
     return "dashboard";
   }
 

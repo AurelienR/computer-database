@@ -1,6 +1,7 @@
 package com.excilys.cdb.daos.impl;
 
 import com.excilys.cdb.daos.CompanyDao;
+import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.mappers.CompanyRowMapper;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.validators.utils.CompanyValidator;
@@ -8,6 +9,7 @@ import com.excilys.cdb.validators.utils.CompanyValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -52,7 +54,12 @@ public class CompanyDaoImpl implements CompanyDao {
     List<Company> companyList = null;
 
     // Retrieve and map all companies
-    companyList = jdbcTemplate.query(FIND_ALL_QUERY, companyRowMapper);
+    try {
+      companyList = jdbcTemplate.query(FIND_ALL_QUERY, companyRowMapper);
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to find all companies");
+      throw new DaoException("Failed to find all companies", e);
+    }
 
     return companyList;
   }
@@ -69,7 +76,12 @@ public class CompanyDaoImpl implements CompanyDao {
     List<Company> companyList;
 
     // Retrieve and map all matching companies by id
-    companyList = jdbcTemplate.query(FIND_BYID_QUERY, companyRowMapper, id);
+    try {
+      companyList = jdbcTemplate.query(FIND_BYID_QUERY, companyRowMapper, id);
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to find company by id: {}", id);
+      throw new DaoException("Failed to find company by id: " + id, e);
+    }
 
     return companyList.get(0);
   }
@@ -87,7 +99,12 @@ public class CompanyDaoImpl implements CompanyDao {
     List<Company> companyList = null;
 
     // Retrieve and map all matching companies
-    companyList = jdbcTemplate.query(FIND_BYNAME_QUERY, companyRowMapper, name);
+    try {
+      companyList = jdbcTemplate.query(FIND_BYNAME_QUERY, companyRowMapper, name);
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to find company by name: {}", name);
+      throw new DaoException("Failed to find company by name: " + name, e);
+    }
 
     return companyList;
   }
@@ -103,17 +120,22 @@ public class CompanyDaoImpl implements CompanyDao {
     KeyHolder holder = new GeneratedKeyHolder();
 
     // Insert computer with custom prepared statement
-    jdbcTemplate.update(new PreparedStatementCreator() {
+    try {
+      jdbcTemplate.update(new PreparedStatementCreator() {
 
-      @Override
-      public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-        PreparedStatement ps =
-            connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1, company.getName());
-        return ps;
-      }
-    }, holder);
-
+        @Override
+        public PreparedStatement createPreparedStatement(Connection connection)
+            throws SQLException {
+          PreparedStatement ps =
+              connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
+          ps.setString(1, company.getName());
+          return ps;
+        }
+      }, holder);
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to insert company: {}", company);
+      throw new DaoException("Failed to count company: " + company, e);
+    }
     return holder.getKey().longValue();
   }
 
@@ -126,7 +148,12 @@ public class CompanyDaoImpl implements CompanyDao {
     CompanyValidator.checkValidId(id);
 
     // Delete company by its id
-    jdbcTemplate.update(DELETE_QUERY, id);
+    try {
+      jdbcTemplate.update(DELETE_QUERY, id);
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to delete company with id: {}", id);
+      throw new DaoException("Failed to delete company with id: " + id, e);
+    }
   }
 
 }

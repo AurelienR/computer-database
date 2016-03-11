@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,9 +19,15 @@
 	<section id="main">
 		<div class="container">	
 			<div class="alert alert-danger">
-				Error 500: An error has occured!
+				<h3>Error 500: An error has occured!</h3>
 				<br/>
 				<!-- stacktrace -->
+				<ul>
+				    <li><h4> Reason : ${message} </h4></li>
+				    <li><h4> Cause : ${cause} </h4></li>				    
+				    <li><h4>StackTrace:</h4> <p>${stackTrace}</p></li>
+				</ul>
+								
 			</div>
 		</div>
 	</section>

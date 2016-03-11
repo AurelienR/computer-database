@@ -49,13 +49,13 @@
 							</div>
 							<div class="form-group">
 								<label for="introduced">${labelIntroduced}</label>
-								<form:input type="date" class="form-control" id="introduced"
+								<form:input type="text" class="form-control" id="introduced"
 									path="introduced" placeholder="${labelIntroduced}"
 									value="${computer.introduced}" />
 							</div>
 							<div class="form-group">
 								<label for="discontinued">${labelDiscontinued}</label>
-								<form:input type="date" class="form-control" id="discontinued"
+								<form:input type="text" class="form-control" id="discontinued"
 									path="discontinued" placeholder="${labelDiscontinued}"
 									value="${computer.discontinued}" />
 							</div>

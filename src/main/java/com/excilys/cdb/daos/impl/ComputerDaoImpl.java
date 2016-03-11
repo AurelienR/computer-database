@@ -1,6 +1,7 @@
 package com.excilys.cdb.daos.impl;
 
 import com.excilys.cdb.daos.ComputerDao;
+import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.mappers.ComputerRowMapper;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.QueryPageParameter;
@@ -11,6 +12,7 @@ import com.excilys.cdb.validators.utils.QueryPageParameterValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -72,7 +74,12 @@ public class ComputerDaoImpl implements ComputerDao {
     List<Computer> computerList = null;
 
     // Retrieve and map all computers
-    computerList = jdbcTemplate.query(FIND_ALL_QUERY, computerRowMapper);
+    try {
+      computerList = jdbcTemplate.query(FIND_ALL_QUERY, computerRowMapper);
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to find all computer");
+      throw new DaoException("Failed to find all computers", e);
+    }
 
     return computerList;
   }
@@ -88,7 +95,12 @@ public class ComputerDaoImpl implements ComputerDao {
     List<Computer> computerList = null;
 
     // Retrieve and map matching
-    computerList = jdbcTemplate.query(FIND_BYID_QUERY, computerRowMapper, id);
+    try {
+      computerList = jdbcTemplate.query(FIND_BYID_QUERY, computerRowMapper, id);
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to find computer with id: {}", id);
+      throw new DaoException("Failed to find computer with id " + id, e);
+    }
 
     return computerList.get(0);
   }
@@ -105,7 +117,12 @@ public class ComputerDaoImpl implements ComputerDao {
     List<Computer> computerList = null;
 
     // Retrieve and map matching computers
-    computerList = jdbcTemplate.query(FIND_BYNAME_QUERY, computerRowMapper, name);
+    try {
+      computerList = jdbcTemplate.query(FIND_BYNAME_QUERY, computerRowMapper, name);
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to find computer by name: {}", name);
+      throw new DaoException("Failed to find computer by name: " + name, e);
+    }
 
     return computerList;
   }
@@ -121,37 +138,42 @@ public class ComputerDaoImpl implements ComputerDao {
     KeyHolder holder = new GeneratedKeyHolder();
 
     // Insert computer with custom prepared statement
-    jdbcTemplate.update(new PreparedStatementCreator() {
+    try {
+      jdbcTemplate.update(new PreparedStatementCreator() {
 
-      @Override
-      public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-        PreparedStatement ps =
-            connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
+        @Override
+        public PreparedStatement createPreparedStatement(Connection connection)
+            throws SQLException {
+          PreparedStatement ps =
+              connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
 
-        // Replace query fields
-        ps.setString(1, computer.getName());
+          // Replace query fields
+          ps.setString(1, computer.getName());
 
-        if (computer.getIntroduced() == null) {
-          ps.setTimestamp(2, null);
-        } else {
-          ps.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
+          if (computer.getIntroduced() == null) {
+            ps.setTimestamp(2, null);
+          } else {
+            ps.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
+          }
+          if (computer.getDiscontinued() == null) {
+            ps.setTimestamp(3, null);
+          } else {
+            ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
+          }
+
+          if (computer.getCompany() == null) {
+            ps.setNull(4, java.sql.Types.BIGINT);
+          } else {
+            ps.setLong(4, computer.getCompany().getId());
+          }
+
+          return ps;
         }
-        if (computer.getDiscontinued() == null) {
-          ps.setTimestamp(3, null);
-        } else {
-          ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
-        }
-
-        if (computer.getCompany() == null) {
-          ps.setNull(4, java.sql.Types.BIGINT);
-        } else {
-          ps.setLong(4, computer.getCompany().getId());
-        }
-
-        return ps;
-      }
-    }, holder);
-    
+      }, holder);
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to insert following computer: {}", computer);
+      throw new DaoException("Failed to insert following computer: " + computer, e);
+    }
     return holder.getKey().longValue();
   }
 
@@ -164,33 +186,39 @@ public class ComputerDaoImpl implements ComputerDao {
     ComputerValidator.validate(computer);
 
     // Update computer with custom prepared statement
-    jdbcTemplate.update(new PreparedStatementCreator() {
-      @Override
-      public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
-        // Replace query fields
-        ps.setString(1, computer.getName());
-        if (computer.getIntroduced() == null) {
-          ps.setTimestamp(2, null);
-        } else {
-          ps.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
-        }
-        if (computer.getDiscontinued() == null) {
-          ps.setTimestamp(3, null);
-        } else {
-          ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
-        }
-        if (computer.getCompany() == null) {
-          ps.setNull(4, java.sql.Types.BIGINT);
-        } else {
-          ps.setLong(4, computer.getCompany().getId());
-        }
+    try {
+      jdbcTemplate.update(new PreparedStatementCreator() {
+        @Override
+        public PreparedStatement createPreparedStatement(Connection connection)
+            throws SQLException {
+          PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
+          // Replace query fields
+          ps.setString(1, computer.getName());
+          if (computer.getIntroduced() == null) {
+            ps.setTimestamp(2, null);
+          } else {
+            ps.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
+          }
+          if (computer.getDiscontinued() == null) {
+            ps.setTimestamp(3, null);
+          } else {
+            ps.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
+          }
+          if (computer.getCompany() == null) {
+            ps.setNull(4, java.sql.Types.BIGINT);
+          } else {
+            ps.setLong(4, computer.getCompany().getId());
+          }
 
-        ps.setLong(5, computer.getId());
+          ps.setLong(5, computer.getId());
 
-        return ps;
-      }
-    });
+          return ps;
+        }
+      });
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to update following computer: {}", computer);
+      throw new DaoException("Failed to update following computer: " + computer, e);
+    }
   }
 
   @Override
@@ -202,18 +230,27 @@ public class ComputerDaoImpl implements ComputerDao {
     ComputerValidator.checkValidId(id);
 
     // Delete computers with matching id
-    jdbcTemplate.update(DELETE_QUERY, id);
+    try {
+      jdbcTemplate.update(DELETE_QUERY, id);
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to delete computer by id: {}", id);
+      throw new DaoException("Failed to delete computer by id: " + id, e);
+    }
   }
 
-  
   @Override
   public long count(QueryPageParameter qp) {
 
     LOGGER.debug("Dao: get count of total computers");
-
+    int count = 0;
     // Count matching computers
-    int count = jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class, qp.getQuerySearch(),
-        qp.getQuerySearch());
+    try {
+      count = jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class, qp.getQuerySearch(),
+          qp.getQuerySearch());
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to count computers with qp: {}", qp);
+      throw new DaoException("Failed to count computers with qp: " + qp, e);
+    }
 
     return count;
   }
@@ -234,8 +271,13 @@ public class ComputerDaoImpl implements ComputerDao {
         qp.getOrder().toString());
 
     // Retrieve matching computers
-    computerList = jdbcTemplate.query(query, computerRowMapper, qp.getQuerySearch(),
-        qp.getQuerySearch(), qp.getLimit(), qp.getOffset());
+    try {
+      computerList = jdbcTemplate.query(query, computerRowMapper, qp.getQuerySearch(),
+          qp.getQuerySearch(), qp.getLimit(), qp.getOffset());
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to find computers with qp: {}", qp);
+      throw new DaoException("Failed to find computers with qp: " + qp, e);
+    }
 
     return computerList;
   }
@@ -249,6 +291,11 @@ public class ComputerDaoImpl implements ComputerDao {
     CompanyValidator.checkValidId(companyId);
 
     // Delete computers
-    jdbcTemplate.update(DELETE_BYCOMPANY_QUERY, companyId);
+    try {
+      jdbcTemplate.update(DELETE_BYCOMPANY_QUERY, companyId);
+    } catch (DataAccessException e) {
+      LOGGER.error("Dao: Failed to delete computers with companyid: {}", companyId);
+      throw new DaoException("Failed to delete computer with companyid: " + companyId, e);
+    }
   }
 }
