@@ -1,55 +1,44 @@
 package com.excilys.cdb.dtos;
 
-import com.excilys.cdb.models.QueryPageParameter;
+import com.excilys.cdb.models.OrderBy;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
+
+import java.util.Iterator;
 import java.util.List;
 
 public class ComputerPageDto {
   public int current = 1;
   public int pageSize = 30;
-  public String orderBy = "id";
-  public String order = "ASC";
-  public String search = "";
   public int pageCount;
+  public String search = "";
   public long matchingRowCount = 0;
+  public String order = Direction.ASC.toString();
+  public String orderBy = OrderBy.id.toString();
   public List<ComputerDto> computers;
 
   /**
    * Instantiates a new computer page dto.
    *
-   * @param qp
-   *          the queryPageParameter of the page
-   * @param pageCount
-   *          the page count
-   * @param computers
-   *          the computers
+   * @param page Page result object of query
    */
-  
-  public ComputerPageDto(QueryPageParameter qp, int pageCount, List<ComputerDto> computers) {
-    this.current = qp.getPageIndex();
-    this.pageSize = qp.getPageSize();
-    this.pageCount = pageCount;
-    this.orderBy = qp.getOrderBy().name();
-    this.order = qp.getOrder().name();
-    this.search = qp.getSearch();
-    this.matchingRowCount = qp.getMatchingRowCount();
-    this.computers = computers;
-  }
 
-  /**
-   * Instantiates a new computer page dto.
-   *
-   * @param pageCount
-   *          the total page count
-   * @param matchingRowCount
-   *          the query matching row count
-   * @param computers
-   *          the related list of computers
-   */
-  public ComputerPageDto(int pageCount, long matchingRowCount, List<ComputerDto> computers) {
-    this.pageCount = pageCount;
-    this.matchingRowCount = matchingRowCount;
-    this.computers = computers;
+  public ComputerPageDto(String search, Page<ComputerDto> page) {
+    this.search = search;
+    this.current = page.getNumber() + 1;
+    this.pageSize = page.getSize();
+    this.pageCount = page.getTotalPages();
+    this.matchingRowCount = page.getTotalElements();
+
+    Iterator<Order> itr = page.getSort().iterator();
+    if (itr.hasNext()) {
+      Order ord = itr.next();
+      this.orderBy = OrderBy.valueOf(ord.getProperty()).toString();
+      this.order = ord.getDirection().toString();
+    }
+    this.computers = page.getContent();
   }
 
   public int getCurrent() {
@@ -84,12 +73,12 @@ public class ComputerPageDto {
     this.computers = computers;
   }
 
-  public String getOrderBy() {
-    return orderBy;
+  public String getSearch() {
+    return search;
   }
 
-  public void setOrderBy(String orderBy) {
-    this.orderBy = orderBy;
+  public void setSearch(String search) {
+    this.search = search;
   }
 
   public String getOrder() {
@@ -100,12 +89,12 @@ public class ComputerPageDto {
     this.order = order;
   }
 
-  public String getSearch() {
-    return search;
+  public String getOrderBy() {
+    return orderBy;
   }
 
-  public void setSearch(String search) {
-    this.search = search;
+  public void setOrderBy(String orderBy) {
+    this.orderBy = orderBy;
   }
 
   public long getMatchingRowCount() {
@@ -115,12 +104,4 @@ public class ComputerPageDto {
   public void setMatchingRowCount(long matchingRowCount) {
     this.matchingRowCount = matchingRowCount;
   }
-
-  @Override
-  public String toString() {
-    return "ComputerPageDto [current=" + current + ", pageSize=" + pageSize + ", orderBy=" + orderBy
-        + ", order=" + order + ", search=" + search + ", pageCount=" + pageCount
-        + ", matchingRowCount=" + matchingRowCount + ", computers=" + computers + "]";
-  }
-
 }

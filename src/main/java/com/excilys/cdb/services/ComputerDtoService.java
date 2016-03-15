@@ -8,6 +8,7 @@ import com.excilys.cdb.validators.utils.ComputerDtoValidator;
 import com.excilys.cdb.validators.utils.QueryPageParameterValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,16 +36,16 @@ public class ComputerDtoService {
    * @param qp          query parameter to search with
    * @return List of computers matching
    */
-  public List<ComputerDto> findByQuery(QueryPageParameter qp) {
+  public Page<ComputerDto> findByQuery(QueryPageParameter qp) {
 
     // Validate queryParameter
     QueryPageParameterValidator.validate(qp);
 
     // Retrieve computer
-    List<Computer> computers = computerService.findByQuery(qp);
+    Page<Computer> computerPage = computerService.findByQuery(qp);
 
     // Map
-    return ComputerMapper.toComputerDtoList(computers);
+    return ComputerMapper.toComputerDtoPage(computerPage);
   }
 
   /**

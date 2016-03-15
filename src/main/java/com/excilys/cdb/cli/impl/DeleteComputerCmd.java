@@ -10,6 +10,8 @@ import com.excilys.cdb.services.ComputerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
@@ -19,6 +21,8 @@ import java.util.Scanner;
  * @author Aurelien.R
  *
  */
+@Component
+@Scope("prototype")
 public class DeleteComputerCmd implements Command {
 
   // Logger
@@ -49,7 +53,7 @@ public class DeleteComputerCmd implements Command {
       Computer computer = inputCmdParser.getValidComputerByName(sc).get(0);
 
       // Delete computer
-      LOGGER.debug("Try to delete computer: {}",computer);
+      LOGGER.debug("Try to delete computer: {}", computer);
       computerService.deleteComputer(computer.getId());
 
     } catch (IllegalArgumentException e) {

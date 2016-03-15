@@ -1,6 +1,5 @@
 package com.excilys.cdb.controllers;
 
-import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.dtos.CompanyDto;
 import com.excilys.cdb.dtos.ComputerDto;
 import com.excilys.cdb.dtos.ComputerPageDto;
@@ -13,6 +12,7 @@ import com.excilys.cdb.services.ComputerDtoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -67,10 +67,9 @@ public class ComputerController {
       @RequestParam(value = "order", required = false) String order,
       @RequestParam(value = "search", required = false) String search, Model model) {
 
-    
-    
     LOGGER.info(
-        "Controller: GET /computers : parameters:\n\tpage={} pageSize={} orderBy={}  order={} search={}",
+        "Controller: GET /computers : parameters:\n\tpage={} pageSize={} orderBy={}  "
+        + "order={} search={}",
         page, pageSize, orderBy, order, search);
 
     // Get related queryPageParameter
@@ -78,15 +77,15 @@ public class ComputerController {
         QueryPageParameterMapper.toQueryPageParameter(page, pageSize, search, orderBy, order);
 
     // Retrieve DTOs
-    List<ComputerDto> computerDtos = computerDtoService.findByQuery(qp);
+    Page<ComputerDto> computerDtoPage = computerDtoService.findByQuery(qp);
 
     // Get total matching computers
-    qp.setMatchingRowCount(computerDtoService.count(qp));
-    ComputerPageDto pageDto = ComputerPageMapper.toComputerPageDto(qp, computerDtos);
+    // long totalmumber = computerDtoService.count(qp);
+    ComputerPageDto pageDto = ComputerPageMapper.toComputerPageDto(qp.getSearch(),computerDtoPage);
 
     // Prepare request
     model.addAttribute("page", pageDto);
-    
+
     return "dashboard";
   }
 
@@ -138,23 +137,22 @@ public class ComputerController {
   /**
    * Edit an existing computer.
    *
-   * @param id id of the computer to edit
    * @param computerDto the computer dto
    * @param result the result
    * @return the string
    */
   @RequestMapping(value = "/edit", method = RequestMethod.POST)
-  public String editComputer(@PathVariable Long id, @Valid @ModelAttribute ComputerDto computerDto,
+  public String editComputer(@Valid @ModelAttribute ComputerDto computerDto,
       BindingResult result, Model model) {
 
-    LOGGER.info("ComputerController: POST: /computers/{} parameters:\n\tComputerDto: {} ", id,
+    LOGGER.info("ComputerController: POST: /computers/{} parameters:\n\tComputerDto: {} ",
         computerDto);
 
     // Manage validation DTO errors
     if (result.hasErrors()) {
 
       LOGGER.error("ComputerController: Error on validating Dto");
-      
+
       // Prepare models for edit view
       List<CompanyDto> companyDtos = companyDtoService.findAll();
       model.addAttribute("computer", computerDto);

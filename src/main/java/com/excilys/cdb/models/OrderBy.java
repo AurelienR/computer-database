@@ -9,13 +9,13 @@ package com.excilys.cdb.models;
 public enum OrderBy {
 
   /** The id. */
-  id("computer.id"),
+  id("id"),
   /** The name. */
-  name("computer.name"),
+  name("name"),
   /** The introduced. */
-  introduced("computer.introduced"),
+  introduced("introduced"),
   /** The discontinued. */
-  discontinued("computer.discontinued"),
+  discontinued("discontinued"),
   /** The company. */
   company("company.name");
 

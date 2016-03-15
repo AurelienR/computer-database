@@ -6,8 +6,6 @@ import com.excilys.cdb.models.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,24 +13,6 @@ public class CompanyMapper {
 
   // Logger
   static final Logger LOGGER = LoggerFactory.getLogger(CompanyMapper.class);
-
-  /**
-   * Gets deserialized resultSet to list of companies.
-   * 
-   * @param results results set to process
-   * @return list of related companies
-   * @throws SQLException issue on db
-   */
-  public static List<Company> getCompaniesFromResults(ResultSet results) throws SQLException {
-
-    ArrayList<Company> companyList = new ArrayList<Company>();
-
-    while (results.next()) {
-      companyList.add(CompanyRowMapper.mapSingleRow(results));
-    }
-
-    return companyList;
-  }
 
   /**
    * Map a Company to a CompanyDTO.

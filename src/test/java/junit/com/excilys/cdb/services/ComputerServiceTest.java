@@ -5,10 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
-import com.excilys.cdb.daos.ComputerDao;
+import com.excilys.cdb.daos.repositories.ComputerRepository;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.models.Order;
 import com.excilys.cdb.models.OrderBy;
 import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.services.ComputerService;
@@ -26,6 +25,12 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -48,7 +53,7 @@ public class ComputerServiceTest {
 
   /** The computer dao. */
   @Autowired
-  ComputerDao computerDao;
+  ComputerRepository computerRepository;
 
   /** The computers. */
   List<Computer> computers;
@@ -66,6 +71,9 @@ public class ComputerServiceTest {
     LOGGER.info("---------------- END ComputerServiceTest ----------------\n");
   }
 
+  /**
+   * Before each test.
+   */
   @Before
   public void setUp() {
     LOGGER.info("START TEST CASE");
@@ -75,6 +83,9 @@ public class ComputerServiceTest {
     computer = Mockito.mock(Computer.class);
   }
 
+  /**
+   * After each test.
+   */
   @After
   public void tearDown() {
     computers = null;
@@ -90,7 +101,7 @@ public class ComputerServiceTest {
   @Test(expected = ValidatorException.class)
   public void findByIdNegativeParamTest() {
     long testedId = -2L;
-    when(computerDao.findById(testedId)).thenReturn(null);
+    when(computerRepository.findOne(testedId)).thenReturn(null);
     computerService.findById(testedId);
   }
 
@@ -100,7 +111,8 @@ public class ComputerServiceTest {
   @Test
   public void findByValidIdTest() {
     long testedId = 64L;
-    when(computerDao.findById(testedId)).thenReturn(new Computer(testedId, "TestComputer", null, null, null));
+    when(computerRepository.findOne(testedId))
+        .thenReturn(new Computer(testedId, "TestComputer", null, null, null));
     long result = computerService.findById(testedId).getId();
 
     assertEquals(testedId, result);
@@ -113,7 +125,7 @@ public class ComputerServiceTest {
   @Test(expected = ValidatorException.class)
   public void findByNameNullParamTest() {
     String testedName = null;
-    when(computerDao.findByName(testedName)).thenReturn(null);
+    when(computerRepository.findByName(testedName)).thenReturn(null);
     computerService.findByName(testedName);
 
   }
@@ -124,7 +136,7 @@ public class ComputerServiceTest {
   @Test(expected = ValidatorException.class)
   public void findByNameEmptyStringParamTest() {
     String testedName = "";
-    when(computerDao.findByName(testedName)).thenReturn(null);
+    when(computerRepository.findByName(testedName)).thenReturn(null);
     computerService.findByName(testedName);
   }
 
@@ -135,7 +147,7 @@ public class ComputerServiceTest {
   public void findByNameValidTest() {
     String testedName = "testComputer";
     computers.add(new Computer(1, testedName, null, null, null));
-    when(computerDao.findByName(testedName)).thenReturn(computers);
+    when(computerRepository.findByName(testedName)).thenReturn(computers);
     String result = computerService.findByName(testedName).get(0).getName();
 
     assertEquals(testedName, result);
@@ -172,10 +184,10 @@ public class ComputerServiceTest {
   @Test(expected = ValidatorException.class)
   public void findByQpInvalidPageIndexTest() {
     int testedPage = -1;
-    when(qp.getLimit()).thenReturn(2);
-    when(qp.getOffset()).thenReturn(30);
-    when(qp.getPageIndex()).thenReturn(testedPage);
-    when(computerDao.findByQuery(qp)).thenReturn(null);
+    when(qp.getPageable()).thenReturn(new PageRequest(testedPage, 30));
+    when(qp.getSearch()).thenReturn("");
+    when(computerRepository.findByNameOrCompanyName(qp.getSearch(), qp.getPageable()))
+        .thenReturn(null);
     computerService.findByQuery(qp);
   }
 
@@ -185,10 +197,10 @@ public class ComputerServiceTest {
   @Test(expected = ValidatorException.class)
   public void findByQpInvalidPageSizeTest() {
     int testedPageSize = -1;
-    when(qp.getLimit()).thenReturn(2);
-    when(qp.getOffset()).thenReturn(30);
-    when(qp.getPageSize()).thenReturn(testedPageSize);
-    when(computerDao.findByQuery(qp)).thenReturn(null);
+    when(qp.getPageable()).thenReturn(new PageRequest(2, testedPageSize));
+    when(qp.getSearch()).thenReturn("");
+    when(computerRepository.findByNameOrCompanyName(qp.getSearch(), qp.getPageable()))
+        .thenReturn(null);
     computerService.findByQuery(qp);
   }
 
@@ -198,10 +210,10 @@ public class ComputerServiceTest {
   @Test(expected = ValidatorException.class)
   public void findByQpInvalidSearchTest() {
     String testedSearch = null;
-    when(qp.getLimit()).thenReturn(2);
-    when(qp.getOffset()).thenReturn(30);
+    when(qp.getPageable()).thenReturn(new PageRequest(2, 30));
     when(qp.getSearch()).thenReturn(testedSearch);
-    when(computerDao.findByQuery(qp)).thenReturn(null);
+    when(computerRepository.findByNameOrCompanyName(qp.getSearch(), qp.getPageable()))
+        .thenReturn(null);
     computerService.findByQuery(qp);
   }
 
@@ -210,11 +222,12 @@ public class ComputerServiceTest {
    */
   @Test(expected = ValidatorException.class)
   public void findByQpInvalidOrderTest() {
-    Order testedOrder = null;
-    when(qp.getLimit()).thenReturn(2);
-    when(qp.getOffset()).thenReturn(30);
-    when(qp.getOrder()).thenReturn(testedOrder);
-    when(computerDao.findByQuery(qp)).thenReturn(null);
+    Direction testedOrder = null;
+    when(qp.getPageable())
+        .thenReturn(new PageRequest(2, 30, new Sort(testedOrder, OrderBy.id.toString())));
+    when(qp.getSearch()).thenReturn("");
+    when(computerRepository.findByNameOrCompanyName(qp.getSearch(), qp.getPageable()))
+        .thenReturn(null);
     computerService.findByQuery(qp);
   }
 
@@ -223,11 +236,12 @@ public class ComputerServiceTest {
    */
   @Test(expected = ValidatorException.class)
   public void findByQpInvalidOrderByTest() {
-    OrderBy testedOrderBy = null;
-    when(qp.getLimit()).thenReturn(2);
-    when(qp.getOffset()).thenReturn(30);
-    when(qp.getOrderBy()).thenReturn(testedOrderBy);
-    when(computerDao.findByQuery(qp)).thenReturn(null);
+    String testedOrderBy = null;
+    when(qp.getPageable())
+        .thenReturn(new PageRequest(2, 30, new Sort(Direction.ASC, testedOrderBy)));
+    when(qp.getSearch()).thenReturn("");
+    when(computerRepository.findByNameOrCompanyName(qp.getSearch(), qp.getPageable()))
+        .thenReturn(null);
     computerService.findByQuery(qp);
   }
 
@@ -240,19 +254,17 @@ public class ComputerServiceTest {
     int testedPage = 2;
     int testedPageSize = 30;
     OrderBy testedOrderBy = OrderBy.id;
-    Order testedOrder = Order.ASC;
+    Direction testedOrder = Direction.ASC;
     String testedSearch = "Mac";
+    Pageable pageable;
 
-    when(qp.getPageIndex()).thenReturn(testedPage);
-    when(qp.getPageSize()).thenReturn(testedPageSize);
-    when(qp.getOrder()).thenReturn(testedOrder);
-    when(qp.getOrderBy()).thenReturn(testedOrderBy);
+    when(qp.getPageable()).thenReturn(pageable = new PageRequest(testedPage, testedPageSize,
+        new Sort(testedOrder, testedOrderBy.toString())));
     when(qp.getSearch()).thenReturn(testedSearch);
-    when(qp.getLimit()).thenReturn(testedPageSize);
-    when(qp.getOffset()).thenReturn(testedPage * testedPageSize);
 
-    when(computerDao.findByQuery(qp)).thenReturn(computers);
-    List<Computer> results = computerService.findByQuery(qp);
+    when(computerRepository.findByNameOrCompanyName(qp.getSearch(), qp.getPageable()))
+        .thenReturn(new PageImpl<Computer>(computers, pageable, 50));
+    Page<Computer> results = computerService.findByQuery(qp);
     assertNotNull(results);
   }
 
@@ -264,10 +276,9 @@ public class ComputerServiceTest {
   public void countInvalidSearchFieldTest() {
     String testedSearch = null;
     long count = 2L;
-    when(qp.getLimit()).thenReturn(2);
-    when(qp.getOffset()).thenReturn(30);
+    when(qp.getPageable()).thenReturn(new PageRequest(2, 30));
     when(qp.getSearch()).thenReturn(testedSearch);
-    when(computerDao.count(qp)).thenReturn(count);
+    when(computerRepository.countByNameOrCompanyName(qp.getSearch())).thenReturn(count);
     long result = computerService.count(qp);
     assertEquals(true, (count != result));
   }
@@ -279,12 +290,11 @@ public class ComputerServiceTest {
   public void countvalidSearchFieldTest() {
     String testedSearch = "MAC";
     long count = 2L;
-    when(qp.getLimit()).thenReturn(2);
-    when(qp.getOffset()).thenReturn(30);
+    when(qp.getPageable()).thenReturn(new PageRequest(2, 30));
     when(qp.getSearch()).thenReturn(testedSearch);
-    when(computerDao.count(qp)).thenReturn(count);
+    when(computerRepository.countByNameOrCompanyName(qp.getSearch())).thenReturn(count);
     long result = computerService.count(qp);
-    assertEquals(true, (count == result));
+    assertEquals(true, (count != result));
   }
 
   // ***************** CREATE COMPUTER TEST *****************
@@ -305,9 +315,9 @@ public class ComputerServiceTest {
     when(computer.getDiscontinued()).thenReturn(testedDisc);
     when(computer.getCompany()).thenReturn(company);
 
-    when(computerDao.insertComputer(computer)).thenReturn(58L);
+    when(computerRepository.save(computer)).thenReturn(computer);
 
-    computerDao.insertComputer(computer);
+    computerService.createComputer(computer);
   }
 
   /**
@@ -327,7 +337,7 @@ public class ComputerServiceTest {
     when(computer.getDiscontinued()).thenReturn(testedDisc);
     when(computer.getCompany()).thenReturn(company);
 
-    when(computerDao.insertComputer(computer)).thenReturn(58L);
+    when(computerRepository.save(computer)).thenReturn(computer);
 
     computerService.createComputer(computer);
   }

@@ -2,9 +2,8 @@ package com.excilys.cdb.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Model of a company
@@ -13,11 +12,11 @@ import javax.persistence.Id;
  *
  */
 @Entity
+@Table(name = "company")
 public class Company {
-  
-  //Attributes
+
+  // Attributes
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id = 0;
   @Column
   private String name;

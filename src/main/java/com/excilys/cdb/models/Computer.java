@@ -1,15 +1,16 @@
 package com.excilys.cdb.models;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * Model of a Computer
@@ -18,11 +19,11 @@ import javax.persistence.ManyToOne;
  *
  */
 @Entity
+@Table(name = "computer")
 public class Computer {
 
   // Attributes
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id = 0;
   @Column(nullable = true)
   private String name;
@@ -30,8 +31,9 @@ public class Computer {
   private LocalDateTime discontinued;
   @Column(nullable = true)
   private LocalDateTime introduced;
-  @ManyToOne(fetch = FetchType.LAZY)
+  @OneToOne
   @JoinColumn(name = "company_id")
+  @NotFound(action = NotFoundAction.IGNORE)
   private Company company;
 
   /**

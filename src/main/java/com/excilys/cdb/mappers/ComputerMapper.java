@@ -8,9 +8,9 @@ import com.excilys.cdb.utils.DateFormatManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.domain.Page;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,28 +24,6 @@ public class ComputerMapper {
 
   // Logger
   private static final Logger LOGGER = LoggerFactory.getLogger(ComputerMapper.class);
-
-  /**
-   * Deserialize DB results to List of computer.
-   * 
-   * @param results Result to process
-   * @return List of computer
-   * @throws SQLException issue with db
-   */
-  public static List<Computer> toComputerList(ResultSet results) throws SQLException {
-
-    ArrayList<Computer> computerList = new ArrayList<Computer>();
-
-    // Fetch DB results
-    while (results.next()) {
-
-      Computer computer = ComputerRowMapper.mapSingleRow(results);
-
-      computerList.add(computer);
-    }
-
-    return computerList;
-  }
 
   /**
    * Map a Computer to a ComputerDTO.
@@ -120,6 +98,24 @@ public class ComputerMapper {
         computerDtos);
 
     return computerDtos;
+  }
+
+  /**
+   * Convert computer to computerDto page.
+   *
+   * @param computerPage the computer page
+   * @return the page
+   */
+  public static Page<ComputerDto> toComputerDtoPage(Page<Computer> computerPage) {
+
+    Converter<Computer, ComputerDto> conv = new Converter<Computer, ComputerDto>() {
+      @Override
+      public ComputerDto convert(Computer computer) {
+        return toComputerDto(computer);
+      }
+    };
+    
+    return computerPage.map(conv);
   }
 
   /**

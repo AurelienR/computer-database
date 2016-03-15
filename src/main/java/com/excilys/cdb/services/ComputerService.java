@@ -1,6 +1,5 @@
 package com.excilys.cdb.services;
 
-import com.excilys.cdb.daos.ComputerDao;
 import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.daos.repositories.ComputerRepository;
 import com.excilys.cdb.models.Computer;
@@ -12,6 +11,7 @@ import com.excilys.cdb.validators.utils.QueryPageParameterValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,10 +36,6 @@ public class ComputerService {
 
   @Autowired
   private ComputerRepository computerRepository;
-  
-  // Dao
-  @Autowired
-  ComputerDao computerDao;
 
   // Methods
   /**
@@ -50,15 +46,16 @@ public class ComputerService {
    * @throws DaoException issues with DB
    * @throws ValidatorException issues with data
    */
-  public List<Computer> findByQuery(QueryPageParameter qp) {
+  public Page<Computer> findByQuery(QueryPageParameter qp) {
 
     LOGGER.debug("Service: find commputer by queryPageParameter, qp: {}", qp);
 
     // Validate queryParameter
     QueryPageParameterValidator.validate(qp);
-    
+
     // Return computers
-    return computerDao.findByQuery(qp);
+    return computerRepository.findByNameOrCompanyName(qp.getSearch(),
+        qp.getPageable());
   }
 
   /**
@@ -75,7 +72,7 @@ public class ComputerService {
     QueryPageParameterValidator.checkSearch(qp.getSearch());
 
     // Get count
-    return computerDao.count(qp);
+    return computerRepository.countByNameOrCompanyName(qp.getSearch());
   }
 
   /**
@@ -88,7 +85,6 @@ public class ComputerService {
 
     LOGGER.debug("Service: find all computers");
     return computerRepository.findAll();
-    //return computerDao.findAll();
   }
 
   /**
@@ -107,7 +103,7 @@ public class ComputerService {
     ComputerValidator.checkValidId(id);
 
     // Retrieve computers
-    return computerDao.findById(id);
+    return computerRepository.findOne(id);
   }
 
   /**
@@ -127,7 +123,7 @@ public class ComputerService {
     ComputerValidator.checkNameNotEmpty(name);
 
     // Retrieve computers
-    return computerDao.findByName(name);
+    return computerRepository.findByName(name);
   }
 
   /**
@@ -140,13 +136,13 @@ public class ComputerService {
    */
   public long createComputer(Computer computer) {
 
-    LOGGER.debug("Service: create computer: {}",computer);
+    LOGGER.debug("Service: create computer: {}", computer);
 
     // Validate computer
     ComputerValidator.validate(computer);
 
     // Create computers
-    return computerDao.insertComputer(computer);
+    return computerRepository.save(computer).getId();
   }
 
   /**
@@ -158,13 +154,23 @@ public class ComputerService {
    */
   public void updateComputer(Computer computer) {
 
-    LOGGER.debug("Service: update computer: {}",computer);
+    LOGGER.debug("Service: update computer: {}", computer);
 
     // Validate computer
     ComputerValidator.validate(computer);
 
+    // Find computer by id
+    Computer updateComputer = computerRepository.findOne(computer.getId());
+
     // Update computer
-    computerDao.updateComputer(computer);
+    updateComputer.setName(computer.getName());
+    updateComputer.setIntroduced(computer.getIntroduced());
+    updateComputer.setDiscontinued(computer.getDiscontinued());
+    updateComputer.setCompany(computer.getCompany());
+    
+    // Update
+    computerRepository.saveAndFlush(updateComputer);
+
   }
 
   /**
@@ -182,6 +188,6 @@ public class ComputerService {
     ComputerValidator.checkValidId(id);
 
     // Delete computer
-    computerDao.deleteComputer(id);
+    computerRepository.delete(id);
   }
 }

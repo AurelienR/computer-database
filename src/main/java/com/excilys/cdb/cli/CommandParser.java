@@ -47,7 +47,7 @@ public class CommandParser {
   // Constructors
   public CommandParser() {
     this.cmdInvoker = new CommandInvoker();
-    this.ctx = new ClassPathXmlApplicationContext("/spring/cdb-context.xml");
+    this.ctx = new ClassPathXmlApplicationContext("/spring/dao-context.xml");
     this.sc = new Scanner(System.in);
   }
 

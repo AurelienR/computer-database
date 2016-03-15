@@ -27,7 +27,8 @@ public class DateFormatManager {
   private static final MessageSource messageSource;
 
   static {
-    try(ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("spring/servlet-context.xml")){
+    try (ClassPathXmlApplicationContext ctx =
+        new ClassPathXmlApplicationContext(SERVLET_CONTEXT_PATH)) {
       messageSource = (MessageSource) ctx.getBean("messageSource", MessageSource.class);
       ctx.close();
     }

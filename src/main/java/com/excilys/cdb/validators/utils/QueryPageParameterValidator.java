@@ -1,9 +1,10 @@
 package com.excilys.cdb.validators.utils;
 
-import com.excilys.cdb.models.Order;
 import com.excilys.cdb.models.OrderBy;
 import com.excilys.cdb.models.QueryPageParameter;
 import com.excilys.cdb.validators.ValidatorException;
+
+import org.springframework.data.domain.Sort.Direction;
 
 /**
  * Check QueryPageParameter state.
@@ -19,7 +20,7 @@ public class QueryPageParameterValidator {
    * @throws ValidatorException           if pageIndex <1
    */
   public static void checkPageIndex(int pageIndex) throws ValidatorException {
-    if (pageIndex < 1) {
+    if (pageIndex < 0) {
       throw new ValidatorException("Page index cannot be less than 1, pageIndex: " + pageIndex);
     }
   }
@@ -90,7 +91,7 @@ public class QueryPageParameterValidator {
    * @param order          order to check
    * @throws ValidatorException           if order is null
    */
-  public static void checkOrder(Order order) throws ValidatorException {
+  public static void checkOrder(Direction order) throws ValidatorException {
     if (order == null) {
       throw new ValidatorException("Order enum field cannot be null");
     }
@@ -115,13 +116,10 @@ public class QueryPageParameterValidator {
    * @throws ValidatorException           if invalid QueryPageParameter state
    */
   public static void validate(QueryPageParameter qp) throws ValidatorException {
-    checkPageIndex(qp.getPageIndex());
-    checkPageSize(qp.getPageSize());
-    checkOffset(qp.getOffset());
-    checkLimit(qp.getLimit());
+    checkPageIndex(qp.getPageable().getPageNumber());
+    checkPageSize(qp.getPageable().getPageSize());
+    checkOffset(qp.getPageable().getOffset());
     checkSearch(qp.getSearch());
-    checkOrderBy(qp.getOrderBy());
-    checkOrder(qp.getOrder());
-    checkMatchingRowCount(qp.getMatchingRowCount());
+    // TODO CHECK PAGEABLE.SORT
   }
 }

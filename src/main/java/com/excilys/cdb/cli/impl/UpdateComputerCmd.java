@@ -11,6 +11,8 @@ import com.excilys.cdb.services.ComputerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -23,6 +25,8 @@ import java.util.Scanner;
  * @author Aurelien.R
  *
  */
+@Component
+@Scope("prototype")
 public class UpdateComputerCmd implements Command {
 
   // Logger

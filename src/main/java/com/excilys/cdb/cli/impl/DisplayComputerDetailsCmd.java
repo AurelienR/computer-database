@@ -7,6 +7,8 @@ import com.excilys.cdb.daos.DaoException;
 import com.excilys.cdb.models.Computer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Scanner;
@@ -17,6 +19,8 @@ import java.util.Scanner;
  * @author Aurelien.R
  *
  */
+@Component
+@Scope("prototype")
 public class DisplayComputerDetailsCmd implements Command {
 
   // Parser
@@ -24,6 +28,7 @@ public class DisplayComputerDetailsCmd implements Command {
   private InputCommandParser inputCmdParser;
 
   private Scanner sc;
+
 
   public DisplayComputerDetailsCmd(Scanner sc) {
     this.sc = sc;

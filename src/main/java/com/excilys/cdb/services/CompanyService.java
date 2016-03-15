@@ -1,8 +1,8 @@
 package com.excilys.cdb.services;
 
-import com.excilys.cdb.daos.CompanyDao;
-import com.excilys.cdb.daos.ComputerDao;
 import com.excilys.cdb.daos.DaoException;
+import com.excilys.cdb.daos.repositories.CompanyRepository;
+import com.excilys.cdb.daos.repositories.ComputerRepository;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.validators.ValidatorException;
 import com.excilys.cdb.validators.utils.CompanyValidator;
@@ -27,11 +27,11 @@ public class CompanyService {
   // Logger
   private static final Logger LOGGER = LoggerFactory.getLogger(CompanyService.class);
 
-  // Dao
+  // Repositories
   @Autowired
-  private CompanyDao companyDao;
+  private CompanyRepository companyRepository;
   @Autowired
-  private ComputerDao computerDao;
+  private ComputerRepository computerRepository;
 
   // Methods
   /**
@@ -45,7 +45,7 @@ public class CompanyService {
 
     LOGGER.debug("Service: find all companies");
 
-    return companyDao.findAll();
+    return companyRepository.findAll();
   }
 
   /**
@@ -64,7 +64,7 @@ public class CompanyService {
     CompanyValidator.checkValidId(id);
 
     // Retrieve companies
-    return companyDao.findById(id);
+    return companyRepository.findOne(id);
   }
 
   /**
@@ -84,7 +84,7 @@ public class CompanyService {
     CompanyValidator.checkNameNotEmpty(name);
 
     // Retrieve companies
-    return companyDao.findByName(name);
+    return companyRepository.findByName(name);
   }
 
   /**
@@ -103,7 +103,7 @@ public class CompanyService {
     CompanyValidator.validate(company);
 
     // Insert Company
-    return companyDao.insertCompany(company);
+    return companyRepository.save(company).getId();
   }
 
   /**
@@ -124,9 +124,9 @@ public class CompanyService {
     // Transaction
     LOGGER.debug("Initialize transaction");
     LOGGER.debug("Delete computers by company id");
-    computerDao.deleteByCompanyId(id);
+    computerRepository.deleteByCompany_Id(id);
     LOGGER.debug("Delete company");
-    companyDao.deleteCompany(id);
+    companyRepository.delete(id);
 
   }
 }

@@ -1,6 +1,6 @@
 package junit.com.excilys.cdb.services;
 
-import com.excilys.cdb.daos.CompanyDao;
+import com.excilys.cdb.daos.repositories.CompanyRepository;
 import com.excilys.cdb.services.CompanyService;
 
 import org.junit.After;
@@ -25,7 +25,7 @@ public class CompanyServiceTest {
   CompanyService companyService;
 
   @Autowired
-  CompanyDao computerDao;
+  CompanyRepository companyRepository;
 
   // Hook methods
   @BeforeClass
