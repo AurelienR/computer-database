@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+  	<groupId>com.excilys.cdb</groupId>
+  	<artifactId>computer-database</artifactId>
+  	<version>0.4.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>cdb-binding</artifactId>
+    <packaging>jar</packaging>
+  <name>Computer Database Binding</name>
+  <dependencies>
+    <!-- Module -->
+    <dependency>
+      <groupId>com.excilys.cdb</groupId>
+      <artifactId>cdb-service</artifactId>
+      <version>0.4.0-SNAPSHOT</version>
+    </dependency>
+    <!-- Validation -->
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator-annotation-processor</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <!-- JavaEE -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>

@@ -17,6 +17,9 @@ buildNumber.properties
 ### Java ###
 *.class
 
+### Chekstyle ###
+*.checkstyle
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
