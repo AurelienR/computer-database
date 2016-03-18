@@ -28,6 +28,7 @@
 	<!-- ***************************** HEADER ***************************** -->
 	<jsp:include page="header.jsp" />
 
+    <!-- ***************************** ADD FORM ***************************** -->
 	<section id="main">
 		<div class="container">
 			<div class="row">

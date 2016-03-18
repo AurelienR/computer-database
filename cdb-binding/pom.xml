@@ -27,13 +27,11 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator-annotation-processor</artifactId>
-      <scope>compile</scope>
     </dependency>
     <!-- JavaEE -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>

@@ -48,6 +48,17 @@ public class ComputerController {
   public ComputerDto getComputerDto() {
     return new ComputerDto(0, "", null, null, new CompanyDto(0, ""));
   }
+  
+  /**
+   * Gets the username model attribute.
+   *
+   * @return the username
+   */
+  @ModelAttribute("user")
+  public String getUsername() {
+    return LoginController.getPrincipal();
+  }
+  
 
   /**
    * Display computer dashboard view.
@@ -129,7 +140,6 @@ public class ComputerController {
 
     // Prepare request
     model.addAttribute("companies", companyDtos);
-    // model.addAttribute("computerDto", new ComputerDto(0, "", null, null, new CompanyDto(0, "")));
 
     return "addComputer";
   }

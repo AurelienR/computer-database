@@ -9,7 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -31,7 +31,7 @@ public class Computer {
   private LocalDateTime discontinued;
   @Column(nullable = true)
   private LocalDateTime introduced;
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "company_id")
   @NotFound(action = NotFoundAction.IGNORE)
   private Company company;

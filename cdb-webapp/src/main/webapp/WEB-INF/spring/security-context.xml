@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+ xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+ <!-- Ignore css security -->
+ <http pattern="/css/**" security="none" />
+ <http pattern="/fonts/**" security="none" />
+ <http pattern="/js/**" security="none" />
+
+ <!-- Security rules -->
+ <http auto-config="true" use-expressions="true">
+  <intercept-url pattern="/login" access="permitAll"></intercept-url>
+  <intercept-url pattern="/logout" access="permitAll"></intercept-url>
+  <intercept-url pattern="/accessdenied" access="permitAll"></intercept-url>
+  <intercept-url pattern="/computers/edit" method="POST" access="hasRole('ROLE_ADMIN')"></intercept-url>
+  <intercept-url pattern="/computers/new" method="POST" access="hasRole('ROLE_ADMIN')"></intercept-url>
+  <intercept-url pattern="/computers/delete" method="POST" access="hasRole('ROLE_ADMIN')"></intercept-url>
+  <intercept-url pattern="/**" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')"></intercept-url>
+  <form-login login-page="/login" default-target-url="/computers"
+   authentication-failure-url="/accessdenied"></form-login>
+  <logout logout-success-url="/logout"></logout>
+  <csrf />
+ </http>
+
+ <!-- Authentication manager -->
+ <authentication-manager alias="authenticationManager">
+  <authentication-provider user-service-ref="userService" />
+ </authentication-manager>
+
+</beans:beans>
+

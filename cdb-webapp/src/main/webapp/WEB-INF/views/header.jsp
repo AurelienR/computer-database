@@ -6,7 +6,7 @@
 <!-- ***************************** LOCALIZATION DECLARATION ***************************** -->
 <spring:message code="property.lang" var="lang" />
 <script>
-   var lang = "${lang}";
+	var lang = "${lang}";
 </script>
 
 
@@ -20,7 +20,7 @@
 		<ul class="nav navbar-nav navbar-right">
 			<c:choose>
 				<c:when test="${lang=='fr'}">
-					<li class="disabled" ><a href="?lang=fr">FR</a></li>
+					<li class="disabled"><a href="?lang=fr">FR</a></li>
 				</c:when>
 				<c:otherwise>
 					<li><a href="?lang=fr">FR</a></li>
@@ -28,12 +28,27 @@
 			</c:choose>
 			<c:choose>
 				<c:when test="${lang=='en'}">
-					<li class="disabled" ><a href="?lang=en">EN</a></li>
+					<li class="disabled"><a href="?lang=en">EN</a></li>
 				</c:when>
 				<c:otherwise>
 					<li><a href="?lang=en">EN</a></li>
 				</c:otherwise>
-			</c:choose>			
+			</c:choose>
+			<li class="disabled"><a>|</a></li>
+			<c:choose>
+				<c:when test="${user!='anonymousUser'}">
+					<li>
+						<a><span class="glyphicon glyphicon-user"></span> ${user}</a>
+					</li>
+					<li>
+						<p class="navbar-btn">
+							<a href="logout" class="btn btn-sm btn-primary" role="button">Logout</a>
+						</p>
+					</li>
+				</c:when>
+				<c:otherwise>
+				</c:otherwise>
+			</c:choose>
 		</ul>
 	</div>
 </header>
