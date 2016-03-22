@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:/spring/cdb-context-test.xml")
+@ContextConfiguration("classpath:/spring/service-context-test.xml")
 public class CompanyServiceTest {
 
   // Logger
@@ -38,6 +39,12 @@ public class CompanyServiceTest {
     LOGGER.info("---------------- END ComputerServiceTest ----------------\n");
   }
 
+  
+  @Test
+  public void test() {
+    //LOGGER.info("---------------- END ComputerServiceTest ----------------\n");
+  }
+  
   @Before
   public void setUp() {
     LOGGER.info("START TEST CASE");
@@ -47,8 +54,5 @@ public class CompanyServiceTest {
   public void tearDown() {
     LOGGER.info("END TEST CASE\n\n");
   }
-  
-  
-
-  
+    
 }

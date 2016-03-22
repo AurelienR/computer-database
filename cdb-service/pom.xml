@@ -7,21 +7,37 @@
   <parent>
     <groupId>com.excilys.cdb</groupId>
     <artifactId>computer-database</artifactId>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>${cdb.version}</version>
   </parent>
   <artifactId>cdb-service</artifactId>
   <packaging>jar</packaging>
   <name>Computer Database Service</name>
 
   <dependencies>
+    <!-- Module -->
     <dependency>
       <groupId>com.excilys.cdb</groupId>
       <artifactId>cdb-persistence</artifactId>
-      <version>0.4.0-SNAPSHOT</version>
     </dependency>
+    <!-- Spring -->
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Unit Tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>junit/com/excilys/cdb/services/ServiceTestSuite.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

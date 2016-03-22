@@ -1,5 +1,7 @@
 package com.excilys.cdb.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,42 +18,30 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class LoginController {
   
+  // Logger
+  static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+  
   @ModelAttribute("user")
   public String getUsername() {
     return getPrincipal();
   }
   
-  @RequestMapping(value = { "/", "/home" }, method = RequestMethod.GET)
-  public String homePage(ModelMap model) {
-    model.addAttribute("greeting", "Hi, Welcome to mysite");
-    return "welcome";
-  }
-
-  @RequestMapping(value = "/admin", method = RequestMethod.GET)
-  public String adminPage(ModelMap model) {
-    model.addAttribute("user", getPrincipal());
-    return "admin";
-  }
-
-  @RequestMapping(value = "/db", method = RequestMethod.GET)
-  public String dbaPage(ModelMap model) {
-    model.addAttribute("user", getPrincipal());
-    return "dba";
-  }
-
-  @RequestMapping(value = "/access_denied", method = RequestMethod.GET)
+  @RequestMapping(value = "/accessdenied", method = RequestMethod.GET)
   public String accessDeniedPage(ModelMap model) {
+    LOGGER.info("Controller: GET /accessdenied");
     model.addAttribute("user", getPrincipal());
-    return "accessDenied";
+    return "errors/accessDenied";
   }
 
   @RequestMapping(value = "/login", method = RequestMethod.GET)
   public String loginPage() {
+    LOGGER.info("Controller: GET /login");
     return "login";
   }
 
   @RequestMapping(value = "/logout", method = RequestMethod.GET)
   public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
+    LOGGER.info("Controller: GET /logout");
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth != null) {
       new SecurityContextLogoutHandler().logout(request, response, auth);
@@ -68,6 +58,7 @@ public class LoginController {
     } else {
       userName = principal.toString();
     }
+    LOGGER.info("Controller: retrieve current user context - Username: {}",userName);
     return userName;
   }
 }

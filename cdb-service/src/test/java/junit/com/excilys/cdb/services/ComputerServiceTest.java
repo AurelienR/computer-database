@@ -42,7 +42,7 @@ import java.util.List;
  * The Class ComputerServiceTest.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:/spring/cdb-context-test.xml")
+@ContextConfiguration("classpath:/spring/service-context-test.xml")
 public class ComputerServiceTest {
 
   // Logger
@@ -51,7 +51,7 @@ public class ComputerServiceTest {
   @Autowired
   ComputerService computerService;
 
-  /** The computer dao. */
+  /** The computer repository. */
   @Autowired
   ComputerRepository computerRepository;
 
@@ -183,8 +183,12 @@ public class ComputerServiceTest {
    */
   @Test(expected = ValidatorException.class)
   public void findByQpInvalidPageIndexTest() {
-    int testedPage = -1;
-    when(qp.getPageable()).thenReturn(new PageRequest(testedPage, 30));
+    int testedPage = -1; 
+    
+    Pageable p = Mockito.mock(Pageable.class);
+    when(p.getPageNumber()).thenReturn(testedPage);
+    when(p.getPageSize()).thenReturn(30);
+    when(qp.getPageable()).thenReturn(p);
     when(qp.getSearch()).thenReturn("");
     when(computerRepository.findByNameOrCompanyName(qp.getSearch(), qp.getPageable()))
         .thenReturn(null);
@@ -197,7 +201,10 @@ public class ComputerServiceTest {
   @Test(expected = ValidatorException.class)
   public void findByQpInvalidPageSizeTest() {
     int testedPageSize = -1;
-    when(qp.getPageable()).thenReturn(new PageRequest(2, testedPageSize));
+    Pageable p = Mockito.mock(Pageable.class);
+    when(p.getPageNumber()).thenReturn(2);
+    when(p.getPageSize()).thenReturn(testedPageSize);    
+    when(qp.getPageable()).thenReturn(p);
     when(qp.getSearch()).thenReturn("");
     when(computerRepository.findByNameOrCompanyName(qp.getSearch(), qp.getPageable()))
         .thenReturn(null);
@@ -217,33 +224,6 @@ public class ComputerServiceTest {
     computerService.findByQuery(qp);
   }
 
-  /**
-   * Find by qp invalid order test.
-   */
-  @Test(expected = ValidatorException.class)
-  public void findByQpInvalidOrderTest() {
-    Direction testedOrder = null;
-    when(qp.getPageable())
-        .thenReturn(new PageRequest(2, 30, new Sort(testedOrder, OrderBy.id.toString())));
-    when(qp.getSearch()).thenReturn("");
-    when(computerRepository.findByNameOrCompanyName(qp.getSearch(), qp.getPageable()))
-        .thenReturn(null);
-    computerService.findByQuery(qp);
-  }
-
-  /**
-   * Find by qp invalid order by test.
-   */
-  @Test(expected = ValidatorException.class)
-  public void findByQpInvalidOrderByTest() {
-    String testedOrderBy = null;
-    when(qp.getPageable())
-        .thenReturn(new PageRequest(2, 30, new Sort(Direction.ASC, testedOrderBy)));
-    when(qp.getSearch()).thenReturn("");
-    when(computerRepository.findByNameOrCompanyName(qp.getSearch(), qp.getPageable()))
-        .thenReturn(null);
-    computerService.findByQuery(qp);
-  }
 
   /**
    * Find by valid qp by test.
@@ -294,7 +274,7 @@ public class ComputerServiceTest {
     when(qp.getSearch()).thenReturn(testedSearch);
     when(computerRepository.countByNameOrCompanyName(qp.getSearch())).thenReturn(count);
     long result = computerService.count(qp);
-    assertEquals(true, (count != result));
+    assertEquals(count,result);
   }
 
   // ***************** CREATE COMPUTER TEST *****************

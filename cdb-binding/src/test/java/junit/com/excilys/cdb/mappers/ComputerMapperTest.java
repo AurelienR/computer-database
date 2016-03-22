@@ -139,8 +139,8 @@ public class ComputerMapperTest {
       assertNotNull(resultComputerDto);
       assertEquals(5, resultComputerDto.getId());
       assertEquals("testComputer", resultComputerDto.getName());
-      assertEquals("2013-02-28", resultComputerDto.getIntroduced());
-      assertEquals("2016-02-28", resultComputerDto.getDiscontinued());
+      assertEquals("28/02/2013", resultComputerDto.getIntroduced());
+      assertEquals("28/02/2016", resultComputerDto.getDiscontinued());
       assertEquals(28, resultComputerDto.getCompany().getId());
       assertEquals("testCompany", resultComputerDto.getCompany().getName());
     } catch (Throwable t) {
@@ -177,8 +177,8 @@ public class ComputerMapperTest {
 
     when(computerDto.getId()).thenReturn(-5L);
     when(computerDto.getName()).thenReturn(null);
-    when(computerDto.getIntroduced()).thenReturn("2016-03-04");
-    when(computerDto.getDiscontinued()).thenReturn("2017-03-04");
+    when(computerDto.getIntroduced()).thenReturn("04/03/2016");
+    when(computerDto.getDiscontinued()).thenReturn("04/03/2017");
     when(computerDto.getCompany()).thenReturn(null);
 
     try {
@@ -229,8 +229,8 @@ public class ComputerMapperTest {
 
     when(computerDto.getId()).thenReturn(5L);
     when(computerDto.getName()).thenReturn("ComputerTest");
-    when(computerDto.getIntroduced()).thenReturn("2016-03-04");
-    when(computerDto.getDiscontinued()).thenReturn("2017-03-04");
+    when(computerDto.getIntroduced()).thenReturn("04/03/2016");
+    when(computerDto.getDiscontinued()).thenReturn("04/03/2017");
     when(computerDto.getCompany()).thenReturn(companyDto);
 
     try {
