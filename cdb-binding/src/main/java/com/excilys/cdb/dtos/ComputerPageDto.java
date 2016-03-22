@@ -104,4 +104,12 @@ public class ComputerPageDto {
   public void setMatchingRowCount(long matchingRowCount) {
     this.matchingRowCount = matchingRowCount;
   }
+
+  @Override
+  public String toString() {
+    return "ComputerPageDto [current=" + current + ", pageSize=" + pageSize + ", pageCount="
+        + pageCount + ", search=" + search + ", matchingRowCount=" + matchingRowCount + ", order="
+        + order + ", orderBy=" + orderBy + ", computers=" + computers + "]";
+  }
+  
 }

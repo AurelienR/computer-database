@@ -7,17 +7,17 @@
   <parent>
   	<groupId>com.excilys.cdb</groupId>
   	<artifactId>computer-database</artifactId>
-  	<version>0.4.0-SNAPSHOT</version>
+  	<version>${cdb.version}</version>
   </parent>
   <artifactId>cdb-webapp</artifactId>
   <packaging>war</packaging>
   <name>Computer Database Webapp</name>
 
   <dependencies>
+    <!-- Module -->
     <dependency>
       <groupId>com.excilys.cdb</groupId>
       <artifactId>cdb-binding</artifactId>
-      <version>0.4.0-SNAPSHOT</version>
     </dependency>
     <!-- Spring -->
     <dependency>
@@ -59,4 +59,24 @@
       <artifactId>javax.el-api</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Integration tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+      <configuration>
+        <includes>
+          <include>selenium/WebappITSuite.java</include>
+        </includes>
+      </configuration>
+      </plugin>
+      <!-- Embedded server -->
+      <plugin>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-maven2-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 </project>

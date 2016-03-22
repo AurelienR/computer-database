@@ -7,7 +7,7 @@
   <parent>
   	<groupId>com.excilys.cdb</groupId>
   	<artifactId>computer-database</artifactId>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>${cdb.version}</version>
   </parent>
   <artifactId>cdb-core</artifactId>
   <packaging>jar</packaging>

@@ -12,6 +12,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.concurrent.TimeUnit;
 
+import selenium.login.LoginTest;
+
 public class PageSizeTest {
   private WebDriver driver;
   private String baseUrl;
@@ -19,6 +21,7 @@ public class PageSizeTest {
 
   private static final String RESULTS_XPATH = "//tbody[@id='results']/tr";
 
+  
   /**
    * Sets the up.
    *
@@ -27,9 +30,15 @@ public class PageSizeTest {
    */
   @Before
   public void setUp() throws Exception {
+    
+    // Launch webclient
     driver = new FirefoxDriver();
     baseUrl = "http://localhost:8080/computer-database/";
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    
+    // Login as User
+    LoginTest.logout(driver, baseUrl);
+    LoginTest.logAsUser(driver);
   }
 
   @Test
