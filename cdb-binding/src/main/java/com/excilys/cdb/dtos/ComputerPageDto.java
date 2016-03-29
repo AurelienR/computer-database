@@ -40,6 +40,8 @@ public class ComputerPageDto {
     }
     this.computers = page.getContent();
   }
+  
+  public ComputerPageDto(){}
 
   public int getCurrent() {
     return current;

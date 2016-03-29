@@ -11,7 +11,6 @@ import com.excilys.cdb.cli.impl.UpdateComputerCmd;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Scanner;
 
@@ -27,7 +26,6 @@ public class CommandParser {
   static final Logger logger = LoggerFactory.getLogger(CommandParser.class);
 
   // Constants
-  private static final String APP_SPRING_CONTEXT = "classpath:spring/application-context.xml";
   private static final String LIST_COMPANIES_CMD = "listcompanies";
   private static final String DELETE_COMPANY_CMD = "deletecompany";
   private static final String LIST_COMPUTERS_CMD = "listcomputers";
@@ -39,7 +37,6 @@ public class CommandParser {
 
   // Attributes
   private CommandInvoker cmdInvoker;
-  private ClassPathXmlApplicationContext ctx;
   private Scanner sc;
 
   /**
@@ -48,7 +45,6 @@ public class CommandParser {
   // Constructors
   public CommandParser() {
     this.cmdInvoker = new CommandInvoker();
-    this.ctx = new ClassPathXmlApplicationContext(APP_SPRING_CONTEXT);
     this.sc = new Scanner(System.in);
   }
 
@@ -64,28 +60,28 @@ public class CommandParser {
 
     switch (cmdStr) {
       case LIST_COMPANIES_CMD:
-        cmd = ctx.getBean(DisplayAllCompanyCmd.class);
+        cmd = new DisplayAllCompanyCmd();
         break;
       case DELETE_COMPANY_CMD:
-        cmd = ctx.getBean(DeleteCompanyCmd.class, sc);
+        cmd = new DeleteCompanyCmd(sc);
         break;
       case LIST_COMPUTERS_CMD:
-        cmd = ctx.getBean(DisplayAllComputerCmd.class);
+        cmd = new DisplayAllComputerCmd(sc);
         break;
       case GET_COMPUTER_DETAILS_CMD:
-        cmd = ctx.getBean(DisplayComputerDetailsCmd.class, sc);
+        cmd = new DisplayComputerDetailsCmd(sc);
         break;
       case CREATE_COMPUTER_CMD:
-        cmd = ctx.getBean(CreateComputerCmd.class, sc);
+        cmd = new CreateComputerCmd(sc);
         break;
       case UPDATE_COMPUTER_CMD:
-        cmd = ctx.getBean(UpdateComputerCmd.class, sc);
+        cmd = new UpdateComputerCmd(sc);
         break;
       case DELETE_COMPUTER_CMD:
-        cmd = ctx.getBean(DeleteComputerCmd.class, sc);
+        cmd = new DeleteComputerCmd(sc);
         break;
       case EXIT_CMD:
-        cmd = ctx.getBean(ExitCmd.class);
+        cmd = new ExitCmd();
         break;
       default:
         logger.warn("Command not found : " + cmdStr);
@@ -100,13 +96,17 @@ public class CommandParser {
    */
   public void displayAvailableCmds() {
     StringBuilder sb =
-        new StringBuilder("\n-----------------------------------------------------\n");
-    sb.append("LIST OF COMMANDS:\n").append(LIST_COMPANIES_CMD).append('\n')
-        .append(DELETE_COMPANY_CMD).append('\n').append(LIST_COMPUTERS_CMD).append('\n')
-        .append(GET_COMPUTER_DETAILS_CMD).append('\n').append(CREATE_COMPUTER_CMD).append('\n')
-        .append(UPDATE_COMPUTER_CMD).append('\n').append(DELETE_COMPUTER_CMD).append('\n')
-        .append(EXIT_CMD).append('\n')
-        .append("\n-----------------------------------------------------\n");
+        new StringBuilder("\n****************************************************************************************\n");
+    sb.append("*\tLIST OF COMMANDS:\n")
+    .append("*\t\t").append(LIST_COMPANIES_CMD).append('\n')
+    .append("*\t\t").append(DELETE_COMPANY_CMD).append('\n')
+    .append("*\t\t").append(LIST_COMPUTERS_CMD).append('\n')
+    .append("*\t\t").append(GET_COMPUTER_DETAILS_CMD).append('\n')
+    .append("*\t\t").append(CREATE_COMPUTER_CMD).append('\n')
+    .append("*\t\t").append(UPDATE_COMPUTER_CMD).append('\n')
+    .append("*\t\t").append(DELETE_COMPUTER_CMD).append('\n')
+    .append("*\t\t").append(EXIT_CMD).append('\n')
+        .append("****************************************************************************************\n");
     System.out.println(sb);
   }
 
@@ -115,9 +115,19 @@ public class CommandParser {
    */
   public void welcome() {
     StringBuilder sb =
-        new StringBuilder("\n************************************************************\n");
-    sb.append("COMPUTER DATABASE").append('\n')
-        .append("************************************************************").append('\n');
+        new StringBuilder("\n****************************************************************************************\n");
+    sb.append("                                                                                      ").append("\n")
+.append("  ,ad8888ba,   88           88                                       88  88           ").append("\n")
+.append(" d8\"'    `\"8b  88           88                                       88  88           ").append("\n")
+.append("d8'            88           88                                       88  88           ").append("\n")
+.append("88             88           88                   ,adPPYba,   ,adPPYb,88  88,dPPYba,   ").append("\n")
+.append("88             88           88     aaaaaaaa     a8\"     \"\"  a8\"    `Y88  88P'    \"8a  ").append("\n")
+.append("Y8,            88           88     \"\"\"\"\"\"\"\"     8b          8b       88  88       d8  ").append("\n")
+.append(" Y8a.    .a8P  88           88                  \"8a,   ,aa  \"8a,   ,d88  88b,   ,a8\"  ").append("\n")
+.append("  `\"Y8888Y\"'   88888888888  88                   `\"Ybbd8\"'   `\"8bbdP\"Y8  8Y\"Ybbd8\"'   ").append("\n")
+.append("                                                                                      ").append("\n")
+.append("                                                                                      ").append("\n")
+.append("****************************************************************************************");
     System.out.println(sb);
   }
 }

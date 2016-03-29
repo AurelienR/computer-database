@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-  	<groupId>com.excilys.cdb</groupId>
-  	<artifactId>computer-database</artifactId>
-  	<version>${cdb.version}</version>
-  </parent>
-  <artifactId>cdb-cli</artifactId>
-  <packaging>jar</packaging>
-  <name>Computer Database Console</name>
+ <modelVersion>4.0.0</modelVersion>
+ <parent>
+  <groupId>com.excilys.cdb</groupId>
+  <artifactId>computer-database</artifactId>
+  <version>${cdb.version}</version>
+ </parent>
+ <artifactId>cdb-cli</artifactId>
+ <packaging>jar</packaging>
+ <name>Computer Database Console</name>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.excilys.cdb</groupId>
-      <artifactId>cdb-binding</artifactId>
-    </dependency>
-
-  </dependencies>
-
+ <dependencies>
+  <!-- Module -->
+  <dependency>
+   <groupId>com.excilys.cdb</groupId>
+   <artifactId>cdb-rest</artifactId>
+  </dependency>
+  <!-- Resteasy -->
+  <dependency>
+   <groupId>org.jboss.resteasy</groupId>
+   <artifactId>resteasy-jackson-provider</artifactId>
+  </dependency>
+  <dependency>
+   <groupId>org.jboss.resteasy</groupId>
+   <artifactId>resteasy-client</artifactId>
+  </dependency>
+  <!-- Jackson -->
+  <dependency>
+   <groupId>com.fasterxml.jackson.core</groupId>
+   <artifactId>jackson-databind</artifactId>
+  </dependency>
+ </dependencies>
 </project>

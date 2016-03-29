@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>   <!-- Jackson -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+ <parent>
+  <groupId>com.excilys.cdb</groupId>
+  <artifactId>computer-database</artifactId>
+  <version>${cdb.version}</version>
+ </parent>
+ <artifactId>cdb-rest</artifactId>
+ <packaging>war</packaging>
+ <name>Computer Database REST api</name>
+
+ <dependencies>
+  <!-- Module -->
+  <dependency>
+   <groupId>com.excilys.cdb</groupId>
+   <artifactId>cdb-binding</artifactId>
+  </dependency>
+    <!-- Spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-config</artifactId>
+    </dependency>
+    <!-- JavaEE -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.el</groupId>
+      <artifactId>javax.el-api</artifactId>
+    </dependency>
+       <!-- Jackson -->
+   <dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+   </dependency>
+ </dependencies>
+</project>

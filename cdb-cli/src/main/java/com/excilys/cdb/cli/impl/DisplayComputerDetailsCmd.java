@@ -1,15 +1,9 @@
 package com.excilys.cdb.cli.impl;
 
-import com.excilys.cdb.cli.CliException;
 import com.excilys.cdb.cli.Command;
-import com.excilys.cdb.cli.InputCommandParser;
-import com.excilys.cdb.models.Computer;
+import com.excilys.cdb.dtos.ComputerDto;
+import com.excilys.cdb.network.CliRequestManager;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -18,16 +12,9 @@ import java.util.Scanner;
  * @author Aurelien.R
  *
  */
-@Component
-@Scope("prototype")
 public class DisplayComputerDetailsCmd implements Command {
 
-  // Parser
-  @Autowired
-  private InputCommandParser inputCmdParser;
-
   private Scanner sc;
-
 
   public DisplayComputerDetailsCmd(Scanner sc) {
     this.sc = sc;
@@ -35,18 +22,13 @@ public class DisplayComputerDetailsCmd implements Command {
 
   @Override
   public void execute() {
-    try {
-      System.out.println("Find computer details:");
-      // Get computer name input
-      System.out.println("Name (of existing computer):");
-      sc.nextLine();
-      List<Computer> computers = inputCmdParser.getValidComputerByName(sc);
-      for (Computer c : computers) {
-        System.out.println(c);
-      }
+    System.out.println("Find computer details:");
+    // Get computer name input
+    System.out.println("Id (of existing computer):");
+    sc.nextLine();
+    long id = sc.nextLong();
+    ComputerDto computerDto = CliRequestManager.getComputerById(id);
+    System.out.println(computerDto);
 
-    } catch (IllegalArgumentException e) {
-      throw new CliException("Illegal argument", e);
-    }
   }
 }

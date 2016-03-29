@@ -92,4 +92,17 @@ public class CompanyDtoService {
     return companyService.createCompany(company);
   }
 
+  /**
+   * Delete computer.
+   *
+   * @param id the id
+   */
+  public void deleteCompany(long id) {
+
+    // Validate id
+    CompanyDtoValidator.checkValidId(id);
+
+    // Retrieve Companies
+    companyService.deleteCompany(id);
+  }
 }
